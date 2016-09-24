@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jomsocial>
+    <component>com_communitypolls</component>
+    <rules>
+        <rule>
+            <name>Crosswords - Submit Question</name>
+            <description>Points awarded for submitting crosswords question.</description>
+            <action_string>com_crosswords.create</action_string>
+            <publish>true</publish>
+            <points>0</points>
+            <access_level>1</access_level>
+        </rule>
+        <rule>
+            <name>Crosswords - Solved Crossword</name>
+            <description>Points awarded for solving a crossword.</description>
+            <action_string>com_crosswords.solve</action_string>
+            <publish>true</publish>
+            <points>0</points>
+            <access_level>1</access_level>
+        </rule>
+    </rules>
+</jomsocial>

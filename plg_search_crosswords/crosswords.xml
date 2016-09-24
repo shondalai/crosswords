@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="2.5" type="plugin" group="search" method="upgrade">
+	<name>Search - Community Crosswords</name>
+	<creationDate>16-Oct-2013</creationDate>
+	<author>Maverick</author>
+	<authorEmail>support@corejoomla.com</authorEmail>
+	<authorUrl>http://www.corejoomla.com</authorUrl>
+	<copyright>Copyright (C) Copyright © 2009 - 2013 corejoomla.com. All rights reserved.</copyright>
+	<license>http://www.corejoomla.com GNU/GPL</license>
+	<version>1.0.1</version>
+	<description>Search Community Crosswords</description>
+	<files>
+		<filename plugin="crosswords">crosswords.php</filename>
+	</files>
+	<languages>
+		<language tag="en-GB">en-GB.plg_search_crosswords.ini</language>
+	</languages>
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				 <field name="search_limit" type="text" default="50" description="JFIELD_PLG_SEARCH_SEARCHLIMIT_DESC" label="JFIELD_PLG_SEARCH_SEARCHLIMIT_LABEL" size="5"/>
+				 <field name="search_content" type="radio" default="0" description="JFIELD_PLG_SEARCH_ALL_DESC" label="JFIELD_PLG_SEARCH_ALL_LABEL">
+				 	<option value="0">JOFF</option>
+				 	<option value="1">JON</option>
+				 </field>
+			</fieldset>
+		</fields>
+	</config>
+</extension>

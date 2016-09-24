@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<updates>
+	<update>
+		<name>Crosswords</name>
+		<description>Crosswords Package</description>
+		<element>pkg_crosswords</element>
+		<type>package</type>
+		<version>4.2.1</version>
+
+		<infourl title="Crosswords">https://www.corejoomla.com/products/community-crosswords.html</infourl>
+		<downloads>
+			<downloadurl format="zip" type="full">https://www.corejoomla.com/index.php?option=com_cjupdater&amp;task=update.download&amp;extension=crosswords&amp;version=4.2.1</downloadurl>
+		</downloads>
+		<tags>
+			<tag>stable</tag>
+		</tags>
+
+		<maintainer>corejoomla.com</maintainer>
+		<maintainerurl>http://www.corejoomla.com</maintainerurl>
+		<section>components</section>
+		
+		<targetplatform name="joomla" version="3.6"/>
+	</update>
+	<update>
+		<name>Crosswords</name>
+		<description>Crosswords Package</description>
+		<element>pkg_crosswords</element>
+		<type>package</type>
+		<version>4.2.1</version>
+
+		<infourl title="Crosswords">https://www.corejoomla.com/products/community-crosswords.html</infourl>
+		<downloads>
+			<downloadurl format="zip" type="full">https://www.corejoomla.com/index.php?option=com_cjupdater&amp;task=update.download&amp;extension=crosswords&amp;version=4.2.1</downloadurl>
+		</downloads>
+		<tags>
+			<tag>stable</tag>
+		</tags>
+
+		<maintainer>corejoomla.com</maintainer>
+		<maintainerurl>http://www.corejoomla.com</maintainerurl>
+		<section>components</section>
+		
+		<targetplatform name="joomla" version="3.5"/>
+	</update>
+</updates>

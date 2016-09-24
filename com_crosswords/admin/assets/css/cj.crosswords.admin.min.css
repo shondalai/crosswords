@@ -1,0 +1,4 @@
+.icon-48-logo{background-image: url(../images/crosswords.png);  max-height: 48px; height: 48px;}
+.icon-32-refresh{background-image: url(../images/cnr-update.png); background-repeat: no-repeat;}
+.btn-progress {background-image: url("../images/ui-anim_basic_16x16.gif"); background-repeat: no-repeat; background-position: center center;}
+.pagetitle {background-position: top left; height: 48px;}

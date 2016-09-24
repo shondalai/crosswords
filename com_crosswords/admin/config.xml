@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- $Id: config.xml 14 2011-01-11 12:15:22Z maverick $ -->
+<config>
+	
+	<fieldset name="feature" label="COM_CROSSWORDS_FEATURE_SETTINGS">
+		
+		<field name="enable_debugging" type="radio" class="btn-group" default="0" label="COM_CROSSWORDS_ENABLE_DEBUGGING" description="COM_CROSSWORDS_ENABLE_DEBUGGING_DESC">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+		
+		<field name="enable_jquery" type="radio" class="btn-group" default="1" label="COM_CROSSWORDS_ENABLE_JQUERY" description="COM_CROSSWORDS_ENABLE_JQUERY_DESC">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+		
+		<field name="enable_bootstrap" type="radio" class="btn-group" default="1" label="COM_CROSSWORDS_ENABLE_BOOTSTRAP" description="COM_CROSSWORDS_ENABLE_BOOTSTRAP_DESC">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+		
+		<field name="spacer1" type="spacer" hr="true" />
+		
+		<field name="default_editor" type="list" class="btn-group" default="bbcode" label="COM_CROSSWORDS_DEFAULT_EDITOR" description="COM_CROSSWORDS_DEFAULT_EDITOR_DESC">
+			<option value="none">COM_CROSSWORDS_NONE</option>
+			<option value="bbcode">COM_CROSSWORDS_BBCODE_EDITOR</option>
+			<option value="wysiwyg">COM_CROSSWORDS_WYSIWYG_EDITOR</option>
+		</field>
+		
+		<field name="process_content_plugins" type="radio" class="btn-group" default="0" label="COM_CROSSWORDS_PROCESS_CONTENT_PLUGINS" description="COM_CROSSWORDS_PROCESS_CONTENT_PLUGINS_DESC">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+		
+		<field name="enable_solve_question" type="radio" class="btn-group" default="1" label="COM_CROSSWORDS_FIELD_ENABLE_SOLVE_QUESTION_LABEL" description="COM_CROSSWORDS_FIELD_ENABLE_SOLVE_QUESTION_DESC">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+		
+		<field name="enable_automove" type="radio" class="btn-group" default="1" label="COM_CROSSWORDS_FIELD_ENABLE_AUTOMOVE_LABEL" description="COM_CROSSWORDS_FIELD_ENABLE_AUTOMOVE_DESC">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+		
+		<field name="min_solve_pct" type="text" default="100" label="COM_CROSSWORDS_FIELD_MINIMUM_PCT_TO_SOLVE_CROSSWORD_LABEL" description="COM_CROSSWORDS_FIELD_MINIMUM_PCT_TO_SOLVE_CROSSWORD_DESC"/>
+	</fieldset>
+	
+	<fieldset name="display" label="COM_CROSSWORDS_DISPLAY_SETTINGS">
+		<field name="list_length" type="text" default="20" label="COM_CROSSWORDS_LIST_LENGTH" description="COM_CROSSWORDS_LIST_LENGTH_DESC"/>
+
+		<field name="display_toolbar" type="radio" class="btn-group" default="1" label="COM_CROSSWORDS_SHOW_TOOLBAR" description="COM_CROSSWORDS_SHOW_TOOLBAR_DESC">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+		
+		<field name="display_cat_list" type="radio" class="btn-group" default="1" label="COM_CROSSWORDS_DISPLAY_CATEGORY_LIST" description="COM_CROSSWORDS_DISPLAY_CATEGORY_LIST_DESC">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+		
+		<field name="num_cat_list_columns" type="list" class="btn-group" default="3" label="COM_CROSSWORDS_NUM_CATEGORY_LIST_COLUMNS" description="COM_CROSSWORDS_NUM_CATEGORY_LIST_COLUMNS_DESC">
+			<option value="4">4</option>
+			<option value="3">3</option>
+			<option value="2">2</option>
+			<option value="1">1</option>
+		</field>		
+		
+		<field name="spacer1" type="spacer" hr="true" />
+
+		<field name="user_display_name" type="list" class="btn-group" default="name" label="COM_CROSSWORDS_USER_DISPLAY_NAME" description="COM_CROSSWORDS_USER_DISPLAY_NAME_DESC">
+			<option value="name">COM_CROSSWORDS_NAME</option>
+			<option value="username">COM_CROSSWORDS_USERNAME</option>
+		</field>
+
+		<field name="user_avatar" type="list" class="btn-group" default="none" label="COM_CROSSWORDS_USER_AVATAR" description="COM_CROSSWORDS_USER_AVATAR_DESC">
+			<option value="none">COM_CROSSWORDS_NONE</option>
+			<option value="cjforum">CjForum</option>
+			<option value="cjblog">CjBlog</option>
+			<option value="jomsocial">JomSocial</option>
+			<option value="cb">Community Builder</option>
+			<option value="kunena">Kunena</option>
+			<option value="aup">Alpha User Points</option>
+			<option value="easysocial">EasySocial</option>
+			<option value="gravatar">Gravatar</option>
+		</field>
+		
+		<field name="avatar_size" type="text" default="52" label="COM_CROSSWORDS_AVATAR_SIZE" description="COM_CROSSWORDS_AVATAR_SIZE_DESC"/>
+	</fieldset>
+	
+	<fieldset name="notification" label="COM_CROSSWORDS_NOTIFICATION_SETTINGS">
+		
+		<field name="admin_user_groups" type="usergroup" default="8" label="COM_CROSSWORDS_ADMIN_USER_GROUPS" description="COM_CROSSWORDS_ADMIN_USER_GROUPS_DESC"/>
+		
+		<field name="notif_crossword_solved" type="radio" class="btn-group" default="1" label="COM_CROSSWORDS_NOTIF_CROSSWORD_SOLVED" description="COM_CROSSWORDS_NOTIF_CROSSWORD_SOLVED_DESC">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>		
+
+		<field name="notif_accepted_keyword" type="radio" class="btn-group" default="1" label="COM_CROSSWORDS_NOTIF_ACCEPTED_KEYWORD" description="COM_CROSSWORDS_NOTIF_ACCEPTED_KEYWORD_DESC">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+		
+		<field name="notif_admin_new_keyword" type="radio" class="btn-group" default="1" label="COM_CROSSWORDS_NOTIF_ADMIN_NEW_KEYWORD" description="COM_CROSSWORDS_NOTIF_ADMIN_NEW_KEYWORD_DESC">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>		
+		
+		<field name="notif_admin_new_crossword" type="radio" class="btn-group" default="1" label="COM_CROSSWORDS_NOTIF_ADMIN_NEW_CROSSWORD" description="COM_CROSSWORDS_NOTIF_ADMIN_NEW_CROSSWORD_DESC">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>		
+		
+	</fieldset>
+	
+	<fieldset name="thirdparty" label="COM_CROSSWORDS_THIRD_PARTY_SETTINGS">
+
+		<field name="activity_stream_type" type="list" class="btn-group" default="none" label="COM_CROSSWORDS_ACTIVITY_STREAM_TYPE" description="COM_CROSSWORDS_ACTIVITY_STREAM_TYPE_DESC">
+			<option value="none">COM_CROSSWORDS_NONE</option>
+			<option value="cjforum">CjForum</option>
+			<option value="jomsocial">JomSocial</option>
+			<option value="easysocial">EasySocial</option>
+		</field>
+		
+		<field name="stream_character_limit" type="text" default="0" label="COM_CROSSWORDS_STREAM_CHARACTER_LIMIT" description="COM_CROSSWORDS_STREAM_CHARACTER_LIMIT_DESC"/>
+
+		<field name="stream_on_new_crossword" type="radio" class="btn-group" default="0" label="COM_CROSSWORDS_STREAM_ON_NEW_CROSSWORD" description="COM_CROSSWORDS_STREAM_ON_NEW_CROSSWORD_DESC">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+		
+		<field name="stream_on_solved_crossword" type="radio" class="btn-group" default="0" label="COM_CROSSWORDS_STREAM_ON_SOLVED_CROSSWORD" description="COM_CROSSWORDS_STREAM_ON_SOLVED_CROSSWORD_DESC">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+		
+		<field name="spacer1" type="spacer" hr="true" />
+
+		<field name="points_system" type="list" class="btn-group" default="none" label="COM_CROSSWORDS_POINTS_SYSTEM" description="COM_CROSSWORDS_POINTS_SYSTEM_DESC">
+			<option value="none">COM_CROSSWORDS_NONE</option>
+			<option value="cjforum">CjForum</option>
+			<option value="cjblog">CjBlog</option>
+			<option value="jomsocial">JomSocial</option>
+			<option value="easysocial">EasySocial</option>
+			<option value="aup">Alpha User Points</option>
+		</field>
+		
+		<field name="spacer2" type="spacer" hr="true" />
+		
+		<field name="comment_system" type="list" class="btn-group" default="none" label="COM_CROSSWORDS_COMMENT_SYSTEM" description="COM_CROSSWORDS_COMMENT_SYSTEM_DESC">
+			<option value="none">COM_CROSSWORDS_NONE</option>
+			<option value="fbcomment">Facebook Comments</option>
+			<option value="disqus">Disqus Comments</option>
+			<option value="intensedebate">Intense Debate</option>
+			<option value="jcomment">JComment</option>
+			<option value="jacomment">JAComment</option>
+			<option value="kommento">Kommento</option>
+		</field>
+		
+		<field name="disqus_intdbt_id" type="text" default="" label="COM_CROSSWORDS_DISQUS_INTDBT_ID" description="COM_CROSSWORDS_DISQUS_INTDBT_ID_DESC"/>
+		
+		<field name="spacer3" type="spacer" hr="true" />
+		
+		<field name="sharing_services" type="checkboxes" class="btn-group" default="" multiple="true" label="COM_CROSSWORDS_SHARING_SERVICES" description="COM_CROSSWORDS_SHARING_SERVICES_DESC">
+			<option value="fblike">COM_CROSSWORDS_FACEBOOK_LIKE</option>
+			<option value="tweet">COM_CROSSWORDS_TWITTER_TWEET</option>
+			<option value="googleplus">COM_CROSSWORDS_GOOGLE_PLUS</option>
+			<option value="addthis">COM_CROSSWORDS_ADD_THIS</option>
+		</field>
+		
+	</fieldset>
+	
+	<fieldset name="permissions" label="JCONFIG_PERMISSIONS_LABEL" description="JCONFIG_PERMISSIONS_DESC">
+		<field name="rules" type="rules" label="JCONFIG_PERMISSIONS_LABEL" class="inputbox" validate="rules" filter="rules" component="com_crosswords" section="component" />
+	</fieldset>
+</config>
+

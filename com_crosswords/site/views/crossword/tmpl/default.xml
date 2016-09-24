@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+	<layout title="COM_CROSSWORDS_CROSSWORD_VIEW_DEFAULT_TITLE" option="COM_CROSSWORDS_CROSSWORD_VIEW_DEFAULT_OPTION">
+		<message>
+			<![CDATA[COM_CROSSWORDS_CROSSWORD_VIEW_DEFAULT_DESC]]>
+		</message>
+	</layout>
+
+	<!-- Add fields to the request variables for the layout. -->
+	<fields name="request">
+		<fieldset name="request" addfieldpath="/administrator/components/com_crosswords/models/fields">
+			<field name="id" type="modal_crossword" label="COM_CROSSWORDS_FIELD_SELECT_CROSSWORD_LABEL" required="true" edit="true" clear="false" description="COM_CROSSWORDS_FIELD_SELECT_CROSSWORD_DESC" />
+		</fieldset>
+	</fields>
+
+	<!-- Add fields to the parameters object for the layout. -->
+	<fields name="params">
+	</fields>
+</metadata>

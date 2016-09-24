@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="CjLib" default="copyall" basedir=".">
+	<property name="site3" value="d:/xampp/htdocs/j3/components/com_crosswords" />
+	<property name="admin3" value="d:/xampp/htdocs/j3/administrator/components/com_crosswords" />
+	<property name="adminlang3" value="d:/xampp/htdocs/j3/administrator/language/" />
+	<property name="media3" value="d:/xampp/htdocs/j3/media/com_crosswords" />
+	
+	<property name="cjsite3" value="d:/xampp/htdocs/corejoomla/components/com_crosswords" />
+	<property name="cjadmin3" value="d:/xampp/htdocs/corejoomla/administrator/components/com_crosswords" />
+	<property name="cjadminlang3" value="d:/xampp/htdocs/corejoomla/administrator/language/" />
+	<property name="cjmedia3" value="d:/xampp/htdocs/corejoomla/media/com_crosswords" />
+    
+	<target name="copyall">
+		<copy todir="${site3}"><fileset dir="com_crosswords/site"><include name="**"/></fileset></copy>
+		<copy todir="${admin3}" ><fileset dir="com_crosswords/admin"><include name="**" /><exclude name="language/**"/></fileset></copy>
+		<copy todir="${adminlang3}"><fileset dir="com_crosswords/admin/language/en-GB"><include name="**"/></fileset></copy>
+		<copy todir="${media3}"><fileset dir="com_crosswords/site/media"><include name="**"/></fileset></copy>
+		
+		<copy todir="${cjsite3}"><fileset dir="com_crosswords/site"><include name="**"/></fileset></copy>
+		<copy todir="${cjadmin3}" ><fileset dir="com_crosswords/admin"><include name="**" /><exclude name="language/**"/></fileset></copy>
+		<copy todir="${cjadminlang3}"><fileset dir="com_crosswords/admin/language/en-GB"><include name="**"/></fileset></copy>
+		<copy todir="${cjmedia3}"><fileset dir="com_crosswords/site/media"><include name="**"/></fileset></copy>
+	</target>
+
+	<target name="build_crosswords">
+	    <xmltask source="${package_dir}/pkg_crosswords.xml" dest="${package_dir}/pkg_crosswords.xml" report="false" encoding="utf-8">
+	        <replace path="/extension/version/text()" withText="${version}"/>
+	    	<replace path="/extension/creationDate/text()" withText="${current.date}"/>
+	    </xmltask>
+	    
+	    <xmltask source="${package_dir}/com_crosswords/crosswords.xml" dest="${package_dir}/com_crosswords/crosswords.xml" report="false" encoding="utf-8">
+	        <replace path="/extension/version/text()" withText="${version}"/>
+	    	<replace path="/extension/creationDate/text()" withText="${current.date}"/>
+	    </xmltask>
+		
+		<delete file="com_crosswords_v${version}.zip" />
+		
+	    <xmltask source="${package_dir}/auto_updates/package.xml" dest="${package_dir}/auto_updates/package.xml" report="false" encoding="utf-8">
+	        <replace path="/extensionset/extension/@version" withText="${version}"/>
+	    </xmltask>
+	    <xmltask source="${package_dir}/auto_updates/details.xml" dest="${package_dir}/auto_updates/details.xml" report="false" encoding="utf-8">
+	        <replace path="/updates/update/version/text()" withText="${version}"/>
+	    	<replace path="/updates/update/downloads/downloadurl/text()" 
+	    		withText="http://www.corejoomla.com/media/autoupdates/files/pkg_crosswords_v${version}.zip"/>
+	    </xmltask>
+	    
+	    <replace file="${package_dir}/com_crosswords/site/helpers/constants.php" token="@version@" value="${version}" />
+	    
+	    <antcall target="make_crosswords_package"></antcall>
+		
+		<echo>UPLOAD: pkg_crosswords_v${version}.zip. Destination: /media/autoupdates/files</echo>
+		<scp 
+			file="${root_dir}/Packages/pkg_crosswords_v${version}.zip" 
+			todir="corejoomla@corejoomla.com:/home/corejoomla/public_html/media/autoupdates/files"
+			port="22" 
+			verbose="false"
+			trust="true"
+			keyfile="corejoomla.ppk"
+			passphrase="${password}"/>
+		<echo>UPLOAD: pkg_crosswords_v${version}.zip. Destination: /media/cjdownloads/community-crosswords</echo>
+		<scp 
+			file="${root_dir}/Packages/pkg_crosswords_v${version}.zip" 
+			todir="corejoomla@corejoomla.com:/home/corejoomla/public_html/media/cjdownloads/community-crosswords"
+			port="22" 
+			verbose="false"
+			trust="true"
+			keyfile="corejoomla.ppk"
+			passphrase="${password}"/>
+		<echo>UPLOAD: com_crosswords.xml. Destination: /media/autoupdates</echo>
+		<scp 
+			file="${package_dir}/auto_updates/package.xml" 
+			todir="corejoomla@corejoomla.com:/home/corejoomla/public_html/media/autoupdates/crosswords"
+			port="22" 
+			verbose="false"
+			trust="true"
+			keyfile="corejoomla.ppk"
+			passphrase="${password}"/>
+		<scp 
+			file="${package_dir}/auto_updates/details.xml" 
+			todir="corejoomla@corejoomla.com:/home/corejoomla/public_html/media/autoupdates/crosswords"
+			port="22" 
+			verbose="false"
+			trust="true"
+			keyfile="corejoomla.ppk"
+			passphrase="${password}"/>
+		
+		<echo>UPDATE: Updating version in extensions.xml file.</echo>
+		<xmltask source="extensions.xml" dest="extensions.xml" report="false" encoding="utf-8">
+	        <replace path="/corejoomla/extension[@name='com_crosswords']/version/text()" withText="${version}"/>
+	    	<replace path="/corejoomla/extension[@name='com_crosswords']/released/text()" withText="${release.date}"/>
+	    </xmltask>
+		
+		<echo>UPLOAD: extensions.xml. Destination: root</echo>
+		<scp 
+			file="extensions.xml" 
+			todir="corejoomla@corejoomla.com:/home/corejoomla/public_html"
+			port="22" 
+			verbose="false"
+			trust="true"
+			keyfile="corejoomla.ppk"
+			passphrase="${password}"/>
+		
+		<move file="${root_dir}/Packages/pkg_crosswords_v${version}.zip" todir="d:/develop/releases/community crosswords/"/>
+		<replace file="${package_dir}/com_crosswords/site/lib/corejoomla/constants.php" token="${version}" value="@version@" />
+	</target>
+	
+	<target name="make_crosswords_package" depends="build_crosswords_package">
+		<zip destfile="${root_dir}/Packages/pkg_crosswords_v${version}.zip">
+			<zipfileset dir="${root_dir}/Packages/" includes="packages/**"/>
+			<zipfileset dir="${package_dir}" includes="pkg_crosswords.xml"/>
+		</zip>
+		<delete dir="${root_dir}/Packages/packages"/>
+	</target>
+	
+	<target name="build_crosswords_package">
+		<zip destfile="${root_dir}/Packages/packages/com_crosswords.zip">
+			<zipfileset dir="${package_dir}/com_crosswords">
+				<include name="site/**" />
+				<include name="admin/**" />
+				<include name="index.html" />
+				<include name="crosswords.xml" />
+				<include name="script.php" />
+			</zipfileset>
+		</zip>
+		<zip destfile="${root_dir}/Packages/packages/plg_search_crosswords.zip">
+			<zipfileset dir="${package_dir}/plg_search_crosswords">
+				<include name="index.html"/>
+				<include name="crosswords.xml"/>
+				<include name="crosswords.php"/>
+			</zipfileset>
+		</zip>
+	</target>
+</project>

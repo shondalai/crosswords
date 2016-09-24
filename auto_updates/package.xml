@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<extensionset description="Crosswords Extensions List" name="Crosswords">
+	<extension client="site" description="Crosswords Package" detailsurl="https://www.corejoomla.com/media/autoupdates/crosswords/details.xml" element="pkg_crosswords" name="Crosswords Package" type="package" version="4.2.1"/>
+</extensionset>

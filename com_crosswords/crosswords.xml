@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<extension method="upgrade" type="component" version="2.5.0">
+	<name>Crosswords</name>
+	<creationDate>2016-Jul-21</creationDate>
+	<author>Maverick</author>
+	<authorEmail>support@corejoomla.com</authorEmail>
+	<authorUrl>http://www.corejoomla.org</authorUrl>
+	<copyright>Copyright corejoomla.com. All rights reserved.</copyright>
+	<license>Gnu/GPL v2 or later</license>
+	<version>3.6.1</version>
+	<description>Build crosswords first time on Joomla.</description>
+
+	<!-- installation part -->
+	<install>
+		<sql>
+			<file charset="utf8" driver="mysql">sql/install.mysql.utf8.sql</file>
+		</sql>
+	</install>
+
+	<!-- user part -->
+	<files folder="site">
+		<filename>index.html</filename>
+		<filename>router.php</filename>
+		<filename>controller.php</filename>
+		<filename>crosswords.php</filename>
+		<filename>komento_plugin.php</filename>
+		<filename>jomsocial_rule.xml</filename>
+		<folder>models</folder>
+		<folder>controllers</folder>
+		<folder>views</folder>
+		<folder>helpers</folder>
+	</files>
+
+	<media destination="com_crosswords" folder="site/media">
+		<filename>index.html</filename>
+		<folder>css</folder>
+		<folder>images</folder>
+		<folder>js</folder>
+	</media>
+
+	<languages folder="site">
+		<language tag="en-GB">language/en-GB/en-GB.com_crosswords.ini</language>
+	</languages>
+
+	<!-- administration part -->
+	<administration>
+		<menu img="components/com_crosswords/assets/images/crosswords-16px.png" link="option=com_crosswords&amp;view=dashboard" task="dashboard">COM_CROSSWORDS</menu>
+		<submenu>
+			<menu link="option=com_crosswords&amp;view=dashboard" view="dashboard">COM_CROSSWORDS_DASHBOARD</menu>
+			<menu link="option=com_crosswords&amp;view=crosswords" view="crosswords">COM_CROSSWORDS_CROSSWORDS</menu>
+			<menu link="option=com_crosswords&amp;view=keywords" view="keywords">COM_CROSSWORDS_KEYWORDS</menu>
+			<menu link="option=com_categories&amp;view=categories&amp;extension=com_crosswords" view="categories">COM_CROSSWORDS_CATEGORIES</menu>
+		</submenu>
+		
+		<files folder="admin">
+			<filename>config.xml</filename>
+			<filename>access.xml</filename>
+			<filename>controller.php</filename>
+			<filename>index.html</filename>
+			<filename>crosswords.php</filename>
+			<filename>easysocial.points</filename>
+			<folder>models</folder>
+			<folder>views</folder>
+			<folder>controllers</folder>
+			<folder>tables</folder>
+			<folder>assets</folder>
+			<folder>helpers</folder>
+			<folder>sql</folder>
+		</files>
+
+		<languages folder="admin/language/en-GB">
+			<language tag="en-GB">en-GB.com_crosswords.sys.ini</language>
+			<language tag="en-GB">en-GB.com_crosswords.ini</language>
+		</languages>
+	</administration>
+
+	<scriptfile>script.php</scriptfile>
+</extension>

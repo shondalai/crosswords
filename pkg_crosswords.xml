@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<extension method="upgrade" type="package" version="3.0">
+	<name>Community Crosswords Package</name>
+	<author>Maverick</author>
+	<creationDate>2016-Jul-21</creationDate>
+	<packagename>crosswords</packagename>
+	<version>3.6.1</version>
+	<url>http://www.corejoomla.com/</url>
+	<packager>Maverick</packager>
+	<packagerurl>http://www.corejoomla.com/</packagerurl>
+	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
+	<description><![CDATA[
+	    <div class="well">
+		<p>Community Crosswords Package:</p> 
+		<div>Community Crosswords Component: Successfully installed</div>
+		<div>Search Plugin: Successfully installed</div>
+		<p><strong style="color: red;">Please install CjLib component if not yet installed. Please enable the plugins from plugin manager.</strong></p>
+		<p>Thank you for using corejoomla&reg; software. Please add a rating and review at Joomla&reg; Extension Directory.</p>
+		</div>
+		]]></description>
+	
+	<files folder="packages">
+		<file id="crosswords" type="component">com_crosswords.zip</file>
+		<file client="site" group="search" id="crosswords" type="plugin">plg_search_crosswords.zip</file>
+	</files>
+</extension>

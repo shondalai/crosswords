@@ -1,0 +1,20 @@
+[
+    {
+        "title"         : "New Crossword Question",
+        "alias"         : "new-crossword-question",
+        "description"   : "Points awarded for creating a crossword question.",
+        "command"       : "com_crosswords.create",
+        "extension"     : "com_crosswords",
+        "state"         : true,
+        "points"        : 1
+	},
+	{
+        "title"         : "Solved a Crossword",
+        "alias"         : "solved-crossword",
+        "description"   : "Points awarded for solving a crossword.",
+        "command"       : "com_crosswords.solve",
+        "extension"     : "com_crosswords",
+        "state"         : true,
+        "points"        : 1
+	}
+]

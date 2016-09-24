@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+	<layout title="Crosswords Layout">
+		<message>
+			<![CDATA[COM_CROSSWORDS_DEFAULT_LAYOUT_DESCRIPTION]]>
+		</message>
+	</layout>
+	<state>
+		<name>Crosswords Layout</name>
+		<description>Crosswords Home Page</description>
+	</state>
+</metadata>

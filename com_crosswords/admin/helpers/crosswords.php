@@ -99,24 +99,48 @@ abstract class CrosswordsHelper{
 		}
 	}
 	
-	public static function countItems(&$query)
+	public static function countItems(&$items)
 	{
-		// Join articles to categories and count published items
-		$query->select('COUNT(DISTINCT cp.id) AS count_published');
-		$query->join('LEFT', '#__crosswords AS cp ON cp.catid = a.id AND cp.published = 1');
-	
-		// Count unpublished items
-		$query->select('COUNT(DISTINCT cu.id) AS count_unpublished');
-		$query->join('LEFT', '#__crosswords AS cu ON cu.catid = a.id AND cu.published = 0');
-	
-		// Count archived items
-		$query->select('COUNT(DISTINCT ca.id) AS count_archived');
-		$query->join('LEFT', '#__crosswords AS ca ON ca.catid = a.id AND ca.published = 2');
-	
-		// Count trashed items
-		$query->select('COUNT(DISTINCT ct.id) AS count_trashed');
-		$query->join('LEFT', '#__crosswords AS ct ON ct.catid = a.id AND ct.published = -2');
-	
-		return $query;
+		$db = JFactory::getDbo();
+
+		foreach ($items as $item)
+		{
+			$item->count_trashed = 0;
+			$item->count_archived = 0;
+			$item->count_unpublished = 0;
+			$item->count_published = 0;
+			$query = $db->getQuery(true);
+			$query->select('published as state, count(*) AS count')
+				->from($db->qn('#__crosswords'))
+				->where('catid = ' . (int) $item->id)
+				->group('published');
+			$db->setQuery($query);
+			$topics = $db->loadObjectList();
+
+			foreach ($topics as $topic)
+			{
+				if ($topic->state == 1)
+				{
+					$item->count_published = $topic->count;
+				}
+
+				if ($topic->state == 0)
+				{
+					$item->count_unpublished = $topic->count;
+				}
+
+				if ($topic->state == 2)
+				{
+					$item->count_archived = $topic->count;
+				}
+
+				if ($topic->state == -2)
+				{
+					$item->count_trashed = $topic->count;
+				}
+			}
+		}
+
+		return $items;
 	}
 }

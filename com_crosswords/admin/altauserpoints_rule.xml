@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<altauserpoints>
+	<component>com_crosswords</component>
+	<rules>
+		<rule>
+			<name>Crosswords - New Crossword</name>
+			<description>Points awarded for creating a crossword.</description>
+			<plugin_function>com_crosswords.create</plugin_function>
+			<fixed_points>true</fixed_points>
+			<category>ot</category>
+			<display_message>1</display_message>
+			<email_notification>1</email_notification>
+		</rule>
+		<rule>
+			<name>Crosswords - Solved Crossword</name>
+			<description>Points awarded for solving a crossword.</description>
+			<plugin_function>com_crosswords.solve</plugin_function>
+			<fixed_points>true</fixed_points>
+			<category>ot</category>
+			<display_message>1</display_message>
+			<email_notification>1</email_notification>
+		</rule>
+	</rules>
+</altauserpoints>

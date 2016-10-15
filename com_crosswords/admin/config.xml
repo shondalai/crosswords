@@ -143,6 +143,7 @@
 			<option value="jomsocial">JomSocial</option>
 			<option value="easysocial">EasySocial</option>
 			<option value="aup">Alpha User Points</option>
+			<option value="atup">Alta User Points</option>
 		</field>
 		
 		<field name="spacer2" type="spacer" hr="true" />

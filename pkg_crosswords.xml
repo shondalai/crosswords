@@ -2,9 +2,9 @@
 <extension method="upgrade" type="package" version="3.0">
 	<name>Community Crosswords Package</name>
 	<author>Maverick</author>
-	<creationDate>2016-Jul-21</creationDate>
+	<creationDate>2017-Jan-08</creationDate>
 	<packagename>crosswords</packagename>
-	<version>3.6.1</version>
+	<version>3.6.2</version>
 	<url>http://www.corejoomla.com/</url>
 	<packager>Maverick</packager>
 	<packagerurl>http://www.corejoomla.com/</packagerurl>

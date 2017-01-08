@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="CjLib" default="copyall" basedir=".">
+<project name="Crosswords" default="copyall" basedir=".">
 	<property name="site3" value="d:/xampp/htdocs/j3/components/com_crosswords" />
 	<property name="admin3" value="d:/xampp/htdocs/j3/administrator/components/com_crosswords" />
 	<property name="adminlang3" value="d:/xampp/htdocs/j3/administrator/language/" />
@@ -41,7 +41,7 @@
 	    <xmltask source="${package_dir}/auto_updates/details.xml" dest="${package_dir}/auto_updates/details.xml" report="false" encoding="utf-8">
 	        <replace path="/updates/update/version/text()" withText="${version}"/>
 	    	<replace path="/updates/update/downloads/downloadurl/text()" 
-	    		withText="http://www.corejoomla.com/media/autoupdates/files/pkg_crosswords_v${version}.zip"/>
+	    		withText="https://www.corejoomla.com/media/autoupdates/files/pkg_crosswords_v${version}.zip"/>
 	    </xmltask>
 	    
 	    <replace file="${package_dir}/com_crosswords/site/helpers/constants.php" token="@version@" value="${version}" />
@@ -101,7 +101,7 @@
 			passphrase="${password}"/>
 		
 		<move file="${root_dir}/Packages/pkg_crosswords_v${version}.zip" todir="d:/develop/releases/community crosswords/"/>
-		<replace file="${package_dir}/com_crosswords/site/lib/corejoomla/constants.php" token="${version}" value="@version@" />
+		<replace file="${package_dir}/com_crosswords/site/helpers/constants.php" token="${version}" value="@version@" />
 	</target>
 	
 	<target name="make_crosswords_package" depends="build_crosswords_package">
@@ -127,6 +127,7 @@
 				<include name="index.html"/>
 				<include name="crosswords.xml"/>
 				<include name="crosswords.php"/>
+				<include name="en-GB.plg_search_crosswords.ini"/>
 			</zipfileset>
 		</zip>
 	</target>

@@ -5,11 +5,11 @@
 		<description>Crosswords Package</description>
 		<element>pkg_crosswords</element>
 		<type>package</type>
-		<version>4.2.1</version>
+		<version>3.6.2</version>
 
 		<infourl title="Crosswords">https://www.corejoomla.com/products/community-crosswords.html</infourl>
 		<downloads>
-			<downloadurl format="zip" type="full">https://www.corejoomla.com/index.php?option=com_cjupdater&amp;task=update.download&amp;extension=crosswords&amp;version=4.2.1</downloadurl>
+			<downloadurl format="zip" type="full">https://www.corejoomla.com/media/autoupdates/files/pkg_crosswords_v3.6.2.zip</downloadurl>
 		</downloads>
 		<tags>
 			<tag>stable</tag>
@@ -26,11 +26,11 @@
 		<description>Crosswords Package</description>
 		<element>pkg_crosswords</element>
 		<type>package</type>
-		<version>4.2.1</version>
+		<version>3.6.2</version>
 
 		<infourl title="Crosswords">https://www.corejoomla.com/products/community-crosswords.html</infourl>
 		<downloads>
-			<downloadurl format="zip" type="full">https://www.corejoomla.com/index.php?option=com_cjupdater&amp;task=update.download&amp;extension=crosswords&amp;version=4.2.1</downloadurl>
+			<downloadurl format="zip" type="full">https://www.corejoomla.com/media/autoupdates/files/pkg_crosswords_v3.6.2.zip</downloadurl>
 		</downloads>
 		<tags>
 			<tag>stable</tag>

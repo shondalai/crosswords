@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <extension method="upgrade" type="component" version="2.5.0">
 	<name>Crosswords</name>
-	<creationDate>2016-Jul-21</creationDate>
+	<creationDate>2017-Jan-08</creationDate>
 	<author>Maverick</author>
 	<authorEmail>support@corejoomla.com</authorEmail>
 	<authorUrl>http://www.corejoomla.org</authorUrl>
 	<copyright>Copyright corejoomla.com. All rights reserved.</copyright>
 	<license>Gnu/GPL v2 or later</license>
-	<version>3.6.1</version>
+	<version>3.6.2</version>
 	<description>Build crosswords first time on Joomla.</description>
 
 	<!-- installation part -->

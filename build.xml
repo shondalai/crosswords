@@ -41,7 +41,7 @@
 	    <xmltask source="${package_dir}/auto_updates/details.xml" dest="${package_dir}/auto_updates/details.xml" report="false" encoding="utf-8">
 	        <replace path="/updates/update/version/text()" withText="${version}"/>
 	    	<replace path="/updates/update/downloads/downloadurl/text()" 
-	    		withText="https://www.corejoomla.com/media/autoupdates/files/pkg_crosswords_v${version}.zip"/>
+	    		withText="https://github.com/corejoomla/crosswords/releases/download/${version}/pkg_crosswords_v${version}.zip"/>
 	    </xmltask>
 	    
 	    <replace file="${package_dir}/com_crosswords/site/helpers/constants.php" token="@version@" value="${version}" />

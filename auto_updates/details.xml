@@ -9,7 +9,7 @@
 
 		<infourl title="Crosswords">https://www.corejoomla.com/products/community-crosswords.html</infourl>
 		<downloads>
-			<downloadurl format="zip" type="full">https://www.corejoomla.com/media/autoupdates/files/pkg_crosswords_v3.6.2.zip</downloadurl>
+			<downloadurl format="zip" type="full">https://github.com/corejoomla/crosswords/releases/download/3.6.2/pkg_crosswords_v3.6.2.zip</downloadurl>
 		</downloads>
 		<tags>
 			<tag>stable</tag>
@@ -30,7 +30,7 @@
 
 		<infourl title="Crosswords">https://www.corejoomla.com/products/community-crosswords.html</infourl>
 		<downloads>
-			<downloadurl format="zip" type="full">https://www.corejoomla.com/media/autoupdates/files/pkg_crosswords_v3.6.2.zip</downloadurl>
+			<downloadurl format="zip" type="full">https://github.com/corejoomla/crosswords/releases/download/3.6.2/pkg_crosswords_v3.6.2.zip</downloadurl>
 		</downloads>
 		<tags>
 			<tag>stable</tag>

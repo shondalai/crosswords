@@ -1,3 +1,9 @@
 /.gitignore
 /.htaccess
 /build.xml
+
+.buildpath
+.settings/org.eclipse.php.core.prefs
+.settings/org.eclipse.wst.common.project.facet.core.xml
+.tx/config
+.externalToolBuilders/pkg_crosswords.launch

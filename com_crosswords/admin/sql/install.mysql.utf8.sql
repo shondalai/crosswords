@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS  `#__crosswords` (
   KEY `idx_crosswords_checkout` (`checked_out`),
   KEY `idx_crosswords_access` (`access`),
   KEY `idx_crosswords_language` (`language`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_unicode_ci
 
 CREATE TABLE IF NOT EXISTS  `#__crosswords_keywords` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -60,7 +60,7 @@ CREATE TABLE IF NOT EXISTS  `#__crosswords_keywords` (
   KEY `idx_crosswords_keywords_checkout` (`checked_out`),
   KEY `idx_crosswords_keywords_access` (`access`),
   KEY `idx_crosswords_keywords_language` (`language`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS  `#__crosswords_questions` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -71,7 +71,7 @@ CREATE TABLE IF NOT EXISTS  `#__crosswords_questions` (
   `axis` tinyint(3) unsigned NOT NULL,
   `position` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_unicode_ci
 
 CREATE TABLE IF NOT EXISTS  `#__crosswords_response_details` (
   `response_id` int(10) unsigned NOT NULL DEFAULT '0',
@@ -79,7 +79,7 @@ CREATE TABLE IF NOT EXISTS  `#__crosswords_response_details` (
   `crossword_id` int(10) unsigned NOT NULL,
   `answer` varchar(32) NOT NULL,
   `valid` tinyint(1) unsigned NOT NULL DEFAULT '0'
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_unicode_ci
 
 CREATE TABLE IF NOT EXISTS  `#__crosswords_responses` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -88,4 +88,4 @@ CREATE TABLE IF NOT EXISTS  `#__crosswords_responses` (
   `created` datetime NOT NULL,
   `solved` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_unicode_ci

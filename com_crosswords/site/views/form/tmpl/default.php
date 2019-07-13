@@ -91,7 +91,7 @@ foreach ($categories as $id=>$category)
 			<table class="multiselect-container">
 				<tr>
 					<td width="45%">
-						<select name="source-list" class="input-xlarge source-list" size="10" multiple="multiple"></select>
+						<select name="source-list" class="input-xlarge source-list" size="10" multiple="multiple" style="height: 100% !important;"></select>
 					</td>
 					<td width="10%">
 						<button type="button" class="btn btn-mini btn-move-right tooltip-hover" title="<?php echo JText::_('COM_CROSSWORDS_MOVE_RIGHT')?>">
@@ -108,7 +108,7 @@ foreach ($categories as $id=>$category)
 						</button>
 					</td>
 					<td width="45%">
-						<select name="target-list[]" class="input-xlarge target-list" size="10" multiple="multiple"></select>
+						<select name="target-list[]" class="input-xlarge target-list" size="10" multiple="multiple" style="height: 100% !important;"></select>
 					</td>
 				</tr>
 				<tr>

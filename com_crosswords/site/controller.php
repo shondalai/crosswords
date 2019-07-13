@@ -1,16 +1,13 @@
 <?php
 /**
- * @version		$Id: controller.php 01 2011-01-11 11:37:09Z maverick $
- * @package		CoreJoomla.crosswords
- * @subpackage	Components.site
- * @copyright	Copyright (C) 2009 - 2010 corejoomla.com, Inc. All rights reserved.
- * @author		Maverick
- * @link		http://www.corejoomla.com/
- * @license		License GNU General Public License version 2 or later
+ * @package     corejoomla.site
+ * @subpackage  com_crosswords
+ *
+ * @copyright   Copyright (C) 2009 - 2018 corejoomla.com. All rights reserved.
+ * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
+defined('_JEXEC') or die();
 
-// no direct access
-defined('_JEXEC') or die;
 
 jimport('joomla.application.component.controller');
 

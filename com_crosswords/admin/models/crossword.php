@@ -413,7 +413,7 @@ class CrosswordsModelCrossword extends JModelAdmin
 			$app = JFactory::getApplication();
 			$assoc = JLanguageAssociations::isEnabled();
 	
-			if ($app->isSite() && $assoc && $this->getState('crossword.id'))
+			if ($app->isClient('site') && $assoc && $this->getState('crossword.id'))
 			{
 				$form->setFieldAttribute('language', 'readonly', 'true');
 				$form->setFieldAttribute('catid', 'readonly', 'true');

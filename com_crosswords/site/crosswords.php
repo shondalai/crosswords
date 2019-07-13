@@ -1,14 +1,12 @@
 <?php
 /**
- * @version		$Id: crosswords.php 01 2011-08-13 11:37:09Z maverick $
- * @package		CoreJoomla.Crosswords
- * @subpackage	Components
- * @copyright	Copyright (C) 2009 - 2011 corejoomla.com. All rights reserved.
- * @author		Maverick
- * @link		http://www.corejoomla.com/
- * @license		License GNU General Public License version 2 or later
+ * @package     corejoomla.site
+ * @subpackage  com_crosswords
+ *
+ * @copyright   Copyright (C) 2009 - 2018 corejoomla.com. All rights reserved.
+ * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
-defined('_JEXEC') or die;
+defined('_JEXEC') or die();
 
 defined('CW_APP_NAME') or define('CW_APP_NAME', 'com_crosswords');
 require_once JPATH_ROOT.'/components/com_cjlib/framework.php';
@@ -42,19 +40,6 @@ else
 {
 	$controller = JControllerLegacy::getInstance('Crosswords');
 }
-
-/********************************** JQUERY HACKS ********************************************/
-$document = JFactory::getDocument();
-$headData = $document->getHeadData();
-$scripts = $headData['scripts'];
-if(!empty($scripts))
-{
-	unset($scripts['/media/system/js/mootools-core.js']);
-	unset($scripts['/media/system/js/mootools-more.js']);
-	$headData['scripts'] = $scripts;
-	$document->setHeadData($headData);
-}
-/*********************************** JQUERY HACKS ***********************************************/
 
 $controller->execute( $app->input->getCmd('task'));
 $controller->redirect();

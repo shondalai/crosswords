@@ -12,18 +12,18 @@
 // No direct access to this file
 defined('_JEXEC') or die;
 
-abstract class CrosswordsHelper{
-
-	public static function addSubmenu($vName){
-		
+abstract class CrosswordsHelper
+{
+	public static function addSubmenu($vName)
+	{
 		JSubMenuHelper::addEntry(JText::_('COM_CROSSWORDS_DASHBOARD'), 'index.php?option=com_crosswords&view=dashboard', $vName == 'dashboard');
 		JSubMenuHelper::addEntry(JText::_('COM_CROSSWORDS_CROSSWORDS'), 'index.php?option=com_crosswords&view=crosswords', $vName == 'crosswords');
 		JSubMenuHelper::addEntry(JText::_('COM_CROSSWORDS_KEYWORDS'), 'index.php?option=com_crosswords&view=keywords', $vName == 'keywords');
 		JSubMenuHelper::addEntry(JText::_('COM_CROSSWORDS_CATEGORIES'), 'index.php?option=com_categories&view=categories&extension=com_crosswords', $vName == 'categories');
 	}
 	
-	public static function getActions($itemid = 0){
-		
+	public static function getActions($itemid = 0)
+	{
 		jimport('joomla.access.access');
 		$user   = JFactory::getUser();
 		$result = new JObject;
@@ -45,58 +45,6 @@ abstract class CrosswordsHelper{
 		}
 
 		return $result;
-	}
-	
-	public static function award_points($params, $userid, $action, $reference, $info){
-	
-		$functions = null;
-	
-		switch ($params->get('points_system', 'none')){
-	
-			case 'cjblog':
-			case 'jomsocial':
-	
-				$functions = array(
-				'question'=>'com_crosswords.newquestion',
-				'solve'=>'com_crosswords.solvedcrossword');
-	
-				break;
-	
-			case 'aup':
-	
-				$functions = array(
-				'question'=>'sysplgaup_submitcwquestion',
-				'solve'=>'sysplgaup_solvecrossword');
-	
-				break;
-	
-			default:
-	
-				return false;
-		}
-	
-		switch ($action){
-	
-			case 1: // new crossword
-	
-				CJFunctions::award_points($params->get('points_system'), $userid, array(
-					'reference'=>$reference,
-					'info'=>$info,
-					'function'=>$functions['question']
-				));
-	
-				break;
-	
-			case 2: // solved crossword
-	
-				CJFunctions::award_points($params->get('points_system'), $userid, array(
-					'reference'=>$reference,
-					'info'=>$info,
-					'function'=>$functions['solve']
-				));
-	
-				break;
-		}
 	}
 	
 	public static function countItems(&$items)

@@ -1,16 +1,13 @@
 <?php
 /**
- * @version		$Id: komento_plugin.php 01 2011-08-13 11:37:09Z maverick $
- * @package		CoreJoomla.gpstools
- * @subpackage	Components
- * @copyright	Copyright (C) 2009 - 2013 corejoomla.com. All rights reserved.
- * @author		Maverick
- * @link		http://www.corejoomla.com/
- * @license		License GNU General Public License version 2 or later
+ * @package     corejoomla.site
+ * @subpackage  com_crosswords
+ *
+ * @copyright   Copyright (C) 2009 - 2018 corejoomla.com. All rights reserved.
+ * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
+defined('_JEXEC') or die();
 
-// no direct access
-defined('_JEXEC') or die('Restricted access');
 
 // Always load abstract class
 require_once( JPATH_ROOT.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_komento'.DIRECTORY_SEPARATOR.'komento_plugins'.DIRECTORY_SEPARATOR.'abstract.php' );

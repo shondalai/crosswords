@@ -26,7 +26,7 @@ class CrosswordsModelCategories extends JModelList {
 
 	public function get_categories($parent = 0, $recursive = false){
 
-		if (!count($this->_items)) {
+		if (empty($this->_items)) {
 			
 			$app = JFactory::getApplication();
 			$menu = $app->getMenu();

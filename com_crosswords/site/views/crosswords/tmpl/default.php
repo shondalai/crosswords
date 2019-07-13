@@ -9,6 +9,7 @@
  * @license		License GNU General Public License version 2 or later
  */
 defined('_JEXEC') or die;
+$api = new CjLibApi();
 ?>
 
 <div id="cj-wrapper" class="cj-wrapper-main">
@@ -91,7 +92,8 @@ defined('_JEXEC') or die;
 				<div class="media">
 					<?php if($this->params->get('user_avatar') != 'none'):?>
 					<div class="pull-left margin-right-10 avatar hidden-phone">
-						<?php echo CJFunctions::get_user_avatar(
+						<?php echo $api->getUserAvatar(
+						    $this->params->get('user_avatar'),
 							$this->params->get('user_avatar'), 
 							$item->created_by, 
 							$this->params->get('user_display_name'), 
@@ -125,9 +127,9 @@ defined('_JEXEC') or die;
 								JRoute::_($base_uri.'&task='.$this->action.'&id='.$item->catid.':'.$item->category_alias.$itemid),
 								$this->escape($item->category_title));
 							$user_name = $item->created_by > 0 
-								? CJFunctions::get_user_profile_link($this->params->get('user_avatar'), $item->created_by, $this->escape($item->user_name))
+							? $api->getUserProfileUrl($this->params->get('user_avatar'), $item->created_by. false, $this->escape($item->user_name))
 								: $this->escape($item->username);
-							$formatted_date = CJFunctions::get_formatted_date($item->created);
+							$formatted_date = CjLibDateUtils::getHumanReadableDate($item->created);
 							
 							echo JText::sprintf('COM_CROSSWORDS_LIST_ITEM_META', $user_name, $category_name, $formatted_date);
 							?>

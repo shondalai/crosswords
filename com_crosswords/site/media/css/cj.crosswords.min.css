@@ -8,8 +8,8 @@
 #cj-wrapper .num-box {text-align: center; min-width: 60px;}
 #cj-wrapper .num-box .num-header {font-weight: bold; margin: 6px; padding: 0; line-height: 18px;}
 
-#cj-wrapper #crossword-grid {border: 1px solid #ccc;}
-#cj-wrapper #crossword-grid td {border: 1px solid #ccc; width: 25px; min-width: 25px; height: 25px; min-height: 25px;}
+#cj-wrapper #crossword-grid {border: 1px solid #ccc; width: auto;}
+#cj-wrapper #crossword-grid td {border: 1px solid #ccc; width: 25px; min-width: 25px; height: 25px; min-height: 25px; padding: 0px !important;}
 #cj-wrapper #crossword-grid td input {padding: 0; width: 100%; border: 0; box-sizing: border-box; -webkit-box-sizing:border-box;
 	-moz-box-sizing: border-box; text-align: center; margin: 0; -webkit-border-radius: 0; border-radius: none; 
 	-webkit-box-shadow: 0; box-shadow: none; background-color: transparent; font-weight: bold;}

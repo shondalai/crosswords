@@ -1,18 +1,13 @@
 <?php
 /**
- * Joomla! 1.5 component Crosswords
+ * @package     corejoomla.site
+ * @subpackage  com_crosswords
  *
- * @version $Id: router.php 2010-10-16 12:32:21 svn $
- * @author Maverick
- * @package Joomla
- * @subpackage Crosswords
- * @license GNU/GPL
- *
- * Crosswords is a Joomla component to generate crosswords with Community touch.
+ * @copyright   Copyright (C) 2009 - 2018 corejoomla.com. All rights reserved.
+ * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
+defined('_JEXEC') or die();
 
-// no direct access
-defined('_JEXEC') or die('Restricted access');
 
 /*
  * Function to convert a system URL to a SEF URL

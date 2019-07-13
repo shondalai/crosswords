@@ -11,6 +11,7 @@
 defined('_JEXEC') or die;
 
 $document = JFactory::getDocument();
+$api = new CjLibApi();
 CJFunctions::load_jquery(array('libs'=>array('form')));
 
 $this->user_name = $this->params->get('user_display_name', 'name');
@@ -30,12 +31,12 @@ if(count($sharing_services) > 0){
 	include_once JPATH_COMPONENT.DS.'helpers'.DS.'header.php';
 	
 	$user_profile_link = $this->item->created_by > 0 
-		? CJFunctions::get_user_profile_link($this->user_avatar, $this->item->created_by, $this->escape($this->item->user_name))
+		? $api->getUserProfileUrl($this->user_avatar, $this->item->created_by, false, $this->escape($this->item->user_name))
 		: $this->escape($this->item->user_name);
 	$category_name = JHtml::link(
 			JRoute::_('index.php?option='.CW_APP_NAME.'&view=crosswords&id='.$this->item->catid.':'.$this->item->category_alias.$home_itemid),
 			$this->escape($this->item->category_title));
-	$formatted_date = CJFunctions::get_formatted_date($this->item->created);
+	$formatted_date = CjLibDateUtils::getHumanReadableDate($this->item->created);
 	?>
 	
 	<div class="container-fluid no-space-left no-space-right crosswords-wrapper">
@@ -45,7 +46,7 @@ if(count($sharing_services) > 0){
 			
 				<div class="media margin-bottom-20">
 					<div class="pull-left avatar">
-						<?php echo CJFunctions::get_user_avatar($this->user_avatar, $this->item->created_by, $this->user_name, 64, $this->item->email, 
+						<?php echo $api->getUserAvatar($this->user_avatar, $this->user_avatar, $this->item->created_by, $this->user_name, 64, $this->item->email, 
 								array('class'=>'thumbnail'), array('class'=>'media-object'));?>
 					</div>
 					<div class="media-body">
@@ -73,7 +74,7 @@ if(count($sharing_services) > 0){
 				</div>
 			
 				<form id="crossword-form" action="<?php echo JRoute::_('index.php?option='.CW_APP_NAME.'&view=crosswords&task=check_result');?>" method="post">
-				    <table id="crossword-grid">
+				    <table id="crossword-grid" style="width: auto;">
 					    <tbody>
 					    	<tr class="grid-header">
 					    		<td colspan="<?php echo $this->item->columns + 2?>" class="question-highlight-box">
@@ -90,12 +91,12 @@ if(count($sharing_services) > 0){
 					    		<?php for($col=-1; $col<=$this->item->columns; $col++):?>
 					    		
 					    		<?php if($this->item->cells[$row][$col]->valid):?>
-					    		<td>
-					    			<div class="textcell<?php echo $this->item->cells[$row][$col]->topclaz?>" style="width: 25px; height: 25px;">
-					    				<div class="<?php echo $this->item->cells[$row][$col]->bottomclaz?>" style="width: 25px; height: 25px;">
+					    		<td style="padding: 0px !important;">
+					    			<div class="textcell<?php echo $this->item->cells[$row][$col]->topclaz?>" style="width: 25px !important; height: 25px !important;">
+					    				<div class="<?php echo $this->item->cells[$row][$col]->bottomclaz?>" style="width: 25px !important; height: 25px !important;">
 					    					<input <?php echo $this->item->solved == '1' ? 'readonly="readonly"' : '';?> name="cell_<?php echo $col.'_'.$row?>" type="text" 
 					    						id="<?php echo $this->item->cells[$row][$col]->id;?>" class="<?php echo implode(' ', $this->item->cells[$row][$col]->claz)?>" 
-					    						value="<?php echo $this->item->cells[$row][$col]->value;?>" maxlength="1" style="width: 25px; height: 25px;">
+					    						value="<?php echo $this->item->cells[$row][$col]->value;?>" maxlength="1" style="width: 25px !important; height: 25px !important; line-height: 20px !important; padding: 0px !important;">
 					    				</div>
 					    			</div>
 					    		</td>
@@ -175,8 +176,9 @@ if(count($sharing_services) > 0){
 					<?php foreach ($this->item->users_solved as $solved_user):?>
 					<div class="pull-left margin-right-10 margin-bottom-10">
 					<?php if($this->params->get('user_avatar', 'none') != 'none'):?>
-						<?php echo CJFunctions::get_user_avatar(
-								$this->params->get('user_avatar'), 
+						<?php echo $api->getUserAvatar(
+								$this->params->get('User_avatar'),
+						        $this->params->get('user_avatar'),
 								$solved_user->id, 
 								$this->params->get('user_display_name'), 
 								$this->params->get('avatar_size'),

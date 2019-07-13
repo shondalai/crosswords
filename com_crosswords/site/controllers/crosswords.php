@@ -442,7 +442,7 @@ class CrosswordsControllerCrosswords extends JControllerLegacy {
     	$crossword->id = $app->input->post->getInt('id', 0);
     	$crossword->title = $app->input->post->getString('title', null);
     	$crossword->alias = $app->input->post->getString('alias', null);
-    	$crossword->description =  CJFunctions::get_clean_var('description');
+    	$crossword->description = JComponentHelper::filterText($app->input->post->get('description', '', 'raw'));
     	$crossword->catid = $app->input->post->getString('catid', 0);
     	
     	if($crossword->id > 0) 

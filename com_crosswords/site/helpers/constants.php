@@ -14,11 +14,10 @@ defined('DS') or define('DS', DIRECTORY_SEPARATOR);
 
 // Please do not touch these until and unless you know what you are doing.
 define('CW_CURR_VERSION',				'@version@');
-define('CW_CJLIB_VER',					'2.0.0');
+define('CW_CJLIB_VER',					'3.2.9');
 
 define("CW_MEDIA_URI",					JURI::root(true).'/media/com_crosswords/');
 define('CW_TEMP_STORE',					JPATH_ROOT.'/media/crosswords/tmp');
 define('CW_TEMP_STORE_URI',				JURI::root(false).'media/crosswords/tmp/');
 define('CW_IMAGES_UPLOAD_DIR',			JPATH_ROOT.'/media/crosswords/images');
 define('CW_IMAGES_URI',					JURI::root(false).'media/crosswords/images/');
-?>

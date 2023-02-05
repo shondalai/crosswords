@@ -14,12 +14,19 @@ defined('_JEXEC') or die;
 // Include the component HTML helpers.
 JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 
-JHtml::_('behavior.formvalidator');
-JHtml::_('behavior.keepalive');
-JHtml::_('formbehavior.chosen', 'select');
-
-CJLib::behavior('bscore');
-CJFunctions::load_jquery(array('libs'=>array('form', 'fontawesome')));
+if ( APP_VERSION < 4 )
+{
+	JHtml::_( 'behavior.formvalidator' );
+	JHtml::_( 'behavior.keepalive' );
+	JHtml::_( 'formbehavior.chosen', 'select' );
+	CJLib::behavior( 'bscore' );
+	CJFunctions::load_jquery( [ 'libs' => [ 'form', 'fontawesome' ] ] );
+} else {
+	$wa = $this->document->getWebAssetManager();
+	$wa->getRegistry()->addExtensionRegistryFile('com_contenthistory');
+	$wa->useScript('keepalive')->useScript('form.validate');
+	$this->set('useCoreUI', true);
+}
 
 $this->hiddenFieldsets = array();
 $this->hiddenFieldsets[0] = 'basic-limited';
@@ -55,23 +62,6 @@ if (isset($this->item->attribs['show_crossword_options']) && $this->item->attrib
 	$params->show_crossword_options = $this->item->attribs['show_crossword_options'];
 }
 ?>
-
-<script type="text/javascript">
-	Joomla.submitbutton = function(task)
-	{
-		if (task == 'crossword.cancel' || document.formvalidator.isValid(document.getElementById('adminForm')))
-		{
-			<?php 
-			if($editor == 'wysiwyg')
-			{
-				echo $this->form->getField('description')->save();
-			} 
-			?>
-			Joomla.submitform(task, document.getElementById('adminForm'));
-		}
-	}
-</script>
-
 <div id="cj-wrapper">
 	<form action="<?php echo JRoute::_('index.php?option=com_crosswords&layout=edit&id=' . (int) $this->item->id); ?>" method="post" name="adminForm" id="adminForm" class="form-validate">
 		

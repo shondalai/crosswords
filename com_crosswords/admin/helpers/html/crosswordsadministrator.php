@@ -96,7 +96,7 @@ abstract class JHtmlCrosswordsAdministrator
 			0	=> array('unfeatured',	'crosswords.featured',	'COM_CROSSWORDS_UNFEATURED',	'COM_CROSSWORDS_TOGGLE_TO_FEATURE'),
 			1	=> array('featured',	'crosswords.unfeatured',	'COM_CROSSWORDS_FEATURED',		'COM_CROSSWORDS_TOGGLE_TO_UNFEATURE'),
 		);
-		$state	= JArrayHelper::getValue($states, (int) $value, $states[1]);
+		$state	= \Joomla\Utilities\ArrayHelper::getValue($states, (int) $value, $states[1]);
 		$icon	= $state[0];
 
 		if ($canChange)

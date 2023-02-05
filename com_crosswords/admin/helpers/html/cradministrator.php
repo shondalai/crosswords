@@ -20,7 +20,7 @@ abstract class JHtmlCrAdministrator
 			1	=> array('featured.png',		'crosswords.unfeatured',	'COM_CROSSWORDS_FEATURED',		'COM_CROSSWORDS_TOGGLE_TO_UNFEATURE'),
 		);
 		
-		$state	= JArrayHelper::getValue($states, (int) $value, $states[1]);
+		$state	= \Joomla\Utilities\ArrayHelper::getValue($states, (int) $value, $states[1]);
 		$html	= JHtml::_('image', 'admin/'.$state[0], JText::_($state[2]), NULL, true);
 		
 		if ($canChange) {

@@ -54,7 +54,6 @@ class CrosswordsViewDashboard extends JViewLegacy
 
 	protected function addToolbar ()
 	{
-		$canDo = CrosswordsHelper::getActions('com_crosswords');
 		$user = JFactory::getUser();
 		
 		// Get the toolbar object instance

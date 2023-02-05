@@ -4,6 +4,11 @@
 #cj-wrapper .margin-top-10 {margin-top: 10px;}
 #cj-wrapper .margin-bottom-20 {margin-bottom: 20px;}
 
+#cj-wrapper .item-count-box {min-width: 64px; margin-bottom: 0;}
+#cj-wrapper .item-count-box .panel-body {padding: 7px 5px;}
+#cj-wrapper .item-count-box .item-count-num {font-weight: normal; font-size: 110%; text-align: center; padding: 10px;}
+#cj-wrapper .item-count-box .item-count-caption {padding: 0 2px; font-weight: bold; font-size: 60%; text-transform: uppercase; text-align: center;}
+
 #cj-wrapper .search-box {padding: 4px 6px;}
 #cj-wrapper .num-box {text-align: center; min-width: 60px;}
 #cj-wrapper .num-box .num-header {font-weight: bold; margin: 6px; padding: 0; line-height: 18px;}

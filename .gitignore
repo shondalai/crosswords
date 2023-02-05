@@ -1,6 +1,5 @@
-/.gitignore
-/.htaccess
-/build.xml
+.htaccess
+build.xml
 
 .buildpath
 .settings/org.eclipse.php.core.prefs

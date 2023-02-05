@@ -69,7 +69,7 @@ class CrosswordsViewCrosswords extends JViewLegacy
 
 	protected function addToolbar()
 	{
-		$canDo = CrosswordsHelper::getActions($this->state->get('filter.category_id'), 0, 'com_crosswords');
+		$canDo = JHelperContent::getActions('com_crosswords', 'category', $this->state->get('filter.category_id'));
 		$user  = JFactory::getUser();
 
 		// Get the toolbar object instance

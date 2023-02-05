@@ -1,45 +1,43 @@
-<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
 <updates>
-	<update>
-		<name>Crosswords</name>
-		<description>Crosswords Package</description>
-		<element>pkg_crosswords</element>
-		<type>package</type>
-		<version>3.6.2</version>
-
-		<infourl title="Crosswords">https://www.corejoomla.com/products/community-crosswords.html</infourl>
-		<downloads>
-			<downloadurl format="zip" type="full">https://github.com/corejoomla/crosswords/releases/download/3.6.2/pkg_crosswords_v3.6.2.zip</downloadurl>
-		</downloads>
-		<tags>
-			<tag>stable</tag>
-		</tags>
-
-		<maintainer>corejoomla.com</maintainer>
-		<maintainerurl>http://www.corejoomla.com</maintainerurl>
-		<section>components</section>
-		
-		<targetplatform name="joomla" version="3.6"/>
-	</update>
-	<update>
-		<name>Crosswords</name>
-		<description>Crosswords Package</description>
-		<element>pkg_crosswords</element>
-		<type>package</type>
-		<version>3.6.2</version>
-
-		<infourl title="Crosswords">https://www.corejoomla.com/products/community-crosswords.html</infourl>
-		<downloads>
-			<downloadurl format="zip" type="full">https://github.com/corejoomla/crosswords/releases/download/3.6.2/pkg_crosswords_v3.6.2.zip</downloadurl>
-		</downloads>
-		<tags>
-			<tag>stable</tag>
-		</tags>
-
-		<maintainer>corejoomla.com</maintainer>
-		<maintainerurl>http://www.corejoomla.com</maintainerurl>
-		<section>components</section>
-		
-		<targetplatform name="joomla" version="3.5"/>
-	</update>
+    <update>
+        <name>Crosswords</name>
+        <description>Crosswords Package</description>
+        <element>pkg_crosswords</element>
+        <type>package</type>
+        <version>4.0.0</version>
+        <infourl title="Crosswords">https://github.com/shondalai/crosswords</infourl>
+        <downloads>
+            <downloadurl format="zip" type="full">https://github.com/shondalai/crosswords/releases/download/v4.0.0/crosswords_v4.0.0.zip</downloadurl>
+        </downloads>
+        <tags>
+            <tag>stable</tag>
+        </tags>
+        <maintainer>Maverick</maintainer>
+        <maintainerurl>https://shondalai.com</maintainerurl>
+        <section>components</section>
+        <targetplatform name="joomla" version="3"></targetplatform>
+        <php_minimum>5.6</php_minimum>
+    </update>
+    <update>
+        <name>Crosswords</name>
+        <description>Crosswords Package</description>
+        <element>pkg_crosswords</element>
+        <type>package</type>
+        <version>4.0.0</version>
+        <infourl title="Crosswords">https://github.com/shondalai/crosswords</infourl>
+        <downloads>
+            <downloadurl format="zip" type="full">https://github.com/shondalai/crosswords/releases/download/v4.0.0/crosswords_v4.0.0.zip</downloadurl>
+        </downloads>
+        <tags>
+            <tag>stable</tag>
+        </tags>
+        <maintainer>Maverick</maintainer>
+        <maintainerurl>https://shondalai.com</maintainerurl>
+        <section>components</section>
+        <targetplatform name="joomla" version="4"></targetplatform>
+        <php_minimum>7.0</php_minimum>
+    </update>
 </updates>
+

@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
 <extensionset description="Crosswords Extensions List" name="Crosswords">
-	<extension client="site" description="Crosswords Package" detailsurl="https://www.corejoomla.com/media/autoupdates/crosswords/details.xml" element="pkg_crosswords" name="Crosswords Package" type="package" version="3.6.2"/>
+    <extension client="site" description="Crosswords Package" detailsurl="https://shondalai.com/wp-content/uploads/autoupdates/crosswords/details.xml" element="pkg_crosswords" name="Crosswords Package" type="package" version="4.0.0"></extension>
 </extensionset>
+

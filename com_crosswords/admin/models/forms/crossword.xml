@@ -16,8 +16,11 @@
 			<option value="-2">JTRASHED</option>
 		</field>
 
-		<field name="catid" type="categoryedit" label="JCATEGORY" description="JFIELD_CATEGORY_DESC" class="inputbox" required="true"></field>
-		<field name="tags" type="tag" label="JTAG" description="JTAG_DESC" class="inputbox" multiple="true"></field>
+		<field name="catid" type="categoryedit" published="1" extension="com_crosswords" label="JCATEGORY" description="JFIELD_CATEGORY_DESC" class="inputbox advancedSelect" required="true"
+			   addfieldprefix="Joomla\Component\Categories\Administrator\Field">
+			<option value="">JOPTION_SELECT_CATEGORY</option>
+		</field>
+		<field name="tags" type="tag" label="JTAG" description="JTAG_DESC" class="inputbox" multiple="true"/>
 		
 		<field name="buttonspacer" description="JGLOBAL_ACTION_PERMISSIONS_DESCRIPTION" type="spacer" />
 		

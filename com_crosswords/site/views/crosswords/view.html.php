@@ -1,201 +1,187 @@
 <?php
 /**
- * @version		$Id: view.html.php 01 2013-01-13 11:37:09Z maverick $
- * @package		CoreJoomla.crosswords
- * @subpackage	Components
- * @copyright	Copyright (C) 2009 - 2013 corejoomla.com. All rights reserved.
- * @author		Maverick
- * @link		http://www.corejoomla.com/
- * @license		License GNU General Public License version 2 or later
+ * @version        $Id: view.html.php 01 2013-01-13 11:37:09Z maverick $
+ * @package        CoreJoomla.crosswords
+ * @subpackage     Components
+ * @copyright      Copyright (C) 2009 - 2013 corejoomla.com. All rights reserved.
+ * @author         Maverick
+ * @link           http://www.corejoomla.com/
+ * @license        License GNU General Public License version 2 or later
  */
-defined('_JEXEC') or die();
-jimport ( 'joomla.application.component.view' );
+defined( '_JEXEC' ) or die();
 
 class CrosswordsViewCrosswords extends JViewLegacy {
-	
-	protected $params;
-	protected $print;
-	protected $state;
-	protected $canDo;
-	
-	function display($tpl = null) {
-		
-		$app = JFactory::getApplication();
-		$document = JFactory::getDocument();
-		$user = JFactory::getUser();
-		$model = $this->getModel();
-		$categories_model = $this->getModel('categories');
-		
-		$pathway = $app->getPathway();
-		$active = $app->getMenu()->getActive();
-		$itemid = CJFunctions::get_active_menu_id();
-		
-		$this->print = $app->input->getBool('print');
-		$page_heading = '';
-		
-		/********************************** PARAMS *****************************/
-		$appparams = JComponentHelper::getParams(CW_APP_NAME);
-		$menuParams = new JRegistry;
-		
-		if ($active) {
-		
-			$menuParams->loadString($active->params);
-		}
-		
-		$this->params = clone $menuParams;
-		$this->params->merge($appparams);
-		/********************************** PARAMS *****************************/
 
-		$limit = $this->params->get('list_length', $app->getCfg('list_limit', 20));
-		$limitstart = $app->input->getInt('start', 0);
-		$limitstart = ($limit != 0 ? (floor($limitstart / $limit) * $limit) : 0);
+	/**
+	 * The model state
+	 *
+	 * @var   \Joomla\CMS\Object\CMSObject
+	 * @since 4.0.0
+	 */
+	protected $state = null;
 
-		$catid = $app->input->getInt('id', 0);
-		
-		if(!$catid){
-				
-			$menuid = CJFunctions::get_active_menu_id(false);
-			$menuparams = $app->getMenu()->getParams( $menuid );
-			$catid = (int)$menuparams->get('catid', 0);
-			$app->input->set('id', $catid);
+	/**
+	 * An array containing archived articles
+	 *
+	 * @var   \stdClass[]
+	 * @since 4.0.0
+	 */
+	protected $items = [];
+
+	/**
+	 * The pagination object
+	 *
+	 * @var   \Joomla\CMS\Pagination\Pagination|null
+	 * @since 4.0.0
+	 */
+	protected $pagination = null;
+
+	/**
+	 * The page parameters
+	 *
+	 * @var    \Joomla\Registry\Registry|null
+	 * @since  4.0.0
+	 */
+	protected $params = null;
+
+	/**
+	 * The search query used on any archived articles (note this may not be displayed depending on the value of the
+	 * filter_field component parameter)
+	 *
+	 * @var    string
+	 * @since  4.0.0
+	 */
+	protected $filter = '';
+
+	/**
+	 * The user object
+	 *
+	 * @var    \Joomla\CMS\User\User
+	 * @since  4.0.0
+	 */
+	protected $user = null;
+
+	/**
+	 * The page class suffix
+	 *
+	 * @var    string
+	 * @since  4.0.0
+	 */
+	protected $pageclass_sfx = '';
+
+	/**
+	 * Execute and display a template script.
+	 *
+	 * @param   string  $tpl  The name of the template file to parse; automatically searches through the template paths.
+	 *
+	 * @return  void
+	 *
+	 * @throws  Exception
+	 * @since 4.0.0
+	 */
+	public function display( $tpl = null ) {
+		$user       = JFactory::getUser();
+		$app        = \Joomla\CMS\Factory::getApplication();
+		$state      = $this->get( 'State' );
+		$items      = $this->get( 'Items' );
+		$pagination = $this->get( 'Pagination' );
+
+		if ( $errors = $this->getModel()->getErrors() )
+		{
+			throw new Exception( implode( "\n", $errors ), 500 );
 		}
-		
-		$app->input->set('cwcatid', $catid);
-		
-		$this->items		= $this->get('Items');
-		$this->pagination	= $this->get('Pagination');
-		$this->state		= $this->get('State');
-		
-		if(!empty($this->items)){
-		
-			$userids = array();
-			
-			foreach($this->items as $item){
-		
-				$userids[] = $item->created_by;
+
+		// Flag indicates to not add limitstart=0 to URL
+		$pagination->hideEmptyLimitstart = true;
+
+		// Get the page/component configuration
+		$params = &$state->params;
+
+		\Joomla\CMS\Plugin\PluginHelper::importPlugin( 'content' );
+
+		foreach ( $items as $item )
+		{
+			$item->slug = $item->alias ? ( $item->id . ':' . $item->alias ) : $item->id;
+
+			// No link for ROOT category
+			if ( $item->parent_alias === 'root' )
+			{
+				$item->parent_id = null;
 			}
-			
-			$userids = array_unique($userids);
-			CJFunctions::load_users($this->params->get('user_avatar'), $userids);
-		}
-		
-		if($this->params->get('display_cat_list', 1) == 1){
-				
-			$this->categories = $categories_model->get_categories($catid);
-		}
-		
-		// Check for errors.
-		if (count($errors = $this->get('Errors'))) {
-			
-			JError::raiseError(500, implode("\n", $errors));
-			return false;
-		}
-		
-		switch ($this->action){
-			
-			case 'all':
-				$page_heading = JText::_('COM_CROSSWORDS_ALL_CROSSWORDS');
-				break;
-			case 'latest':
-				$page_heading = JText::_('COM_CROSSWORDS_LATEST_CROSSWORDS');
-				break;
-			case 'popular':
-				$page_heading = JText::_('COM_CROSSWORDS_POPULAR_CROSSWORDS');
-				break;
-			case 'solved':
-				$page_heading = JText::_('COM_CROSSWORDS_SOLVED_CROSSWORDS');
-				break;
-			case 'mycrosswords':
-				$page_heading = JText::_('COM_CROSSWORDS_MY_CROSSWORDS');
-				break;
-			case 'myresponses':
-				$page_heading = JText::_('COM_CROSSWORDS_MY_RESPONSES');
-				break;
-		}
-		
-		if($catid > 0){
-			
-			$category = JCategories::getInstance('Crosswords')->get($catid);
-			$this->assignRef('category', $category);
-			
-			if(!empty($category)){
 
-				// breadcrumbs
-				if(!in_array($this->action, array('search'))){
-					
-					$temp = $category;
+			$item->event = new \stdClass();
 
-					while ($temp && $temp->id > 1){
-					
-						$pathway->addItem($temp->title, JRoute::_('index.php?option='.CW_APP_NAME.'&view=crosswords&task='.$this->action.'&id='.$temp->id.':'.$temp->alias.$itemid));
-						$temp = $temp->getParent();
-					}
-				}
-				
-				// add to pathway
-				$pathway->addItem($page_heading);
-
-				$page_heading = $page_heading . ' - '. $category->title;
-
-				// set browser title
-				$this->params->set('page_heading', $this->params->get('page_heading', $page_heading));
+			// Old plugins: Ensure that text property is available
+			if ( ! isset( $item->text ) )
+			{
+				$item->text = $item->description;
 			}
+
+			\Joomla\CMS\Factory::getApplication()->triggerEvent( 'onContentPrepare', [ 'com_crosswords.crossword', &$item, &$item->params, 0 ] );
+
+			// Old plugins: Use processed text as introtext
+			$item->introtext = $item->text;
+
+			$results                        = $app->triggerEvent( 'onContentAfterTitle', [ 'com_content.archive', &$item, &$item->params, 0 ] );
+			$item->event->afterDisplayTitle = trim( implode( "\n", $results ) );
+
+			$results                           = $app->triggerEvent( 'onContentBeforeDisplay', [ 'com_content.archive', &$item, &$item->params, 0 ] );
+			$item->event->beforeDisplayContent = trim( implode( "\n", $results ) );
+
+			$results                          = $app->triggerEvent( 'onContentAfterDisplay', [ 'com_content.archive', &$item, &$item->params, 0 ] );
+			$item->event->afterDisplayContent = trim( implode( "\n", $results ) );
 		}
-		
-		$title = $this->params->get('page_title', $app->getCfg('sitename'));
-		
-		if ($app->getCfg('sitename_pagetitles', 0) == 1) {
-				
-			$document->setTitle(JText::sprintf('JPAGETITLE', $title, $page_heading));
-		} elseif ($app->getCfg('sitename_pagetitles', 0) == 2) {
-				
-			$document->setTitle(JText::sprintf('JPAGETITLE', $page_heading, $title));
-		} else {
-			
-			$document->setTitle($page_heading);
-		}
-		
-		// set meta description
-		if ($this->params->get('menu-meta_description')){
-				
-			$document->setDescription($this->params->get('menu-meta_description'));
-		}
-		
-		// set meta keywords
-		if ($this->params->get('menu-meta_keywords')){
-				
-			$document->setMetadata('keywords', $this->params->get('menu-meta_keywords'));
-		}
-		
-		// set robots
-		if ($this->params->get('robots')){
-				
-			$document->setMetadata('robots', $this->params->get('robots'));
-		}
-		
-		// set nofollow if it is print
-		if ($this->print){
-				
-			$document->setMetaData('robots', 'noindex, nofollow');
-		}
-		
-		parent::display($tpl);
+
+		$form             = new \stdClass();
+		$form->limitField = $pagination->getLimitBox();
+
+		// Escape strings for HTML output
+		$this->pageclass_sfx = htmlspecialchars( $params->get( 'pageclass_sfx', '' ) );
+
+		$this->filter     = $state->get( 'list.filter' );
+		$this->form       = &$form;
+		$this->items      = &$items;
+		$this->params     = &$params;
+		$this->user       = &$user;
+		$this->pagination = &$pagination;
+
+		$this->_prepareDocument();
+
+		parent::display( $tpl );
 	}
-	
-	private function load_users($items){
-		
-		if(empty($items)) return;
-		
-		$ids = array();
-		
-		foreach($items as $item){
-			
-			$ids[] = $item->created_by;
+
+	/**
+	 * Prepares the document
+	 *
+	 * @return  void
+	 *
+	 * @since 4.0.0
+	 */
+	protected function _prepareDocument() {
+		// Because the application sets a default page title,
+		// we need to get it from the menu item itself
+		$menu = \Joomla\CMS\Factory::getApplication()->getMenu()->getActive();
+
+		if ( $menu )
+		{
+			$this->params->def( 'page_heading', $this->params->get( 'page_title', $menu->title ) );
 		}
-		
-		if(!empty($ids)){
-			
-			CJFunctions::load_users($this->params->get('user_avatar'), $ids);
+		else
+		{
+			$this->params->def( 'page_heading', \Joomla\CMS\Language\Text::_( 'COM_CROSSWORDS_CROSSWORDS' ) );
+		}
+
+		$this->setDocumentTitle( $this->params->get( 'page_title', '' ) );
+
+		if ( $this->params->get( 'menu-meta_description' ) )
+		{
+			$this->document->setDescription( $this->params->get( 'menu-meta_description' ) );
+		}
+
+		if ( $this->params->get( 'robots' ) )
+		{
+			$this->document->setMetaData( 'robots', $this->params->get( 'robots' ) );
 		}
 	}
+
 }

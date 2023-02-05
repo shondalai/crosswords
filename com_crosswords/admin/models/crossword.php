@@ -139,7 +139,7 @@ class CrosswordsModelCrossword extends JModelAdmin
 		}
 	}
 
-	protected function prepareTable(&$table)
+	protected function prepareTable($table)
 	{
 		// Set the publish date to now
 		$db = $this->getDbo();
@@ -541,7 +541,7 @@ class CrosswordsModelCrossword extends JModelAdmin
 	{
 		// Sanitize the ids.
 		$pks = (array) $pks;
-		JArrayHelper::toInteger($pks);
+		$pks = \Joomla\Utilities\ArrayHelper::toInteger($pks);
 
 		if (empty($pks))
 		{

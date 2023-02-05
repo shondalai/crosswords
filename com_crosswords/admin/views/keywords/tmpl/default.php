@@ -12,17 +12,13 @@ defined('_JEXEC') or die;
 
 JHtml::addIncludePath(JPATH_COMPONENT.'/helpers/html');
 
-if(APP_VERSION >= 3)
+if(APP_VERSION < 4)
 {
 	JHtml::_('bootstrap.tooltip');
 	JHtml::_('formbehavior.chosen', 'select');
-}
-else 
-{
 	JHtml::_('behavior.tooltip');
+    JHtml::_('behavior.multiselect');
 }
-
-JHtml::_('behavior.multiselect');
 
 $app		= JFactory::getApplication();
 $user		= JFactory::getUser();
@@ -189,17 +185,6 @@ $assoc		= APP_VERSION >= 3 ? JLanguageAssociations::isEnabled() : true;
 						<td class="center">
 							<div class="btn-group">
 								<?php echo JHtml::_('jgrid.published', $item->published, $i, 'keywords.', $canChange, 'cb', '0000-00-00 00:00:00', '0000-00-00 00:00:00'); ?>
-								<?php
-								// Create dropdown items
-								$action = $archived ? 'unarchive' : 'archive';
-								JHtml::_('actionsdropdown.' . $action, 'cb' . $i, 'keywords');
-
-								$action = $trashed ? 'untrash' : 'trash';
-								JHtml::_('actionsdropdown.' . $action, 'cb' . $i, 'keywords');
-
-								// Render dropdown list
-								echo JHtml::_('actionsdropdown.render', $this->escape($item->title));
-								?>
 							</div>
 						</td>
 						<td class="has-context">
@@ -258,9 +243,16 @@ $assoc		= APP_VERSION >= 3 ? JLanguageAssociations::isEnabled() : true;
 				</tbody>
 			</table>
 		<?php endif; ?>
-		<?php echo $this->pagination->getListFooter(); ?>
-		<?php //Load the batch processing form. ?>
-		<?php echo $this->loadTemplate('batch'); ?>
+		<?php
+		echo $this->pagination->getListFooter();
+		//Load the batch processing form.
+		if ($user->authorise('core.create', 'com_crosswords') && $user->authorise('core.edit', 'com_crosswords') && $user->authorise('core.edit.state', 'com_crosswords'))
+		{
+			echo Jhtml::_('bootstrap.renderModal', 'collapseModal',
+				array('title'  => JText::_('COM_CROSSWORDS_BATCH_OPTIONS'), 'footer' => $this->loadTemplate('batch_footer')),
+				$this->loadTemplate('batch_body'));
+		}
+		?>
 
 		<input type="hidden" name="task" value="" />
 		<input type="hidden" name="boxchecked" value="0" />

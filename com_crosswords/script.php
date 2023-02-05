@@ -13,9 +13,6 @@ defined('_JEXEC') or die('Restricted access');
 defined('DS') or define('DS', DIRECTORY_SEPARATOR);
 defined('CW_APP_NAME') or define('CW_APP_NAME', 'com_crosswords');
 
-jimport('joomla.filesystem.file');
-jimport('joomla.filesystem.folder');
-
 class com_crosswordsInstallerScript{
 	/**
 	 * method to install the component
@@ -44,32 +41,40 @@ class com_crosswordsInstallerScript{
 	 */
 	function update($parent){
 		$db = JFactory::getDBO();
-		if(method_exists($parent, 'extension_root')) {
-			$sqlfile = $parent->getPath('extension_root').DS.'sql'.DS.'install.mysql.utf8.sql';
-		} else {
-			$sqlfile = $parent->getParent()->getPath('extension_root').DS.'sql'.DS.'install.mysql.utf8.sql';
+		if (method_exists($parent, 'extension_root'))
+		{
+			$sqlfile = $parent->getPath('extension_root') . '/sql/install.mysql.utf8.sql';
+		}
+		else
+		{
+			$sqlfile = $parent->getParent()->getPath('extension_root') . '/sql/install.mysql.utf8.sql';
 		}
 		// Don't modify below this line
 		$buffer = file_get_contents($sqlfile);
-		if ($buffer !== false) {
+		if ($buffer !== false)
+		{
 			jimport('joomla.installer.helper');
-			$queries = JInstallerHelper::splitSql($buffer);
-			if (count($queries) != 0) {
+			$queries = $db->splitSql($buffer);
+			if (count($queries) != 0)
+			{
 				foreach ($queries as $query)
 				{
 					$query = trim($query);
-					if ($query != '' && $query{0} != '#') {
+					if ($query != '' && $query[0] != '#')
+					{
 						$db->setQuery($query);
-						if (!$db->execute()) {
-							JError::raiseWarning(1, JText::sprintf('JLIB_INSTALLER_ERROR_SQL_ERROR', $db->stderr(true)));
-							return false;
+						if (! $db->execute())
+						{
+							// 							return false;
 						}
 					}
 				}
 			}
 		}
+
 		// $parent is the class calling this method
 		echo '<p>' . JText::_('COM_CROSSWORDS_UPDATE_TEXT') . '</p>';
+		$parent->getParent()->setRedirectURL('index.php?option=com_crosswords&view=dashboard');
 	}
 
 	/**
@@ -90,7 +95,7 @@ class com_crosswordsInstallerScript{
 	 */
 	function postflight($type, $parent){
 		
-		$db = JFactory::getDBO();
+		$db = JFactory::getDbo();
 		$update_queries = array ();
 		
 		$update_queries[] = 'ALTER IGNORE TABLE `#__crosswords` ADD COLUMN `asset_id` INTEGER(10) UNSIGNED NOT NULL DEFAULT 0';;
@@ -147,135 +152,7 @@ class com_crosswordsInstallerScript{
 		}
 		
 		/**************** MIGRATE OLD CATEGORIES ********************/
-		if(!$this->migrate_categories($db)){
-			
-			echo 'There is an error upgrading categories. Please check categories and make sure they upgraded correctly. Report to us if you find any error.';
-		}
-		/**************** MIGRATE OLD CATEGORIES ********************/
-		
-		//ALTER TABLE `j25`.`jos_crosswords_categories` ADD COLUMN `migrate_id` INTEGER UNSIGNED NOT NULL DEFAULT 0
-		
-		/**************** MIGRATE OLD CATEGORIES ********************/
 		
 		echo "<b><font color=\"red\">Database tables successfully migrated to the latest version. Please check the configuration options once again.</font></b>";
-	}
-	
-	private function migrate_categories($db){
-		
-		$query = $db->getQuery(true);
-		$query->select('count(*) as row_count')->from('#__crosswords_categories')->where('migrate_id = 0');
-		$db->setQuery($query);
-		
-		try {
-				
-			$count = $db->loadResult();
-				
-			if($count > 0){ // table exists, upgrade it
-		
-				$api = JPATH_ROOT.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_cjlib'.DIRECTORY_SEPARATOR.'framework.php';
-					
-				if(!file_exists($api)) {
-		
-					echo '<p style="color: red"><strong>Please install CjLib component to use Community Crosswords.</strong></p>';
-				} else {
-		
-					require_once $api;
-		
-					CJLib::import('corejoomla.framework.core');
-					CJLib::import('corejoomla.nestedtree.core');
-		
-					$tree = new CjNestedTree($db, '#__crosswords_categories');
-					$tree = $tree->get_tree();
-						
-					if(count($tree)){
-		
-						$basePath = JPATH_ADMINISTRATOR . '/components/com_categories';
-						require_once $basePath . '/models/category.php';
-						
-						$config = array( 'table_path' => $basePath . '/tables');
-						$catmodel = new CategoriesModelCategory($config);
-						
-						foreach ($tree as $category){
-
-							if($category['migrate_id'] == 0) {
-							
-								if(!$this->do_migration($db, $category, $catmodel, $category['alias'], 0, 1, 0)){
-									
-									echo 'An error occurred while migrating categories, please contact support.';
-									return false;
-								}
-							}
-						}
-						
-						return true;
-					}
-				}
-			}
-		} catch (Exception $e) {}
-		
-		return false;
-	}
-	
-	private function do_migration($db, &$node, $catmodel, $path, $child_id, $level, $parent_id){
-		
-		$catData = array(
-				'id' => 0,
-				'parent_id' => $parent_id,
-				'level' => $level,
-				'path' => $path,
-				'extension' => 'com_crosswords',
-				'title' => $node['title'],
-				'alias' => $node['alias'],
-				'description' => '',
-				'published' => 1,
-				'language' => '*');
-		
-		$status = $catmodel->save( $catData);
-		$migrate_id = $catmodel->getState('category.id');
-
-		if(!$status || !$migrate_id){
-				
-			JError::raiseWarning(500, JText::_('Unable to create default content category!'));
-			return false;
-		}
-		
-		$node['migrate_id'] = $migrate_id;
-		
-		try {
-			
-			$query = $db->getQuery(true);
-			$query->update('#__crosswords_categories')->set('migrate_id = '.$migrate_id)->where('id = '.$node['id']);
-			$db->setQuery($query);
-			$db->execute();
-			
-			$query = $db->getQuery(true);
-			$query->update('#__crosswords')->set('catid = '.$migrate_id)->where('catid = '.$node['id']);
-			$db->setQuery($query);
-			$db->execute();
-			
-			$query = $db->getQuery(true);
-			$query->update('#__crosswords_keywords')->set('catid = '.$migrate_id)->where('catid = '.$node['id']);
-			$db->setQuery($query);
-			$db->execute();
-		}catch (Exception $e){
-			
-			return false;
-		}
-		
-		if(!empty($node['children'])){
-			
-			foreach ($node['children'] as $child) {
-				
-				if($child['migrate_id'] == 0) {
-					
-					if(!$this->do_migration($db, $child, $catmodel, $path.'/'.$child['alias'], $child['id'], $level + 1, $migrate_id)){
-						
-						return false;
-					}
-				}
-			}
-		}
-		
-		return true;
 	}
 }

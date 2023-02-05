@@ -141,7 +141,7 @@ class plgSearchCrosswords extends JPlugin {
 
 		$menu = $app->getMenu();
 		$mnuitem = $menu->getItems('link', 'index.php?option=com_crosswords&view=crosswords', true);
-		$ritemid = JRequest::getInt('Itemid');
+		$ritemid = $app->input->getInt('Itemid');
 		$itemid = isset($mnuitem) ? '&Itemid='.$mnuitem->id : (isset($ritemid)?'&Itemid='.$ritemid:'');
 
 		//The 'output' of the displayed link

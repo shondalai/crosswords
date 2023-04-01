@@ -20,7 +20,8 @@ if ( APP_VERSION < 4 )
 	JHtml::_( 'behavior.keepalive' );
 	JHtml::_( 'formbehavior.chosen', 'select' );
 	CJLib::behavior( 'bscore' );
-	CJFunctions::load_jquery( [ 'libs' => [ 'form', 'fontawesome' ] ] );
+	CjScript::_( 'form', [ 'custom' => false ] );
+	CjScript::_( 'fontawesome', [ 'custom' => false ] );
 } else {
 	$wa = $this->document->getWebAssetManager();
 	$wa->getRegistry()->addExtensionRegistryFile('com_contenthistory');

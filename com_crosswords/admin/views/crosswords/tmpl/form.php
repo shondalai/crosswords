@@ -11,7 +11,7 @@ defined('_JEXEC') or die;
 $user = JFactory::getUser();
 $editor = $user->authorise('core.wysiwyg', CW_APP_NAME) ? $this->params->get('default_editor', 'bbcode') : 'none';
 
-CJFunctions::load_jquery(array('libs'=>array('validate')));
+CjScript::_( 'validate', [ 'custom' => false ] );
 $categories = JHtml::_('category.categories', CW_APP_NAME);
 
 foreach ($categories as $id=>$category){

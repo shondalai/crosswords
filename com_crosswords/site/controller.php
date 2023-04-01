@@ -62,7 +62,7 @@ class CrosswordsController extends JControllerLegacy {
 		if ( APP_VERSION < 4 )
 		{
 			CjLib::behavior( 'bscore', [ 'customtag' => false ] );
-			CJFunctions::load_jquery( [ 'libs' => [ 'fontawesome' ] ] );
+			CjScript::_( 'fontawesome', [ 'custom' => false ] );
 
 			if ( $params->get( 'enable_bootstrap', 1 ) == 1 )
 			{

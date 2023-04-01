@@ -18,8 +18,7 @@ class JFormFieldModal_Crossword extends JFormField
 	{
 		require_once JPATH_ROOT.'/components/com_cjlib/framework.php';
 		CJLib::import('corejoomla.framework.core');
-		CJFunctions::load_jquery(array('libs'=>array()));
-		
+
 		$allowEdit		= ((string) $this->element['edit'] == 'true') ? true : false;
 		$allowClear		= ((string) $this->element['clear'] != 'false') ? true : false;
 

@@ -15,7 +15,7 @@ $layout = $this->params->get( 'ui_layout', 'bootstrap2' );
 	<?php
 	echo JLayoutHelper::render( $layout . '.toolbar', [
 		'params'     => $this->params,
-		'action'     => $this->action,
+		'action'     => isset($this->action) ?? '',
 	] );
 	echo JLayoutHelper::render( $layout . '.crosswords_list', [
 		'items'      => $this->items,

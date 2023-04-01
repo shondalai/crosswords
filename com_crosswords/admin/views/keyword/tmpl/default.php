@@ -20,7 +20,9 @@ if ( APP_VERSION < 4 )
 	JHtml::_( 'behavior.multiselect' );
 	JHtml::_( 'formbehavior.chosen', 'select' );
 	CJLib::behavior( 'bscore' );
-	CJFunctions::load_jquery( [ 'libs' => [ 'validate', 'form', 'fontawesome' ] ] );
+	CjScript::_( 'validate', [ 'custom' => false ] );
+	CjScript::_( 'form', [ 'custom' => false ] );
+	CjScript::_( 'fontawesome', [ 'custom' => false ] );
 }
 
 $app       = JFactory::getApplication();

@@ -22,7 +22,7 @@ if(APP_VERSION < 3){
 	<?php echo $this->form->getInput('metakey'); ?></li>
 
 
-<?php foreach($this->form->getGroup('metadata') as $field): ?>
+<?php foreach($this->form->getFieldset('metadata') as $field): ?>
 	<li>
 		<?php if (!$field->hidden): ?>
 			<?php echo $field->label; ?>

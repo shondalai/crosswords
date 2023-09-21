@@ -8,9 +8,15 @@
  * @link           http://www.corejoomla.com/
  * @license        License GNU General Public License version 2 or later
  */
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\View\HtmlView;
+use Joomla\CMS\Plugin\PluginHelper;
+
 defined( '_JEXEC' ) or die();
 
-class CrosswordsViewCrosswords extends JViewLegacy {
+class CrosswordsViewCrosswords extends HtmlView {
 
 	/**
 	 * The model state
@@ -80,8 +86,8 @@ class CrosswordsViewCrosswords extends JViewLegacy {
 	 * @since 4.0.0
 	 */
 	public function display( $tpl = null ) {
-		$user       = JFactory::getUser();
-		$app        = \Joomla\CMS\Factory::getApplication();
+		$user       = Factory::getUser();
+		$app        = Factory::getApplication();
 		$state      = $this->get( 'State' );
 		$items      = $this->get( 'Items' );
 		$pagination = $this->get( 'Pagination' );
@@ -97,7 +103,7 @@ class CrosswordsViewCrosswords extends JViewLegacy {
 		// Get the page/component configuration
 		$params = &$state->params;
 
-		\Joomla\CMS\Plugin\PluginHelper::importPlugin( 'content' );
+		PluginHelper::importPlugin( 'content' );
 
 		foreach ( $items as $item )
 		{
@@ -109,7 +115,7 @@ class CrosswordsViewCrosswords extends JViewLegacy {
 				$item->parent_id = null;
 			}
 
-			$item->event = new \stdClass();
+			$item->event = new stdClass();
 
 			// Old plugins: Ensure that text property is available
 			if ( ! isset( $item->text ) )
@@ -117,7 +123,7 @@ class CrosswordsViewCrosswords extends JViewLegacy {
 				$item->text = $item->description;
 			}
 
-			\Joomla\CMS\Factory::getApplication()->triggerEvent( 'onContentPrepare', [ 'com_crosswords.crossword', &$item, &$item->params, 0 ] );
+			Factory::getApplication()->triggerEvent( 'onContentPrepare', [ 'com_crosswords.crossword', &$item, &$item->params, 0 ] );
 
 			// Old plugins: Use processed text as introtext
 			$item->introtext = $item->text;
@@ -132,7 +138,7 @@ class CrosswordsViewCrosswords extends JViewLegacy {
 			$item->event->afterDisplayContent = trim( implode( "\n", $results ) );
 		}
 
-		$form             = new \stdClass();
+		$form             = new stdClass();
 		$form->limitField = $pagination->getLimitBox();
 
 		// Escape strings for HTML output
@@ -160,7 +166,7 @@ class CrosswordsViewCrosswords extends JViewLegacy {
 	protected function _prepareDocument() {
 		// Because the application sets a default page title,
 		// we need to get it from the menu item itself
-		$menu = \Joomla\CMS\Factory::getApplication()->getMenu()->getActive();
+		$menu = Factory::getApplication()->getMenu()->getActive();
 
 		if ( $menu )
 		{
@@ -168,7 +174,7 @@ class CrosswordsViewCrosswords extends JViewLegacy {
 		}
 		else
 		{
-			$this->params->def( 'page_heading', \Joomla\CMS\Language\Text::_( 'COM_CROSSWORDS_CROSSWORDS' ) );
+			$this->params->def( 'page_heading', Text::_( 'COM_CROSSWORDS_CROSSWORDS' ) );
 		}
 
 		$this->setDocumentTitle( $this->params->get( 'page_title', '' ) );

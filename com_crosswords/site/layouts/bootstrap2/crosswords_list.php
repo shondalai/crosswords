@@ -6,6 +6,11 @@
  * @copyright   Copyright (C) 2021 BulaSikku Technologies Private Limited.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
+
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Router\Route;
+
 defined( '_JEXEC' ) or die;
 
 $data       = $displayData;
@@ -39,14 +44,14 @@ $api        = new CjLibApi();
 						<?php if ( $params->get( 'display_hits_count', 1 ) == 1 ): ?>
                             <div class="pull-left hidden-phone thumbnail num-box">
                                 <h2 class="num-header"><?php echo $item->hits; ?></h2>
-                                <span class="muted"><?php echo $item->hits == 1 ? JText::_( 'COM_CROSSWORDS_HIT' ) : JText::_( 'COM_CROSSWORDS_HITS' ); ?></span>
+                                <span class="muted"><?php echo $item->hits == 1 ? Text::_( 'COM_CROSSWORDS_HIT' ) : Text::_( 'COM_CROSSWORDS_HITS' ); ?></span>
                             </div>
 						<?php endif; ?>
 
                         <div class="media-body">
 
                             <h4 class="media-heading">
-                                <a href="<?php echo JRoute::_( CrosswordsHelperRoute::getCrosswordRoute( $item->id . ':' . $item->alias, $item->catid ) ); ?>">
+                                <a href="<?php echo Route::_( CrosswordsHelperRoute::getCrosswordRoute( $item->id . ':' . $item->alias, $item->catid ) ); ?>">
 									<?php echo $this->escape( $item->title ) ?>
                                 </a>
                             </h4>
@@ -55,18 +60,18 @@ $api        = new CjLibApi();
                                 <div class="muted">
                                     <small>
 										<?php
-										$category_name  = JHtml::link( JRoute::_( 'index.php?task=' . $action . '&id=' . $item->catid . ':' . $item->category_alias ),
+										$category_name  = HTMLHelper::link( Route::_( 'index.php?task=' . $action . '&id=' . $item->catid . ':' . $item->category_alias ),
 											$this->escape( $item->category_title ) );
 										$user_name      = $item->created_by > 0
 											? $api->getUserProfileUrl( $params->get( 'user_avatar' ), $item->created_by . false, $this->escape( $item->user_name ) )
 											: $this->escape( $item->username );
 										$formatted_date = CjLibDateUtils::getHumanReadableDate( $item->created );
 
-										echo JText::sprintf( 'COM_CROSSWORDS_LIST_ITEM_META', $user_name, $category_name, $formatted_date );
+										echo Text::sprintf( 'COM_CROSSWORDS_LIST_ITEM_META', $user_name, $category_name, $formatted_date );
 										?>
                                     </small>
                                 </div>
-                                <div class="muted"><small><?php echo JText::sprintf( 'COM_CROSSWORDS_N_PEOPLE_SOLVED', $item->solved ); ?></small></div>
+                                <div class="muted"><small><?php echo Text::sprintf( 'COM_CROSSWORDS_N_PEOPLE_SOLVED', $item->solved ); ?></small></div>
 							<?php endif; ?>
                         </div>
                     </div>
@@ -84,7 +89,7 @@ $api        = new CjLibApi();
         </div>
 
 	<?php else: ?>
-        <div class="alert alert-info"><i class="icon-info-sign"></i> <?php echo JText::_( 'COM_CROSSWORDS_MSG_NO_RESULTS' ) ?></div>
+        <div class="alert alert-info"><i class="icon-info-sign"></i> <?php echo Text::_( 'COM_CROSSWORDS_MSG_NO_RESULTS' ) ?></div>
 	<?php endif; ?>
 
 </div>

@@ -1,20 +1,24 @@
 <?php
+
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+
 defined('_JEXEC') or die('Restricted access');
-JHTML::_('behavior.tooltip');
+HTMLHelper::_('behavior.tooltip');
 ?>
 <form name="adminForm" id="adminForm" action="index.php?option=<?php echo CW_APP_NAME;?>&view=categories" method="post">
 	<div class="col100">
 		<table class="adminlist">
 			<tr>
-				<th width="150px"><label class="hasTip" title="<?php echo JText::_('LBL_TITLE'); ?>" for="category"><?php echo JText::_('LBL_TITLE'); ?></label></th>
+				<th width="150px"><label class="hasTip" title="<?php echo Text::_('LBL_TITLE'); ?>" for="category"><?php echo Text::_('LBL_TITLE'); ?></label></th>
 				<td><input class="text_area" type="text" name="title" id="title" size="32" maxlength="250" value="<?php echo $this->category['title'];?>" /></td>
 			</tr>
 			<tr>
-				<th width="150px"><label class="hasTip" title="<?php echo JText::_('LBL_ALIAS'); ?>" for="category"><?php echo JText::_('LBL_ALIAS'); ?></label></th>
+				<th width="150px"><label class="hasTip" title="<?php echo Text::_('LBL_ALIAS'); ?>" for="category"><?php echo Text::_('LBL_ALIAS'); ?></label></th>
 				<td><input class="text_area" type="text" name="alias" id="alias" size="32" maxlength="250" value="<?php echo $this->category['alias'];?>" /></td>
 			</tr>
 			<tr>
-				<th><label class="hasTip" title="<?php echo JText::_('LBL_PARENT_CATEGORY'); ?>" for="category"><?php echo JText::_( 'LBL_PARENT_CATEGORY' ); ?>:</label></th>
+				<th><label class="hasTip" title="<?php echo Text::_('LBL_PARENT_CATEGORY'); ?>" for="category"><?php echo Text::_( 'LBL_PARENT_CATEGORY' ); ?>:</label></th>
 				<td>
 					<select name="category" id="category">
 						<?php if(!empty($this->categories)):?>

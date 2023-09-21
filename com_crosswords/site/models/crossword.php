@@ -10,14 +10,19 @@
  */
 defined( '_JEXEC' ) or die;
 
+use Joomla\CMS\Access\Access;
+use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Filter\OutputFilter;
 use Joomla\CMS\Language\Multilanguage;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Model\ItemModel;
 use Joomla\CMS\Table\Table;
 use Joomla\Database\ParameterType;
 use Joomla\Registry\Registry;
+use Joomla\Utilities\ArrayHelper;
 
-class CrosswordsModelCrossword extends JModelItem {
+class CrosswordsModelCrossword extends ItemModel {
 
 	/**
 	 * Model context string.
@@ -205,13 +210,13 @@ class CrosswordsModelCrossword extends JModelItem {
 
 				if ( empty( $data ) )
 				{
-					throw new \Exception( Text::_( 'COM_CROSSWORDS_ERROR_CROSSWORD_NOT_FOUND' ), 404 );
+					throw new Exception( Text::_( 'COM_CROSSWORDS_ERROR_CROSSWORD_NOT_FOUND' ), 404 );
 				}
 
 				// Check for published state if filter set.
 				if ( ( is_numeric( $published ) || is_numeric( $archived ) ) && ( $data->published != $published && $data->published != $archived ) )
 				{
-					throw new \Exception( Text::_( 'COM_CROSSWORDS_ERROR_CROSSWORD_NOT_FOUND' ), 404 );
+					throw new Exception( Text::_( 'COM_CROSSWORDS_ERROR_CROSSWORD_NOT_FOUND' ), 404 );
 				}
 
 				// Convert parameter fields to objects.
@@ -271,7 +276,7 @@ class CrosswordsModelCrossword extends JModelItem {
 
 				$this->_item[$pk] = $data;
 			}
-			catch ( \Exception $e )
+			catch ( Exception $e )
 			{
 				if ( $e->getCode() == 404 )
 				{
@@ -315,7 +320,7 @@ class CrosswordsModelCrossword extends JModelItem {
 
 	private function loadCrosswordDetails( &$crossword ) {
 		$db                     = $this->getDbo();
-		$user                   = JFactory::getUser();
+		$user                   = Factory::getUser();
 		$crossword->response_id = 0;
 		$crossword->solved      = 0;
 
@@ -409,7 +414,7 @@ class CrosswordsModelCrossword extends JModelItem {
 				foreach ( $kchars as $i => $char )
 				{
 
-					$cells[$q->row + $i][$q->column]->value = ( ! empty( $chars[$i] ) ? $chars[$i] : '' );;
+					$cells[$q->row + $i][$q->column]->value = ( ! empty( $chars[$i] ) ? $chars[$i] : '' );
 					$cells[$q->row + $i][$q->column]->valid  = true;
 					$cells[$q->row + $i][$q->column]->claz[] = 'axis-y-pos-' . $q->position;
 
@@ -434,7 +439,7 @@ class CrosswordsModelCrossword extends JModelItem {
 
 	function getKeyword( $cid, $axis, $position ) {
 
-		$db    = JFactory::getDbo();
+		$db    = Factory::getDbo();
 		$query = $db->getQuery( true );
 
 		$query
@@ -450,9 +455,9 @@ class CrosswordsModelCrossword extends JModelItem {
 	}
 
 	public function checkResult() {
-		$app  = JFactory::getApplication();
-		$user = JFactory::getUser();
-		$db   = JFactory::getDbo();
+		$app  = Factory::getApplication();
+		$user = Factory::getUser();
+		$db   = Factory::getDbo();
 
 		$cid       = $app->input->getInt( 'id', 0 );
 		$crossword = $this->getItem( $cid );
@@ -472,7 +477,7 @@ class CrosswordsModelCrossword extends JModelItem {
 		if ( empty( $questions ) )
 		{
 
-			$this->setError( JText::_( 'MSG_ERROR_PROCESSING' ) . ' Error: 10021' );
+			$this->setError( Text::_( 'MSG_ERROR_PROCESSING' ) . ' Error: 10021' );
 
 			return false;
 		}
@@ -576,7 +581,7 @@ class CrosswordsModelCrossword extends JModelItem {
 				if ( ! $db->execute() )
 				{
 
-					$this->setError( JText::_( 'COM_CROSSWORDS_MSG_ERROR_PROCESSING' ) . ' Error: 10022' );
+					$this->setError( Text::_( 'COM_CROSSWORDS_MSG_ERROR_PROCESSING' ) . ' Error: 10022' );
 
 					return false;
 				}
@@ -603,14 +608,14 @@ class CrosswordsModelCrossword extends JModelItem {
 				$query
 					->insert( '#__crosswords_responses' )
 					->columns( 'cid, created_by, created, solved' )
-					->values( $cid . ',' . $user->id . ',' . $db->q( JFactory::getDate()->toSql() ) . ',' . ( ( count( $failed ) > 0 ) ? '0' : '1' ) );
+					->values( $cid . ',' . $user->id . ',' . $db->q( Factory::getDate()->toSql() ) . ',' . ( ( count( $failed ) > 0 ) ? '0' : '1' ) );
 
 				$db->setQuery( $query );
 
 				if ( ! $db->execute() )
 				{
 
-					$this->setError( JText::_( 'COM_CROSSWORDS_MSG_ERROR_PROCESSING' ) . ' Error: 10023' );
+					$this->setError( Text::_( 'COM_CROSSWORDS_MSG_ERROR_PROCESSING' ) . ' Error: 10023' );
 
 					return false;
 				}
@@ -649,7 +654,7 @@ class CrosswordsModelCrossword extends JModelItem {
 			if ( ! $db->execute() )
 			{
 
-				$this->setError( JText::_( 'COM_CROSSWORDS_MSG_ERROR_PROCESSING' ) . ' Error: 10024' );
+				$this->setError( Text::_( 'COM_CROSSWORDS_MSG_ERROR_PROCESSING' ) . ' Error: 10024' );
 
 				return false;
 			}
@@ -659,10 +664,10 @@ class CrosswordsModelCrossword extends JModelItem {
 	}
 
 	public function solveCrossword( $id ) {
-		$user        = JFactory::getUser();
-		$db          = JFactory::getDbo();
+		$user        = Factory::getUser();
+		$db          = Factory::getDbo();
 		$response_id = 0;
-		$params      = JComponentHelper::getParams( 'com_crosswords' );
+		$params      = ComponentHelper::getParams( 'com_crosswords' );
 		$minpct      = (int) $params->get( 'min_solve_pct', 75 );
 
 		if ( ! $minpct )
@@ -722,7 +727,7 @@ class CrosswordsModelCrossword extends JModelItem {
 
 				if ( ! $db->execute() )
 				{
-					throw new Exception( JText::_( 'COM_CROSSWORDS_MSG_ERROR_PROCESSING' ) . ' Code: 1', 500 );
+					throw new Exception( Text::_( 'COM_CROSSWORDS_MSG_ERROR_PROCESSING' ) . ' Code: 1', 500 );
 				}
 
 				$query = $db->getQuery( true );
@@ -740,19 +745,19 @@ class CrosswordsModelCrossword extends JModelItem {
 			$query
 				->insert( '#__crosswords_responses' )
 				->columns( 'cid, created_by, created, solved' )
-				->values( $id . ',' . $user->id . ',' . $db->q( JFactory::getDate()->toSql() ) . ',0' );
+				->values( $id . ',' . $user->id . ',' . $db->q( Factory::getDate()->toSql() ) . ',0' );
 			$db->setQuery( $query );
 
 			if ( ! $db->execute() )
 			{
-				throw new Exception( JText::_( 'COM_CROSSWORDS_MSG_ERROR_PROCESSING' ) . ' Code: 2', 500 );
+				throw new Exception( Text::_( 'COM_CROSSWORDS_MSG_ERROR_PROCESSING' ) . ' Code: 2', 500 );
 			}
 			$response_id = $db->insertid();
 		}
 
 		if ( ! $continue )
 		{
-			throw new Exception( JText::sprintf( 'COM_CROSSWORDS_MSG_CROSSWORD_MINIMUM_SOLVE_REQUIRED', $minpct ), 500 );
+			throw new Exception( Text::sprintf( 'COM_CROSSWORDS_MSG_CROSSWORD_MINIMUM_SOLVE_REQUIRED', $minpct ), 500 );
 		}
 
 		$query = $db->getQuery( true );
@@ -792,9 +797,9 @@ class CrosswordsModelCrossword extends JModelItem {
 
 	public function populate_crossword_details( &$crossword ) {
 
-		$user   = JFactory::getUser();
-		$db     = JFactory::getDbo();
-		$params = JComponentHelper::getParams( 'com_crosswords' );
+		$user   = Factory::getUser();
+		$db     = Factory::getDbo();
+		$params = ComponentHelper::getParams( 'com_crosswords' );
 
 		$query = $db->getQuery( true );
 		$query->select( 'count(*)' )->from( '#__crosswords_responses' )->where( 'cid = ' . $crossword->id . ' and solved = 1' );
@@ -810,7 +815,7 @@ class CrosswordsModelCrossword extends JModelItem {
 
 	public function get_solved_users( $id, $params ) {
 
-		$db    = JFactory::getDbo();
+		$db    = Factory::getDbo();
 		$query = $db->getQuery( true );
 
 		$query
@@ -829,7 +834,7 @@ class CrosswordsModelCrossword extends JModelItem {
 
 	public function update_crossword( $crossword ) {
 
-		$db = JFactory::getDbo();
+		$db = Factory::getDbo();
 
 		try
 		{
@@ -841,17 +846,17 @@ class CrosswordsModelCrossword extends JModelItem {
 		catch ( Exception $e )
 		{
 
-			$this->setError( JText::_( 'MSG_ERROR_PROCESSING' ) . '| Code: 1' );
+			$this->setError( Text::_( 'MSG_ERROR_PROCESSING' ) . '| Code: 1' );
 
 			return false;
 		}
 	}
 
 	public function create_crossword( &$crossword ) {
-		$app    = JFactory::getApplication();
-		$user   = JFactory::getUser();
-		$params = JComponentHelper::getParams( 'com_crosswords' );
-		$db     = JFactory::getDbo();
+		$app    = Factory::getApplication();
+		$user   = Factory::getUser();
+		$params = ComponentHelper::getParams( 'com_crosswords' );
+		$db     = Factory::getDbo();
 
 		if ( $crossword->id > 0 )
 		{ //update
@@ -870,7 +875,7 @@ class CrosswordsModelCrossword extends JModelItem {
 			catch ( Exception $e )
 			{
 
-				$this->setError( JText::_( 'MSG_ERROR_PROCESSING' ) . '| Code: 1' );
+				$this->setError( Text::_( 'MSG_ERROR_PROCESSING' ) . '| Code: 1' );
 
 				return false;
 			}
@@ -894,7 +899,7 @@ class CrosswordsModelCrossword extends JModelItem {
 			if ( empty( $word_list ) )
 			{
 
-				$this->setError( JText::_( 'MSG_ERROR_PROCESSING' ) . '| Code: 2' );
+				$this->setError( Text::_( 'MSG_ERROR_PROCESSING' ) . '| Code: 2' );
 
 				return false;
 			}
@@ -906,21 +911,21 @@ class CrosswordsModelCrossword extends JModelItem {
 			if ( count( $weaver->across ) <= 0 || count( $weaver->down ) <= 0 )
 			{
 
-				$this->setError( JText::_( 'MSG_ERROR_PROCESSING' ) . '| Code: 3' );
+				$this->setError( Text::_( 'MSG_ERROR_PROCESSING' ) . '| Code: 3' );
 
 				return false;
 			}
 			/********************** BUILD CROSSWORD ***********************/
 
 			$object           = new stdClass();
-			$crossword->alias = JFilterOutput::stringURLUnicodeSlug( $crossword->title );
+			$crossword->alias = OutputFilter::stringURLUnicodeSlug( $crossword->title );
 
 			$object->title       = $crossword->title;
 			$object->alias       = $crossword->alias;
 			$object->description = $crossword->description;
 			$object->catid       = $crossword->catid;
 			$object->created_by  = $user->id;
-			$object->created     = JFactory::getDate()->toSql();
+			$object->created     = Factory::getDate()->toSql();
 			$object->published   = 1;
 			$object->questions   = $max_words;
 			$object->rows        = $crossword->size;
@@ -934,7 +939,7 @@ class CrosswordsModelCrossword extends JModelItem {
 			catch ( Exception $e )
 			{
 
-				$this->setError( JText::_( 'MSG_ERROR_PROCESSING' ) . '| Code: 4' );
+				$this->setError( Text::_( 'MSG_ERROR_PROCESSING' ) . '| Code: 4' );
 
 				return false;
 			}
@@ -973,7 +978,7 @@ class CrosswordsModelCrossword extends JModelItem {
 				catch ( Exception $e )
 				{
 
-					$this->setError( JText::_( 'MSG_ERROR_PROCESSING' ) . '| Code: 5' );
+					$this->setError( Text::_( 'MSG_ERROR_PROCESSING' ) . '| Code: 5' );
 
 					return false;
 				}
@@ -981,7 +986,7 @@ class CrosswordsModelCrossword extends JModelItem {
 			else
 			{
 
-				$this->setError( JText::_( 'MSG_ERROR_PROCESSING' ) . '| Code: 6' );
+				$this->setError( Text::_( 'MSG_ERROR_PROCESSING' ) . '| Code: 6' );
 
 				return false;
 			}
@@ -992,7 +997,7 @@ class CrosswordsModelCrossword extends JModelItem {
 
 	private function load_words( $catid, $custom_list, $max_words ) {
 
-		$db = JFactory::getDbo();
+		$db = Factory::getDbo();
 
 		try
 		{
@@ -1000,7 +1005,7 @@ class CrosswordsModelCrossword extends JModelItem {
 			if ( ! empty( $custom_list ) )
 			{
 
-				$custom_list = \Joomla\Utilities\ArrayHelper::toInteger( $custom_list );
+				$custom_list = ArrayHelper::toInteger( $custom_list );
 				$query       = $db->getQuery( true );
 
 				$query
@@ -1025,7 +1030,7 @@ class CrosswordsModelCrossword extends JModelItem {
 				if ( ! $result->min_value || ! $result->max_value )
 				{
 
-					$this->setError( JText::_( 'MSG_ERROR_PROCESSING' ) . '| Code: 7' );
+					$this->setError( Text::_( 'MSG_ERROR_PROCESSING' ) . '| Code: 7' );
 
 					return false;
 				}
@@ -1065,7 +1070,7 @@ class CrosswordsModelCrossword extends JModelItem {
 		catch ( Exception $e )
 		{
 
-			$this->setError( JText::_( 'MSG_ERROR_PROCESSING' ) . '| Code: 8' );
+			$this->setError( Text::_( 'MSG_ERROR_PROCESSING' ) . '| Code: 8' );
 
 			return false;
 		}
@@ -1074,9 +1079,9 @@ class CrosswordsModelCrossword extends JModelItem {
 	}
 
 	function save_keyword() {
-		$app  = JFactory::getApplication();
-		$user = JFactory::getUser();
-		$db   = JFactory::getDbo();
+		$app  = Factory::getApplication();
+		$user = Factory::getUser();
+		$db   = Factory::getDbo();
 
 		$question_title    = trim( $app->input->post->getString( 'question', null ) );
 		$question_keyword  = trim( $app->input->post->getString( 'keyword', null ) );
@@ -1111,7 +1116,7 @@ class CrosswordsModelCrossword extends JModelItem {
 					$db->q( $question_title ) . ',' .
 					$db->q( mb_strtoupper( $question_keyword, 'UTF-8' ) ) . ',' .
 					$user->id . ',' .
-					$db->q( JFactory::getDate()->toSql() ) . ',' .
+					$db->q( Factory::getDate()->toSql() ) . ',' .
 					$question_category );
 
 			$db->setQuery( $query );
@@ -1136,7 +1141,7 @@ class CrosswordsModelCrossword extends JModelItem {
 			return false;
 		}
 
-		$userids = JAccess::getUsersByGroup( $groupId );
+		$userids = Access::getUsersByGroup( $groupId );
 
 		if ( empty( $userids ) )
 		{

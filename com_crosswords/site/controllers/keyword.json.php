@@ -6,22 +6,29 @@
  * @copyright   Copyright (C) 2023 BulaSikku Technologies Private Limited.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
+
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Controller\AdminController;
+use Joomla\CMS\Response\JsonResponse;
+
 defined( '_JEXEC' ) or die();
 
-class CrosswordsControllerKeyword extends JControllerAdmin {
+class CrosswordsControllerKeyword extends AdminController {
 
 	public function __construct( $config = [] ) {
 		parent::__construct( $config );
 	}
 
 	public function save() {
-		$user = JFactory::getUser();
+		$user = Factory::getUser();
 		if ( ! $user->authorise( 'core.keywords', 'com_crosswords' ) )
 		{
-			throw new Exception( JText::_( 'COM_CROSSWORDS_MSG_NOT_AUTHORIZED' ), 403 );
+			throw new Exception( Text::_( 'COM_CROSSWORDS_MSG_NOT_AUTHORIZED' ), 403 );
 		}
 
-		$app                 = JFactory::getApplication();
+		$app                 = Factory::getApplication();
 		$model               = $this->getModel( 'Keyword' );
 		$keyword             = [];
 		$keyword['question'] = $app->input->getString( 'keyword', '' );
@@ -30,18 +37,19 @@ class CrosswordsControllerKeyword extends JControllerAdmin {
 
 		if ( empty( $keyword['question'] ) || empty( $keyword['keyword'] ) || empty( $keyword['catid'] ) )
 		{
-			throw new Exception( JText::_( 'COM_CROSSWORDS_REQUIRED_FIELDS_MISSING' ), 404 );
+			throw new Exception( Text::_( 'COM_CROSSWORDS_REQUIRED_FIELDS_MISSING' ), 404 );
 		}
 
 		if ( $model->save( $keyword ) )
 		{
 			$keyword['id'] = $model->getState( $model->getName() . '.id' );
-			$params        = JComponentHelper::getParams( 'com_crosswords' );
+			$params        = ComponentHelper::getParams( 'com_crosswords' );
 
 			if ( $params->get( 'notif_admin_new_keyword', 0 ) == '1' )
 			{
-				$sub          = JText::_( 'COM_CROSSWORDS_EMAIL_ADMIN_NEW_KEYWORD_SUB' );
-				$body         = JText::sprintf( 'COM_CROSSWORDS_EMAIL_ADMIN_NEW_KEYWORD_BODY', $user->username, $keyword['question'], $keyword['keyword'], $keyword['catid'] );
+				$sub          = Text::_( 'COM_CROSSWORDS_EMAIL_ADMIN_NEW_KEYWORD_SUB' );
+				$body         = Text::sprintf( 'COM_CROSSWORDS_EMAIL_ADMIN_NEW_KEYWORD_BODY', $user->username, $keyword['question'], $keyword['keyword'],
+					$keyword['catid'] );
 				$from         = $app->get( 'mailfrom' );
 				$fromname     = $app->get( 'fromname' );
 				$admin_emails = $model->getAdminEmailIds( $params->get( 'admin_user_groups', 0 ) );
@@ -52,7 +60,7 @@ class CrosswordsControllerKeyword extends JControllerAdmin {
 				}
 			}
 
-			echo new JResponseJson( $keyword, JText::_('COM_CROSSWORDS_MSG_QUESTION_SUBMITTED') );
+			echo new JsonResponse( $keyword, Text::_( 'COM_CROSSWORDS_MSG_QUESTION_SUBMITTED' ) );
 		}
 		else
 		{

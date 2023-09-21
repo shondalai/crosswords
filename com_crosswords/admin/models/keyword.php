@@ -8,11 +8,16 @@
  * @link           http://www.corejoomla.com/
  * @license        License GNU General Public License version 2 or later
  */
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\MVC\Model\AdminModel;
+use Joomla\CMS\Table\Table;
+
 defined( '_JEXEC' ) or die;
 
-JTable::addIncludePath( JPATH_ADMINISTRATOR . '/components/com_crosswords/tables' );
+Table::addIncludePath( JPATH_ADMINISTRATOR . '/components/com_crosswords/tables' );
 
-class CrosswordsModelKeyword extends JModelAdmin {
+class CrosswordsModelKeyword extends AdminModel {
 
 	protected $text_prefix = 'COM_CROSSWORDS';
 	public $typeAlias = 'com_crosswords.keyword';
@@ -41,7 +46,7 @@ class CrosswordsModelKeyword extends JModelAdmin {
 	 * @since 1.0.0
 	 */
 	protected function canEditState( $record ) {
-		$user = JFactory::getUser();
+		$user = Factory::getUser();
 
 		return parent::canEditState( 'com_crosswords' );
 	}
@@ -58,7 +63,7 @@ class CrosswordsModelKeyword extends JModelAdmin {
 	 * @since 1.0.0
 	 */
 	public function getTable( $type = 'Keyword', $prefix = 'CrosswordsTable', $config = [] ) {
-		return JTable::getInstance( $type, $prefix, $config );
+		return Table::getInstance( $type, $prefix, $config );
 	}
 
 	/**
@@ -71,9 +76,9 @@ class CrosswordsModelKeyword extends JModelAdmin {
 	 * @since   1.0.0
 	 */
 	public function save( $data ) {
-		$date = JFactory::getDate();
-		$user = JFactory::getUser();
-		$db   = JFactory::getDbo();
+		$date = Factory::getDate();
+		$user = Factory::getUser();
+		$db   = Factory::getDbo();
 
 		if ( isset( $data['id'] ) && $data['id'] )
 		{
@@ -124,7 +129,7 @@ class CrosswordsModelKeyword extends JModelAdmin {
 		{
 			return false;
 		}
-		$jinput = JFactory::getApplication()->input;
+		$jinput = Factory::getApplication()->input;
 
 		// The front end calls this model and uses a_id to avoid id clashes so we need to check for that first.
 		if ( $jinput->get( 'a_id' ) )
@@ -142,7 +147,7 @@ class CrosswordsModelKeyword extends JModelAdmin {
 			$id = $this->getState( 'keyword.id' );
 		}
 
-		$user = JFactory::getUser();
+		$user = Factory::getUser();
 
 		// Check for existing article.
 		// Modify the form based on Edit State access controls.
@@ -170,7 +175,7 @@ class CrosswordsModelKeyword extends JModelAdmin {
 	 */
 	protected function loadFormData() {
 		// Check the session for previously entered form data.
-		$app  = JFactory::getApplication();
+		$app  = Factory::getApplication();
 		$data = $app->getUserState( 'com_crosswords.edit.keyword.data', [] );
 
 		if ( empty( $data ) )

@@ -6,6 +6,10 @@
  * @copyright   Copyright (C) 2009 - 2018 corejoomla.com. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\MVC\Controller\BaseController;
+
 defined( '_JEXEC' ) or die();
 
 defined( 'CW_APP_NAME' ) or define( 'CW_APP_NAME', 'com_crosswords' );
@@ -18,6 +22,6 @@ require_once JPATH_ROOT . '/components/com_crosswords/helpers/route.php';
 require_once JPATH_ROOT . '/components/com_crosswords/helpers/constants.php';
 require_once JPATH_ROOT . '/components/com_crosswords/helpers/style.php';
 
-$controller = JControllerLegacy::getInstance('Crosswords');
-$controller->execute(JFactory::getApplication()->input->get('task'));
+$controller = BaseController::getInstance( 'Crosswords' );
+$controller->execute( Factory::getApplication()->input->get( 'task' ) );
 $controller->redirect();

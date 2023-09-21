@@ -6,6 +6,10 @@
  * @copyright   Copyright (C) 2009 - 2018 corejoomla.com. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Router\Route;
+
 defined( '_JEXEC' ) or die();
 
 
@@ -28,14 +32,14 @@ class KomentoComcrosswords extends KomentoExtension {
 
 	public function __construct( $component ) {
 		parent::__construct( $component );
-		JFactory::getLanguage()->load('com_crosswords');
+		Factory::getLanguage()->load('com_crosswords');
 	}
 
 	public function load( $cid ) {
 		static $instances = [];
 		if ( ! isset( $instances[$cid] ) )
 		{
-			$db    = JFactory::getDbo();
+			$db    = Factory::getDbo();
 			$query = $db->getQuery( true )
 			            ->select( 'a.id, a.title, a.alias, a.catid, a.created_by, a.hits, a.language' )
 			            ->select( 'c.title AS category_title, c.alias AS category_alias, u.name AS author' )
@@ -59,7 +63,7 @@ class KomentoComcrosswords extends KomentoExtension {
 	}
 
 	public function getContentIds( $categories = '' ) {
-		$db = JFactory::getDbo();
+		$db = Factory::getDbo();
 
 		if ( empty( $categories ) )
 		{
@@ -80,7 +84,7 @@ class KomentoComcrosswords extends KomentoExtension {
 	}
 
 	public function getCategories() {
-		$db    = JFactory::getDbo();
+		$db    = Factory::getDbo();
 		$query = $db->getQuery( true )
 		            ->select( 'node.id, node.title, (COUNT(parent.id) - 1) as level, node.parent_id' )
 		            ->from( $db->quoteName( '#__categories', 'node' ) )
@@ -101,12 +105,12 @@ class KomentoComcrosswords extends KomentoExtension {
 
 	// to determine if is listing view
 	public function isListingView() {
-		return JFactory::getApplication()->input->getCmd( 'view' ) == 'crosswords';
+		return Factory::getApplication()->input->getCmd( 'view' ) == 'crosswords';
 	}
 
 	// to determine if is entry view
 	public function isEntryView() {
-		return JFactory::getApplication()->input->getCmd( 'view' ) == 'crossword';
+		return Factory::getApplication()->input->getCmd( 'view' ) == 'crossword';
 	}
 
 	public function onExecute( &$article, $html, $view, $options = [] ) {
@@ -125,7 +129,7 @@ class KomentoComcrosswords extends KomentoExtension {
 		CJLib::import( 'corejoomla.framework.core' );
 		require_once JPATH_ROOT . '/components/com_crosswords/helpers/route.php';
 
-		$link = JRoute::_( CrosswordsHelperRoute::getCrosswordRoute( $this->_item->id, $this->_item->catid, $this->_item->language ) );
+		$link = Route::_( CrosswordsHelperRoute::getCrosswordRoute( $this->_item->id, $this->_item->catid, $this->_item->language ) );
 		$link = $this->prepareLink( $link );
 
 		return $link;

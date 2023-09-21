@@ -8,8 +8,14 @@
  * @link		http://www.corejoomla.com/
  * @license		License GNU General Public License version 2 or later
  */
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Router\Route;
+
 defined('_JEXEC') or die('Restricted access');
-JHTML::_('behavior.tooltip');
+HTMLHelper::_('behavior.tooltip');
 
 $themes = CJFunctions::get_ui_theme_names();
 $supported_avatars = CJFunctions::get_supported_avatars();
@@ -20,7 +26,7 @@ $general_settings = array(
 	'title'=>'GENERAL_SETTINGS',
 	'elements'=>array(
 		array('name'=>CW_DEFAULT_TEMPLATE, 'type'=>'select', 'values'=>array('default'), 'labels'=>array('Default')),
-		array('name'=>CW_DEFAULT_THEME, 'type'=>'select', 'values'=>array_merge((array)'default', $themes), 'labels'=>array_merge((array)JText::_('LBL_GLOBAL'), $themes)),
+		array('name'=>CW_DEFAULT_THEME, 'type'=>'select', 'values'=>array_merge((array)'default', $themes), 'labels'=>array_merge((array) Text::_('LBL_GLOBAL'), $themes)),
 		array('name'=>CW_DEFAULT_EDITOR, 'type'=>'select', 'values'=>array('default', 'bbcode'), 'labels'=>array('Joomla Default', 'BBCode Editor')),
 		array('name'=>CW_ENABLE_CURSOR_AUTOMOVE, 'type'=>'select', 'values'=>array('1','0'), 'labels'=>array('LBL_YES','LBL_NO')),
 	)
@@ -117,52 +123,52 @@ if(APP_VERSION == '1.5'){
 
 $config = CrosswordsHelper::getConfig();
 
-$document = JFactory::getDocument();
+$document = Factory::getDocument();
 $document->addScriptDeclaration('function resetPermissionOptions(select){ selectBox = document.getElementById(select); selectBox.selectedIndex = -1; }');
 $document->addScriptDeclaration('jQuery(document).ready(function($){jQuery("#config-document").tabs();});');
 ?>
-<form action="<?php echo JRoute::_('index.php?option='.CW_APP_NAME.'&view=config&task=save');?>" method="post" name="adminForm">
+<form action="<?php echo Route::_('index.php?option='.CW_APP_NAME.'&view=config&task=save');?>" method="post" name="adminForm">
 <div id="config-document">
 	<ul>
 		<?php foreach ($configuration as $tab):?>
-		<li><a href="#<?php echo $tab['name'];?>"><?php echo JText::_($tab['title']);?></a></li>
-		<?php endforeach;;?>
+		<li><a href="#<?php echo $tab['name'];?>"><?php echo Text::_($tab['title']);?></a></li>
+		<?php endforeach; ?>
 	</ul>
 	<?php 
 	foreach ($configuration as $tab){
 		echo '<div id="'.$tab['name'].'">';
 		foreach ($tab['groups'] as $group){
-			echo '<fieldset><legend>'.JText::_($group['title']).'</legend><table class="admintable">';
+			echo '<fieldset><legend>' . Text::_($group['title']) . '</legend><table class="admintable">';
 			foreach ($group['elements'] as $element){
 				switch ($element['type']){
 					case 'text':
 						echo '<tr><td class="formelement">';
-						echo '<label for="'.$element['name'].'"><span class="editlinktip hasTip" title="'.JText::_('LBL_'.$element['name'].'_DESC').'">'.JText::_('LBL_'.$element['name']).'</span></label>';
+						echo '<label for="'.$element['name'].'"><span class="editlinktip hasTip" title="' . Text::_( 'LBL_' . $element['name'] . '_DESC') . '">' . Text::_( 'LBL_' . $element['name']) . '</span></label>';
 						echo '</td><td>';
 						echo '<input type="text" id="'.$element['name'].'" name="'.$element['name'].'" size="25" value="'.$config[$element['name']].'">';
 						echo '</td></tr>';
 						break;
 					case 'textarea':
 						echo '<tr><td class="formelement">';
-						echo '<label for="'.$element['name'].'"><span class="editlinktip hasTip" title="'.JText::_('LBL_'.$element['name'].'_DESC').'">'.JText::_('LBL_'.$element['name']).'</span></label>';
+						echo '<label for="'.$element['name'].'"><span class="editlinktip hasTip" title="' . Text::_( 'LBL_' . $element['name'] . '_DESC') . '">' . Text::_( 'LBL_' . $element['name']) . '</span></label>';
 						echo '</td><td>';
 						echo '<textarea cols="40" rows="4" id="'.$element['name'].'" name="'.$element['name'].'" size="25">'.$config[$element['name']].'</textarea>';
 						echo '</td></tr>';
 						break;
 					case 'password':
 						echo '<tr><td class="formelement">';
-						echo '<label for="'.$element['name'].'"><span class="editlinktip hasTip" title="'.JText::_('LBL_'.$element['name'].'_DESC').'">'.JText::_('LBL_'.$element['name']).'</span></label>';
+						echo '<label for="'.$element['name'].'"><span class="editlinktip hasTip" title="' . Text::_( 'LBL_' . $element['name'] . '_DESC') . '">' . Text::_( 'LBL_' . $element['name']) . '</span></label>';
 						echo '</td><td>';
 						echo '<input type="password" id="'.$element['name'].'" name="'.$element['name'].'" size="25" value="*****">';
 						echo '</td></tr>';
 						break;
 					case 'select':
 						echo '<tr><td class="formelement">';
-						echo '<label for="'.$element['name'].'"><span class="editlinktip hasTip" title="'.JText::_('LBL_'.$element['name'].'_DESC').'">'.JText::_('LBL_'.$element['name']).'</span></label>';
+						echo '<label for="'.$element['name'].'"><span class="editlinktip hasTip" title="' . Text::_( 'LBL_' . $element['name'] . '_DESC') . '">' . Text::_( 'LBL_' . $element['name']) . '</span></label>';
 						echo '</td><td>';
 						echo '<select id="'.$element['name'].'" name="'.$element['name'].'" size="1">';
 						foreach ($element['values'] as $i=>$value){
-							echo '<option value="'.$value.'"'.($config[$element['name']] == $value ? ' selected="selected"':'').'>'.JText::_($element['labels'][$i]).'</option>';
+							echo '<option value="'.$value.'"'.($config[$element['name']] == $value ? ' selected="selected"':'').'>' . Text::_($element['labels'][$i]) . '</option>';
 						}
 						echo '</select></td></tr>';
 						break;
@@ -170,12 +176,12 @@ $document->addScriptDeclaration('jQuery(document).ready(function($){jQuery("#con
 						echo '<tr><td>';
 						echo '<input type="checkbox" id="'.$element['name'].'" name="'.$element['name'].'" size="25" value="1"'.($config[$element['name']] == '1' ? ' checked="checked"':'').'>';
 						echo '</td><td class="formelement">';
-						echo '<label for="'.$element['name'].'"><span class="editlinktip hasTip" title="'.JText::_('LBL_'.$element['name'].'_DESC').'">'.JText::_('LBL_'.$element['name']).'</span></label>';
+						echo '<label for="'.$element['name'].'"><span class="editlinktip hasTip" title="' . Text::_( 'LBL_' . $element['name'] . '_DESC') . '">' . Text::_( 'LBL_' . $element['name']) . '</span></label>';
 						echo '</td></tr>';
 						break;
 					case 'vcheckboxes':
 						echo '<tr><td class="formelement" nowrap="nowrap">';
-						echo '<label for="'.$element['name'].'"><span class="editlinktip hasTip" title="'.JText::_('LBL_'.$element['name'].'_DESC').'">'.JText::_('LBL_'.$element['name']).'</span></label>';
+						echo '<label for="'.$element['name'].'"><span class="editlinktip hasTip" title="' . Text::_( 'LBL_' . $element['name'] . '_DESC') . '">' . Text::_( 'LBL_' . $element['name']) . '</span></label>';
 						echo '&nbsp;&nbsp;&nbsp;</td>';
 						foreach ($element['values'] as $i=>$value){
 							if($i == 0){
@@ -184,13 +190,13 @@ $document->addScriptDeclaration('jQuery(document).ready(function($){jQuery("#con
 								echo '<tr><td></td><td class="formelement" nowrap="nowrap">';
 							}
 							echo '<input type="checkbox" id="'.$element['name'].$i.'" name="'.$element['name'].'[]" value="'.$value.'"'.(strpos($config[$element['name']], $value) !== false ? ' checked="checked"':'').'>';
-							echo '<label for="'.$element['name'].$i.'"><span class="editlinktip hasTip" title="'.JText::_($element['labels'][$i]).'">'.JText::_($element['labels'][$i]).'</span></label>';
+							echo '<label for="'.$element['name'].$i.'"><span class="editlinktip hasTip" title="' . Text::_($element['labels'][$i]) . '">' . Text::_($element['labels'][$i]) . '</span></label>';
 						}
 						echo '</td></tr>';
 						break; 
 					case 'permissions':
 						echo '<tr><td class="formelement">';
-						echo '<label for="'.$element['name'].'"><span class="editlinktip hasTip" title="'.JText::_('LBL_'.$element['name'].'_DESC').'">'.JText::_('LBL_'.$element['name']).'</span></label>';
+						echo '<label for="'.$element['name'].'"><span class="editlinktip hasTip" title="' . Text::_( 'LBL_' . $element['name'] . '_DESC') . '">' . Text::_( 'LBL_' . $element['name']) . '</span></label>';
 						echo '</td><td>';
 						echo CrosswordsHelper::usersGroups($element['name'],$element['name'].'[]',explode(',', $config[$element['name']]));
 						echo '</td></tr>';
@@ -206,5 +212,5 @@ $document->addScriptDeclaration('jQuery(document).ready(function($){jQuery("#con
 <input type="hidden" name="option" value="<?php echo CW_APP_NAME;?>" />
 <input type="hidden" name="task" value="save" />
 <input type="hidden" name="view" value="config" />
-<?php echo JHTML::_( 'form.token' ); ?>
+<?php echo HTMLHelper::_( 'form.token' ); ?>
 </form>

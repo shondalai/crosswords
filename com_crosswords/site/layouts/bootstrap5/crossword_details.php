@@ -6,6 +6,12 @@
  * @copyright   Copyright (C) 2021 BulaSikku Technologies Private Limited.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Router\Route;
+
 defined( '_JEXEC' ) or die;
 
 $item              = $displayData['item'];
@@ -13,9 +19,9 @@ $params            = $displayData['params'];
 $avatarComponent   = $params->get( 'avatar_component', 'none' );
 $commentsComponent = $params->get( 'comments_component', 'none' );
 $displayName       = $params->get( 'user_display_name', 'name' );
-$user              = JFactory::getUser();
+$user              = Factory::getUser();
 $api               = new CjLibApi();
-$category_name     = JHtml::link( JRoute::_( CrosswordsHelperRoute::getCategoryRoute( $item->catid ) ), $this->escape( $item->category_title ) );
+$category_name     = HTMLHelper::link( Route::_( CrosswordsHelperRoute::getCategoryRoute( $item->catid ) ), $this->escape( $item->category_title ) );
 $formatted_date    = CjLibDateUtils::getHumanReadableDate( $item->created );
 $crosswordUri      = CrosswordsHelperRoute::getCrosswordRoute( $item->id, $item->catid, $item->language );
 $userProfileUrl    = $item->created_by > 0
@@ -35,14 +41,14 @@ $userProfileUrl    = $item->created_by > 0
             <div class="fs-4 fw-light mt-0"><?php echo $this->escape( $item->title ); ?></div>
 
             <div class="text-muted mb-2">
-				<?php echo JText::sprintf( 'COM_CROSSWORDS_LIST_ITEM_META', $userProfileUrl, $category_name, $formatted_date ); ?>
+				<?php echo Text::sprintf( 'COM_CROSSWORDS_LIST_ITEM_META', $userProfileUrl, $category_name, $formatted_date ); ?>
             </div>
 
 			<?php if ( ( ! $user->guest && $user->id == $item->created_by && $user->authorise( 'core.edit', CW_APP_NAME ) )
 			           || $user->authorise( 'core.manage', 'com_crosswords' ) ): ?>
                 <div class="crossword-controls mb-2">
-                    <a href="<?php echo JRoute::_( 'index.php?option=com_crosswords&view=crosswords&task=edit&id=' . $item->id . ':' . $item->alias ); ?>"
-                       class="text-muted btn-edit-crossword"><?php echo JText::_( 'JGLOBAL_EDIT' ); ?></a>
+                    <a href="<?php echo Route::_( 'index.php?option=com_crosswords&view=crosswords&task=edit&id=' . $item->id . ':' . $item->alias ); ?>"
+                       class="text-muted btn-edit-crossword"><?php echo Text::_( 'JGLOBAL_EDIT' ); ?></a>
                 </div>
 			<?php endif; ?>
 
@@ -57,15 +63,15 @@ $userProfileUrl    = $item->created_by > 0
         </div>
     </div>
 
-    <form id="crossword-form" class="mb-4" action="<?php echo JRoute::_( $crosswordUri ); ?>" method="post">
+    <form id="crossword-form" class="mb-4" action="<?php echo Route::_( $crosswordUri ); ?>" method="post">
         <table id="crossword-grid" style="width: auto;">
             <tbody>
             <tr class="grid-header">
                 <td colspan="<?php echo $item->columns + 2 ?>" class="question-highlight-box">
 					<?php if ( $item->solved == '1' ): ?>
-						<?php echo JText::_( "COM_CROSSWORDS_YOU_HAVE_SOLVED" ); ?>
+						<?php echo Text::_( "COM_CROSSWORDS_YOU_HAVE_SOLVED" ); ?>
 					<?php else: ?>
-						<?php echo JText::_( 'COM_CROSSWORDS_NO_QUESTION_SELECTED' ); ?>
+						<?php echo Text::_( 'COM_CROSSWORDS_NO_QUESTION_SELECTED' ); ?>
 					<?php endif; ?>
                 </td>
             </tr>
@@ -102,13 +108,13 @@ $userProfileUrl    = $item->created_by > 0
 
 	<?php if ( $item->solved != '1' ): ?>
         <div class="mb-4 navigation">
-            <button class="btn btn-sm btn-primary" id="btn-check-result"><?php echo JText::_( 'COM_CROSSWORDS_CHECK_RESULT' ); ?></button>
+            <button class="btn btn-sm btn-primary" id="btn-check-result"><?php echo Text::_( 'COM_CROSSWORDS_CHECK_RESULT' ); ?></button>
 
 			<?php if ( $params->get( 'enable_solve_question', 1 ) == 1 ): ?>
-                <button class="btn btn-sm btn-info" id="btn-solve-question"><?php echo JText::_( 'COM_CROSSWORDS_SOLVE_QUESTION' ); ?></button>
+                <button class="btn btn-sm btn-info" id="btn-solve-question"><?php echo Text::_( 'COM_CROSSWORDS_SOLVE_QUESTION' ); ?></button>
 			<?php endif; ?>
 
-            <button class="btn btn-sm btn-success" id="btn-solve-crossword"><?php echo JText::_( 'COM_CROSSWORDS_SOLVE_CROSSWORD' ); ?></button>
+            <button class="btn btn-sm btn-success" id="btn-solve-crossword"><?php echo Text::_( 'COM_CROSSWORDS_SOLVE_CROSSWORD' ); ?></button>
         </div>
 	<?php endif; ?>
 
@@ -134,13 +140,13 @@ $userProfileUrl    = $item->created_by > 0
 
         <div class="row questions mt-3">
             <div class="col-md-6">
-                <h5 class="page-header margin-bottom-10 no-pad-bottom"><?php echo JText::_( "COM_CROSSWORDS_ACROSS" ); ?></h5>
+                <h5 class="page-header margin-bottom-10 no-pad-bottom"><?php echo Text::_( "COM_CROSSWORDS_ACROSS" ); ?></h5>
                 <table class="table table-bordered table-striped table-hover">
                     <tbody><?php echo $h_questions; ?></tbody>
                 </table>
             </div>
             <div class="col-md-6">
-                <h5 class="page-header margin-bottom-10 no-pad-bottom"><?php echo JText::_( "COM_CROSSWORDS_DOWN" ); ?></h5>
+                <h5 class="page-header margin-bottom-10 no-pad-bottom"><?php echo Text::_( "COM_CROSSWORDS_DOWN" ); ?></h5>
                 <table class="table table-bordered table-striped table-hover">
                     <tbody><?php echo $v_questions; ?></tbody>
                 </table>
@@ -150,7 +156,7 @@ $userProfileUrl    = $item->created_by > 0
 
     <!--*********************** START: Solved Users **********************-->
     <div class="mb-4">
-        <h3 class="page-header margin-bottom-10"><?php echo JText::_( 'COM_CROSSWORDS_WHO_SOLVED_THIS' ); ?></h3>
+        <h3 class="page-header margin-bottom-10"><?php echo Text::_( 'COM_CROSSWORDS_WHO_SOLVED_THIS' ); ?></h3>
 		<?php if ( ! empty( $item->users_solved ) ): ?>
             <div class="solved-users-listing clearfix">
 				<?php foreach ( $item->users_solved as $solved_user ): ?>
@@ -174,20 +180,20 @@ $userProfileUrl    = $item->created_by > 0
 				<?php endforeach; ?>
             </div>
 		<?php else: ?>
-            <div class="alert alert-info"><?php echo JText::_( 'COM_CROSSWORDS_NO_USERS_SOLVED_THIS' ); ?></div>
+            <div class="alert alert-info"><?php echo Text::_( 'COM_CROSSWORDS_NO_USERS_SOLVED_THIS' ); ?></div>
 		<?php endif; ?>
     </div>
     <!--*********************** END: Solved Users ***********************-->
     <!--************************* START: Comments *************************-->
 	<?php if ( $commentsComponent != 'none' ): ?>
         <div id="cwcomments mb-4">
-            <h3 class="page-header"><?php echo JText::_( 'COM_CROSSWORDS_COMMENTS' ); ?></h3>
+            <h3 class="page-header"><?php echo Text::_( 'COM_CROSSWORDS_COMMENTS' ); ?></h3>
 			<?php
 			echo CJFunctions::load_comments( $commentsComponent,
 				'com_crosswords',
 				$item->id,
 				$this->escape( $item->title ),
-				JRoute::_( $crosswordUri, false, - 1 ),
+				Route::_( $crosswordUri, false, - 1 ),
 				$params->get( 'disqus_intdbt_id' ),
 				$item
 			);
@@ -198,17 +204,17 @@ $userProfileUrl    = $item->created_by > 0
 
     <div style="display: none;">
         <input type="hidden" id="cjpageid" value="crossword_deails">
-        <span id="lbl_cancel"><?php echo JText::_( "COM_CROSSWORDS_CANCEL" ); ?></span>
-        <span id="lbl_info"><?php echo JText::_( "COM_CROSSWORDS_INFO" ); ?></span>
-        <span id="lbl_alert"><?php echo JText::_( "COM_CROSSWORDS_ALERT" ); ?></span>
-        <span id="lbl_error"><?php echo JText::_( "COM_CROSSWORDS_ERROR" ); ?></span>
-        <span id="lbl_confirm"><?php echo JText::_( "COM_CROSSWORDS_CONFIRM" ); ?></span>
-        <span id="msg_failed_answers"><?php echo JText::_( "COM_CROSSWORDS_MSG_CROSSWORD_UNSOLVED" ); ?></span>
-        <span id="msg_select_question"><?php echo JText::_( 'COM_CROSSWORDS_MSG_SELECT_QUESTION' ); ?></span>
+        <span id="lbl_cancel"><?php echo Text::_( "COM_CROSSWORDS_CANCEL" ); ?></span>
+        <span id="lbl_info"><?php echo Text::_( "COM_CROSSWORDS_INFO" ); ?></span>
+        <span id="lbl_alert"><?php echo Text::_( "COM_CROSSWORDS_ALERT" ); ?></span>
+        <span id="lbl_error"><?php echo Text::_( "COM_CROSSWORDS_ERROR" ); ?></span>
+        <span id="lbl_confirm"><?php echo Text::_( "COM_CROSSWORDS_CONFIRM" ); ?></span>
+        <span id="msg_failed_answers"><?php echo Text::_( "COM_CROSSWORDS_MSG_CROSSWORD_UNSOLVED" ); ?></span>
+        <span id="msg_select_question"><?php echo Text::_( 'COM_CROSSWORDS_MSG_SELECT_QUESTION' ); ?></span>
         <img id="progress-confirm" alt="..." src="<?php echo CW_MEDIA_URI; ?>images/ui-anim_basic_16x16.gif"/>
-        <span id="url_solve_question"><?php echo JRoute::_( $crosswordUri . '&task=crossword.solveQuestion' ); ?></span>
-        <span id="url_check_result"><?php echo JRoute::_( $crosswordUri . '&task=crossword.checkResult' ); ?></span>
-        <span id="url_solve_crossword"><?php echo JRoute::_( $crosswordUri . '&task=crossword.solveCrossword' ); ?></span>
+        <span id="url_solve_question"><?php echo Route::_( $crosswordUri . '&task=crossword.solveQuestion' ); ?></span>
+        <span id="url_check_result"><?php echo Route::_( $crosswordUri . '&task=crossword.checkResult' ); ?></span>
+        <span id="url_solve_crossword"><?php echo Route::_( $crosswordUri . '&task=crossword.solveCrossword' ); ?></span>
         <span id="lbl_sharing_services"><?php echo $params->get( 'sharing_services' ); ?></span>
         <span id="enable_auto_move"><?php echo $params->get( 'enable_automove', 1 ); ?></span>
     </div>
@@ -217,13 +223,13 @@ $userProfileUrl    = $item->created_by > 0
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title"><?php echo JText::_( 'COM_CROSSWORDS_ALERT' ); ?></h5>
+                    <h5 class="modal-title"><?php echo Text::_( 'COM_CROSSWORDS_ALERT' ); ?></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body"></div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" data-bs-dismiss="modal" aria-hidden="true">
-						<?php echo JText::_( 'COM_CROSSWORDS_CLOSE' ); ?>
+						<?php echo Text::_( 'COM_CROSSWORDS_CLOSE' ); ?>
                     </button>
                 </div>
             </div>
@@ -234,16 +240,16 @@ $userProfileUrl    = $item->created_by > 0
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title"><?php echo JText::_( 'COM_CROSSWORDS_ALERT' ); ?></h5>
+                    <h5 class="modal-title"><?php echo Text::_( 'COM_CROSSWORDS_ALERT' ); ?></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body"><?php echo JText::_( 'COM_CROSSWORDS_MSG_CONFIRM_SOLVE_CROSSWORD' ) ?></div>
+                <div class="modal-body"><?php echo Text::_( 'COM_CROSSWORDS_MSG_CONFIRM_SOLVE_CROSSWORD' ) ?></div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary btn-cancel" data-bs-dismiss="modal" aria-hidden="true">
-                        <i class="fa fa-remove"></i> <?php echo JText::_( 'COM_CROSSWORDS_CLOSE' ); ?>
+                        <i class="fa fa-remove"></i> <?php echo Text::_( 'COM_CROSSWORDS_CLOSE' ); ?>
                     </button>
                     <button class="btn btn-primary btn-confirm-solve-crossword" aria-hidden="true">
-                        <i class="fa fa-thumbs-up"></i> <?php echo JText::_( 'COM_CROSSWORDS_CONFIRM' ); ?>
+                        <i class="fa fa-thumbs-up"></i> <?php echo Text::_( 'COM_CROSSWORDS_CONFIRM' ); ?>
                     </button>
                 </div>
             </div>

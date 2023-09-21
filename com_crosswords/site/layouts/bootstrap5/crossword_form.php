@@ -6,6 +6,11 @@
  * @copyright   Copyright (C) 2021 BulaSikku Technologies Private Limited.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
+
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Router\Route;
+
 defined( '_JEXEC' ) or die;
 
 $item    = $displayData['item'];
@@ -14,12 +19,12 @@ $form    = $displayData['form'];
 $helper  = $displayData['helper'];
 $tabName = 'com-crosswords-form';
 ?>
-<form action="<?php echo JRoute::_( 'index.php?option=com_crosswords&id=' . (int) $item->id ); ?>" method="post" name="crosswordForm" id="crosswordForm"
+<form action="<?php echo Route::_( 'index.php?option=com_crosswords&id=' . (int) $item->id ); ?>" method="post" name="crosswordForm" id="crosswordForm"
       class="form-validate form-vertical mt-3"
       enctype="multipart/form-data">
     <fieldset>
-		<?php echo JHtml::_( $helper . '.startTabSet', $tabName, [ 'active' => 'editor' ] ); ?>
-		<?php echo JHtml::_( $helper . '.addTab', $tabName, 'editor', JText::_( 'COM_CROSSWORDS_CONTENT' ) ); ?>
+		<?php echo HTMLHelper::_( $helper . '.startTabSet', $tabName, [ 'active' => 'editor' ] ); ?>
+		<?php echo HTMLHelper::_( $helper . '.addTab', $tabName, 'editor', Text::_( 'COM_CROSSWORDS_CONTENT' ) ); ?>
 		<?php echo $form->renderField( 'title' ); ?>
 
 		<?php if ( is_null( $item->id ) && $params->get( 'show_alias_field' ) ) : ?>
@@ -38,10 +43,10 @@ $tabName = 'com-crosswords-form';
 			<?php echo $form->getInput( 'description' ); ?>
         </div>
 
-		<?php echo JHtml::_( $helper . '.endTab' ); ?>
+		<?php echo HTMLHelper::_( $helper . '.endTab' ); ?>
 
 		<?php if ( $params->get( 'show_publishing_options', 1 ) == 1 ): ?>
-			<?php echo JHtml::_( $helper . '.addTab', $tabName, 'publishing', JText::_( 'COM_CROSSWORDS_PUBLISHING' ) ); ?>
+			<?php echo HTMLHelper::_( $helper . '.addTab', $tabName, 'publishing', Text::_( 'COM_CROSSWORDS_PUBLISHING' ) ); ?>
 
 			<?php if ( $item->params->get( 'access-change' ) ) : ?>
 				<?php echo $form->renderField( 'state' ); ?>
@@ -59,22 +64,22 @@ $tabName = 'com-crosswords-form';
                     <div class="control-label">
                     </div>
                     <div class="controls">
-						<?php echo JText::_( 'COM_CROSSWORDS_ORDERING' ); ?>
+						<?php echo Text::_( 'COM_CROSSWORDS_ORDERING' ); ?>
                     </div>
                 </div>
 			<?php endif; ?>
-			<?php echo JHtml::_( $helper . '.endTab' ); ?>
+			<?php echo HTMLHelper::_( $helper . '.endTab' ); ?>
 		<?php endif; ?>
 
 		<?php if ( $params->get( 'show_metadata_options', 1 ) ): ?>
-			<?php echo JHtml::_( $helper . '.addTab', $tabName, 'metadata', JText::_( 'COM_CROSSWORDS_METADATA' ) ); ?>
+			<?php echo HTMLHelper::_( $helper . '.addTab', $tabName, 'metadata', Text::_( 'COM_CROSSWORDS_METADATA' ) ); ?>
 			<?php echo $form->renderField( 'metadesc' ); ?>
 			<?php echo $form->renderField( 'metakey' ); ?>
-			<?php echo JHtml::_( $helper . '.endTab' ); ?>
+			<?php echo HTMLHelper::_( $helper . '.endTab' ); ?>
 		<?php endif; ?>
         
-		<?php echo JHtml::_( $helper . '.endTabSet' ); ?>
+		<?php echo HTMLHelper::_( $helper . '.endTabSet' ); ?>
 
-		<?php echo JHtml::_( 'form.token' ); ?>
+		<?php echo HTMLHelper::_( 'form.token' ); ?>
     </fieldset>
 </form>

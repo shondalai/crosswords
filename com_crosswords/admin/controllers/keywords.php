@@ -6,9 +6,13 @@
  * @copyright   Copyright (C) 2009 - 2014 corejoomla.com. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\MVC\Controller\AdminController;
+
 defined( '_JEXEC' ) or die();
 
-class CrosswordsControllerKeywords extends JControllerAdmin {
+class CrosswordsControllerKeywords extends AdminController {
 
 	public function __construct( $config = [] ) {
 		parent::__construct( $config );
@@ -16,7 +20,7 @@ class CrosswordsControllerKeywords extends JControllerAdmin {
 
 		if ( APP_VERSION < 3 )
 		{
-			$this->input = JFactory::getApplication()->input;
+			$this->input = Factory::getApplication()->input;
 		}
 	}
 
@@ -31,7 +35,7 @@ class CrosswordsControllerKeywords extends JControllerAdmin {
 	}
 
 	public function publish() {
-		$cid = JFactory::getApplication()->input->get( 'cid', [], 'array' );
+		$cid = Factory::getApplication()->input->get( 'cid', [], 'array' );
 		parent::publish();
 	}
 

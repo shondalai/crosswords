@@ -9,6 +9,9 @@
  * @license		License GNU General Public License version 2 or later
  */
 // No direct access to this file
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+
 defined('_JEXEC') or die('Restricted access');
 defined('DS') or define('DS', DIRECTORY_SEPARATOR);
 defined('CW_APP_NAME') or define('CW_APP_NAME', 'com_crosswords');
@@ -31,7 +34,7 @@ class com_crosswordsInstallerScript{
 	 */
 	function uninstall($parent){
 		// $parent is the class calling this method
-		echo '<p>' . JText::_('COM_CROSSWORDS_UNINSTALL_TEXT') . '</p>';
+		echo '<p>' . Text::_('COM_CROSSWORDS_UNINSTALL_TEXT') . '</p>';
 	}
 
 	/**
@@ -40,7 +43,7 @@ class com_crosswordsInstallerScript{
 	 * @return void
 	 */
 	function update($parent){
-		$db = JFactory::getDBO();
+		$db = Factory::getDBO();
 		if (method_exists($parent, 'extension_root'))
 		{
 			$sqlfile = $parent->getPath('extension_root') . '/sql/install.mysql.utf8.sql';
@@ -73,7 +76,7 @@ class com_crosswordsInstallerScript{
 		}
 
 		// $parent is the class calling this method
-		echo '<p>' . JText::_('COM_CROSSWORDS_UPDATE_TEXT') . '</p>';
+		echo '<p>' . Text::_('COM_CROSSWORDS_UPDATE_TEXT') . '</p>';
 		$parent->getParent()->setRedirectURL('index.php?option=com_crosswords&view=dashboard');
 	}
 
@@ -85,7 +88,7 @@ class com_crosswordsInstallerScript{
 	function preflight($type, $parent){
 		// $parent is the class calling this method
 		// $type is the type of change (install, update or discover_install)
-		echo '<p>' . JText::_('COM_CROSSWORDS_PREFLIGHT_' . $type . '_TEXT') . '</p>';
+		echo '<p>' . Text::_('COM_CROSSWORDS_PREFLIGHT_' . $type . '_TEXT') . '</p>';
 	}
 
 	/**
@@ -95,10 +98,10 @@ class com_crosswordsInstallerScript{
 	 */
 	function postflight($type, $parent){
 		
-		$db = JFactory::getDbo();
+		$db = Factory::getDbo();
 		$update_queries = array ();
 		
-		$update_queries[] = 'ALTER IGNORE TABLE `#__crosswords` ADD COLUMN `asset_id` INTEGER(10) UNSIGNED NOT NULL DEFAULT 0';;
+		$update_queries[] = 'ALTER IGNORE TABLE `#__crosswords` ADD COLUMN `asset_id` INTEGER(10) UNSIGNED NOT NULL DEFAULT 0';
 		$update_queries[] = 'ALTER IGNORE TABLE `#__crosswords` ADD COLUMN `description` MEDIUMTEXT';
 		$update_queries[] = 'ALTER IGNORE TABLE `#__crosswords` ADD COLUMN `hits` INTEGER UNSIGNED NOT NULL DEFAULT 0';
 		$update_queries[] = 'ALTER IGNORE TABLE `#__crosswords` ADD COLUMN `solved` INTEGER UNSIGNED NOT NULL DEFAULT 0';

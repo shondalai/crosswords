@@ -9,24 +9,33 @@
  * @license        License GNU General Public License version 2 or later
  */
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Associations;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Layout\LayoutHelper;
+use Joomla\CMS\Router\Route;
+
 defined( '_JEXEC' ) or die;
 
 // Include the component HTML helpers.
-JHtml::addIncludePath( JPATH_COMPONENT . '/helpers/html' );
+HTMLHelper::addIncludePath( JPATH_COMPONENT . '/helpers/html' );
 
 if ( APP_VERSION < 4 )
 {
-	JHtml::_( 'behavior.formvalidator' );
-	JHtml::_( 'behavior.keepalive' );
-	JHtml::_( 'formbehavior.chosen', 'select' );
+	HTMLHelper::_( 'behavior.formvalidator' );
+	HTMLHelper::_( 'behavior.keepalive' );
+	HTMLHelper::_( 'formbehavior.chosen', 'select' );
 	CJLib::behavior( 'bscore' );
 	CjScript::_( 'form', [ 'custom' => false ] );
 	CjScript::_( 'fontawesome', [ 'custom' => false ] );
-} else {
+}
+else
+{
 	$wa = $this->document->getWebAssetManager();
-	$wa->getRegistry()->addExtensionRegistryFile('com_contenthistory');
-	$wa->useScript('keepalive')->useScript('form.validate');
-	$this->set('useCoreUI', true);
+	$wa->getRegistry()->addExtensionRegistryFile( 'com_contenthistory' );
+	$wa->useScript( 'keepalive' )->useScript( 'form.validate' );
+	$this->set( 'useCoreUI', true );
 }
 
 $this->hiddenFieldsets    = [];
@@ -37,9 +46,9 @@ $this->configFieldsets[0] = 'editorConfig';
 // Create shortcut to parameters.
 $params = $this->state->get( 'params' );
 
-$app   = JFactory::getApplication();
+$app   = Factory::getApplication();
 $input = $app->input;
-$assoc = JLanguageAssociations::isEnabled();
+$assoc = Associations::isEnabled();
 
 // This checks if the config options have ever been saved. If they haven't they will fall back to the original settings.
 $params        = json_decode( $params );
@@ -63,7 +72,7 @@ if ( isset( $this->item->attribs['show_crossword_options'] ) && $this->item->att
 }
 ?>
 <div id="cj-wrapper">
-    <form action="<?php echo JRoute::_( 'index.php?option=com_crosswords&layout=edit&id=' . (int) $this->item->id ); ?>"
+    <form action="<?php echo Route::_( 'index.php?option=com_crosswords&layout=edit&id=' . (int) $this->item->id ); ?>"
           method="post" name="adminForm" id="item-form" class="form-validate">
 
         <div class="form-horizontal">
@@ -79,7 +88,7 @@ if ( isset( $this->item->attribs['show_crossword_options'] ) && $this->item->att
                     </div>
 
 					<?php if ( $params->show_publishing_options == 1 ) : ?>
-						<?php echo JLayoutHelper::render( 'joomla.edit.publishingdata', $this ); ?>
+						<?php echo LayoutHelper::render( 'joomla.edit.publishingdata', $this ); ?>
 					<?php endif; ?>
 
 					<?php if ( $assoc ) : ?>
@@ -87,10 +96,10 @@ if ( isset( $this->item->attribs['show_crossword_options'] ) && $this->item->att
 					<?php endif; ?>
 
 					<?php $this->show_options = $params->show_crossword_options; ?>
-					<?php echo JLayoutHelper::render( 'joomla.edit.params', $this ); ?>
+					<?php echo LayoutHelper::render( 'joomla.edit.params', $this ); ?>
                 </div>
                 <div class="span6 col-md-6">
-					<?php echo JLayoutHelper::render( 'joomla.edit.global', $this ); ?>
+					<?php echo LayoutHelper::render( 'joomla.edit.global', $this ); ?>
                 </div>
             </div>
         </div>
@@ -98,11 +107,11 @@ if ( isset( $this->item->attribs['show_crossword_options'] ) && $this->item->att
         <input type="hidden" name="task" value=""/>
         <input type="hidden" name="return" value="<?php echo $input->getCmd( 'return' ); ?>"/>
 
-		<?php echo JHtml::_( 'form.token' ); ?>
+		<?php echo HTMLHelper::_( 'form.token' ); ?>
     </form>
 
     <div style="display: none;">
         <input id="cjpageid" value="form" type="hidden">
-        <span id="msg_field_required"><?php echo JText::_( 'MSG_FIELD_REQUIRED' ); ?></span>
+        <span id="msg_field_required"><?php echo Text::_( 'MSG_FIELD_REQUIRED' ); ?></span>
     </div>
 </div>

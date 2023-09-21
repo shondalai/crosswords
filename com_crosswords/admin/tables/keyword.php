@@ -8,9 +8,15 @@
  * @link		http://www.corejoomla.com/
  * @license		License GNU General Public License version 2 or later
  */
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Table\Table;
+use Joomla\Utilities\ArrayHelper;
+
 defined('_JEXEC') or die;
 
-class CrosswordsTableKeyword extends JTable 
+class CrosswordsTableKeyword extends Table
 {
 	public function __construct($db)
 	{
@@ -27,7 +33,7 @@ class CrosswordsTableKeyword extends JTable
 		return $this->keyword;
 	}
 
-	protected function _getAssetParentId(JTable $table = null, $id = null)
+	protected function _getAssetParentId(Table $table = null, $id = null)
 	{
 		$assetId = null;
 
@@ -64,7 +70,7 @@ class CrosswordsTableKeyword extends JTable
 	{
 		if (trim($this->keyword) == '')
 		{
-			$this->setError(JText::_('COM_CROSSWORDS_WARNING_PROVIDE_VALID_NAME'));
+			$this->setError( Text::_('COM_CROSSWORDS_WARNING_PROVIDE_VALID_NAME'));
 
 			return false;
 		}
@@ -74,8 +80,8 @@ class CrosswordsTableKeyword extends JTable
 
 	public function store($updateNulls = false)
 	{
-		$date = JFactory::getDate();
-		$user = JFactory::getUser();
+		$date = Factory::getDate();
+		$user = Factory::getUser();
 
 		if ($this->id)
 		{
@@ -106,7 +112,7 @@ class CrosswordsTableKeyword extends JTable
 		$k = $this->_tbl_key;
 
 		// Sanitize input.
-		$pks = \Joomla\Utilities\ArrayHelper::toInteger($pks);
+		$pks = ArrayHelper::toInteger($pks);
 		$userId = (int) $userId;
 		$state = (int) $state;
 
@@ -120,7 +126,7 @@ class CrosswordsTableKeyword extends JTable
 			// Nothing to set publishing state on, return false.
 			else
 			{
-				$this->setError(JText::_('JLIB_DATABASE_ERROR_NO_ROWS_SELECTED'));
+				$this->setError( Text::_('JLIB_DATABASE_ERROR_NO_ROWS_SELECTED'));
 
 				return false;
 			}

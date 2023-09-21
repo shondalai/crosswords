@@ -8,22 +8,28 @@
  * @link           http://www.corejoomla.com/
  * @license        License GNU General Public License version 2 or later
  */
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Router\Route;
+
 defined( '_JEXEC' ) or die;
 
-JHtml::addIncludePath( JPATH_COMPONENT . '/helpers/html' );
+HTMLHelper::addIncludePath( JPATH_COMPONENT . '/helpers/html' );
 
-$app    = JFactory::getApplication();
-$user   = JFactory::getUser();
+$app    = Factory::getApplication();
+$user   = Factory::getUser();
 $userId = $user->id;
 
 if ( APP_VERSION >= 3 )
 {
-	JHtml::_( 'bootstrap.tooltip' );
+	HTMLHelper::_( 'bootstrap.tooltip' );
 }
 else
 {
 	CJLib::import( 'corejoomla.ui.bootstrap' );
-	JFactory::getDocument()->addStyleSheet( CJLIB_URI . '/framework/assets/cj.framework.css' );
+	Factory::getDocument()->addStyleSheet( CJLIB_URI . '/framework/assets/cj.framework.css' );
 }
 
 CJLib::behavior( 'bscore' );
@@ -35,23 +41,23 @@ CJLib::behavior( 'fontawesome' );
 
             <div class="panel panel-default card">
                 <div class="panel-heading card-header">
-                    <strong><i class="fa fa-refresh"></i> <?php echo JText::_( 'COM_CROSSWORDS_LATEST_CROSSWORDS' ); ?></strong>
+                    <strong><i class="fa fa-refresh"></i> <?php echo Text::_( 'COM_CROSSWORDS_LATEST_CROSSWORDS' ); ?></strong>
                 </div>
 				<?php if ( ! $this->latest ): ?>
                     <div class="panel-body card-body">
-						<?php echo JText::_( 'JGLOBAL_NO_MATCHING_RESULTS' ); ?>
+						<?php echo Text::_( 'JGLOBAL_NO_MATCHING_RESULTS' ); ?>
                     </div>
 				<?php else: ?>
                     <table class="table table-striped table-hover">
                         <caption></caption>
                         <thead>
                         <tr>
-                            <th><?php echo JText::_( 'JGLOBAL_TITLE' ); ?></th>
-                            <th width="10%" class="nowrap hidden-phone"><?php echo JText::_( 'JAUTHOR' ); ?></th>
-                            <th width="5%" class="nowrap hidden-phone"><?php echo JText::_( 'JGRID_HEADING_LANGUAGE' ); ?></th>
-                            <th width="10%" class="nowrap hidden-phone"><?php echo JText::_( 'JDATE' ); ?></th>
-                            <th width="10%"><?php echo JText::_( 'JGLOBAL_HITS' ); ?></th>
-                            <th width="1%" class="nowrap hidden-phone"><?php echo JText::_( 'JGRID_HEADING_ID' ); ?></th>
+                            <th><?php echo Text::_( 'JGLOBAL_TITLE' ); ?></th>
+                            <th width="10%" class="nowrap hidden-phone"><?php echo Text::_( 'JAUTHOR' ); ?></th>
+                            <th width="5%" class="nowrap hidden-phone"><?php echo Text::_( 'JGRID_HEADING_LANGUAGE' ); ?></th>
+                            <th width="10%" class="nowrap hidden-phone"><?php echo Text::_( 'JDATE' ); ?></th>
+                            <th width="10%"><?php echo Text::_( 'JGLOBAL_HITS' ); ?></th>
+                            <th width="1%" class="nowrap hidden-phone"><?php echo Text::_( 'JGRID_HEADING_ID' ); ?></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -65,41 +71,41 @@ CJLib::behavior( 'fontawesome' );
                                 <td class="has-context">
                                     <div>
 										<?php if ( $item->checked_out ) : ?>
-											<?php echo JHtml::_( 'jgrid.checkedout', $i, $item->editor, $item->checked_out_time, 'polls.', $canCheckin ); ?>
+											<?php echo HTMLHelper::_( 'jgrid.checkedout', $i, $item->editor, $item->checked_out_time, 'polls.', $canCheckin ); ?>
 										<?php endif; ?>
 										<?php if ( $item->language == '*' ): ?>
-											<?php $language = JText::alt( 'JALL', 'language' ); ?>
+											<?php $language = Text::alt( 'JALL', 'language' ); ?>
 										<?php else: ?>
-											<?php $language = $item->language_title ? $this->escape( $item->language_title ) : JText::_( 'JUNDEFINED' ); ?>
+											<?php $language = $item->language_title ? $this->escape( $item->language_title ) : Text::_( 'JUNDEFINED' ); ?>
 										<?php endif; ?>
 										<?php if ( $canEdit || $canEditOwn ) : ?>
-                                            <a href="<?php echo JRoute::_( 'index.php?option=com_crosswords&task=crossword.edit&id=' . $item->id ); ?>"
-                                               title="<?php echo JText::_( 'JACTION_EDIT' ); ?>">
+                                            <a href="<?php echo Route::_( 'index.php?option=com_crosswords&task=crossword.edit&id=' . $item->id ); ?>"
+                                               title="<?php echo Text::_( 'JACTION_EDIT' ); ?>">
 												<?php echo $this->escape( $item->title ); ?></a>
 										<?php else : ?>
-                                            <span title="<?php echo JText::sprintf( 'JFIELD_ALIAS_LABEL',
+                                            <span title="<?php echo Text::sprintf( 'JFIELD_ALIAS_LABEL',
 												$this->escape( $item->alias ) ); ?>"><?php echo $this->escape( $item->title ); ?></span>
 										<?php endif; ?>
                                         <div class="small">
-											<?php echo JText::_( 'JCATEGORY' ) . ": " . $this->escape( $item->category_title ); ?>
+											<?php echo Text::_( 'JCATEGORY' ) . ": " . $this->escape( $item->category_title ); ?>
                                         </div>
                                     </div>
                                 </td>
                                 <td class="small hidden-phone">
-                                    <a href="<?php echo JRoute::_( 'index.php?option=com_users&task=user.edit&id=' . (int) $item->created_by ); ?>"
-                                       title="<?php echo JText::_( 'JAUTHOR' ); ?>">
+                                    <a href="<?php echo Route::_( 'index.php?option=com_users&task=user.edit&id=' . (int) $item->created_by ); ?>"
+                                       title="<?php echo Text::_( 'JAUTHOR' ); ?>">
 										<?php echo $this->escape( $item->author_name ); ?>
                                     </a>
                                 </td>
                                 <td class="small hidden-phone">
 									<?php if ( $item->language == '*' ): ?>
-										<?php echo JText::alt( 'JALL', 'language' ); ?>
+										<?php echo Text::alt( 'JALL', 'language' ); ?>
 									<?php else: ?>
-										<?php echo $item->language_title ? $this->escape( $item->language_title ) : JText::_( 'JUNDEFINED' ); ?>
+										<?php echo $item->language_title ? $this->escape( $item->language_title ) : Text::_( 'JUNDEFINED' ); ?>
 									<?php endif; ?>
                                 </td>
                                 <td class="nowrap small hidden-phone">
-									<?php echo JHtml::_( 'date', $item->created, JText::_( 'DATE_FORMAT_LC4' ) ); ?>
+									<?php echo HTMLHelper::_( 'date', $item->created, Text::_( 'DATE_FORMAT_LC4' ) ); ?>
                                 </td>
                                 <td class="center">
 									<?php echo (int) $item->hits; ?>
@@ -116,23 +122,23 @@ CJLib::behavior( 'fontawesome' );
 
             <div class="panel panel-default card">
                 <div class="panel-heading card-header">
-                    <strong><i class="fa fa-refresh"></i> <?php echo JText::_( 'COM_CROSSWORDS_POPULAR_CROSSWORDS' ); ?></strong>
+                    <strong><i class="fa fa-refresh"></i> <?php echo Text::_( 'COM_CROSSWORDS_POPULAR_CROSSWORDS' ); ?></strong>
                 </div>
 				<?php if ( ! $this->popular ): ?>
                     <div class="panel-body card-body">
-						<?php echo JText::_( 'JGLOBAL_NO_MATCHING_RESULTS' ); ?>
+						<?php echo Text::_( 'JGLOBAL_NO_MATCHING_RESULTS' ); ?>
                     </div>
 				<?php else: ?>
                     <table class="table table-striped table-hover">
                         <caption></caption>
                         <thead>
                         <tr>
-                            <th><?php echo JText::_( 'JGLOBAL_TITLE' ); ?></th>
-                            <th width="10%" class="nowrap hidden-phone"><?php echo JText::_( 'JAUTHOR' ); ?></th>
-                            <th width="5%" class="nowrap hidden-phone"><?php echo JText::_( 'JGRID_HEADING_LANGUAGE' ); ?></th>
-                            <th width="10%" class="nowrap hidden-phone"><?php echo JText::_( 'JDATE' ); ?></th>
-                            <th width="10%"><?php echo JText::_( 'JGLOBAL_HITS' ); ?></th>
-                            <th width="1%" class="nowrap hidden-phone"><?php echo JText::_( 'JGRID_HEADING_ID' ); ?></th>
+                            <th><?php echo Text::_( 'JGLOBAL_TITLE' ); ?></th>
+                            <th width="10%" class="nowrap hidden-phone"><?php echo Text::_( 'JAUTHOR' ); ?></th>
+                            <th width="5%" class="nowrap hidden-phone"><?php echo Text::_( 'JGRID_HEADING_LANGUAGE' ); ?></th>
+                            <th width="10%" class="nowrap hidden-phone"><?php echo Text::_( 'JDATE' ); ?></th>
+                            <th width="10%"><?php echo Text::_( 'JGLOBAL_HITS' ); ?></th>
+                            <th width="1%" class="nowrap hidden-phone"><?php echo Text::_( 'JGRID_HEADING_ID' ); ?></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -146,41 +152,41 @@ CJLib::behavior( 'fontawesome' );
                                 <td class="has-context">
                                     <div>
 										<?php if ( $item->checked_out ) : ?>
-											<?php echo JHtml::_( 'jgrid.checkedout', $i, $item->editor, $item->checked_out_time, 'polls.', $canCheckin ); ?>
+											<?php echo HTMLHelper::_( 'jgrid.checkedout', $i, $item->editor, $item->checked_out_time, 'polls.', $canCheckin ); ?>
 										<?php endif; ?>
 										<?php if ( $item->language == '*' ): ?>
-											<?php $language = JText::alt( 'JALL', 'language' ); ?>
+											<?php $language = Text::alt( 'JALL', 'language' ); ?>
 										<?php else: ?>
-											<?php $language = $item->language_title ? $this->escape( $item->language_title ) : JText::_( 'JUNDEFINED' ); ?>
+											<?php $language = $item->language_title ? $this->escape( $item->language_title ) : Text::_( 'JUNDEFINED' ); ?>
 										<?php endif; ?>
 										<?php if ( $canEdit || $canEditOwn ) : ?>
-                                            <a href="<?php echo JRoute::_( 'index.php?option=com_crosswords&task=crossword.edit&id=' . $item->id ); ?>"
-                                               title="<?php echo JText::_( 'JACTION_EDIT' ); ?>">
+                                            <a href="<?php echo Route::_( 'index.php?option=com_crosswords&task=crossword.edit&id=' . $item->id ); ?>"
+                                               title="<?php echo Text::_( 'JACTION_EDIT' ); ?>">
 												<?php echo $this->escape( $item->title ); ?></a>
 										<?php else : ?>
-                                            <span title="<?php echo JText::sprintf( 'JFIELD_ALIAS_LABEL',
+                                            <span title="<?php echo Text::sprintf( 'JFIELD_ALIAS_LABEL',
 												$this->escape( $item->alias ) ); ?>"><?php echo $this->escape( $item->title ); ?></span>
 										<?php endif; ?>
                                         <div class="small">
-											<?php echo JText::_( 'JCATEGORY' ) . ": " . $this->escape( $item->category_title ); ?>
+											<?php echo Text::_( 'JCATEGORY' ) . ": " . $this->escape( $item->category_title ); ?>
                                         </div>
                                     </div>
                                 </td>
                                 <td class="small hidden-phone">
-                                    <a href="<?php echo JRoute::_( 'index.php?option=com_users&task=user.edit&id=' . (int) $item->created_by ); ?>"
-                                       title="<?php echo JText::_( 'JAUTHOR' ); ?>">
+                                    <a href="<?php echo Route::_( 'index.php?option=com_users&task=user.edit&id=' . (int) $item->created_by ); ?>"
+                                       title="<?php echo Text::_( 'JAUTHOR' ); ?>">
 										<?php echo $this->escape( $item->author_name ); ?>
                                     </a>
                                 </td>
                                 <td class="small hidden-phone">
 									<?php if ( $item->language == '*' ): ?>
-										<?php echo JText::alt( 'JALL', 'language' ); ?>
+										<?php echo Text::alt( 'JALL', 'language' ); ?>
 									<?php else: ?>
-										<?php echo $item->language_title ? $this->escape( $item->language_title ) : JText::_( 'JUNDEFINED' ); ?>
+										<?php echo $item->language_title ? $this->escape( $item->language_title ) : Text::_( 'JUNDEFINED' ); ?>
 									<?php endif; ?>
                                 </td>
                                 <td class="nowrap small hidden-phone">
-									<?php echo JHtml::_( 'date', $item->created, JText::_( 'DATE_FORMAT_LC4' ) ); ?>
+									<?php echo HTMLHelper::_( 'date', $item->created, Text::_( 'DATE_FORMAT_LC4' ) ); ?>
                                 </td>
                                 <td class="center">
 									<?php echo (int) $item->hits; ?>
@@ -199,7 +205,7 @@ CJLib::behavior( 'fontawesome' );
         <div class="span4 col-md-4">
             <div class="panel panel-default card">
                 <div class="panel-heading card-header">
-                    <strong><i class="fa fa-bullhorn"></i> <?php echo JText::_( 'COM_CROSSWORDS_TITLE_VERSION' ); ?></strong>
+                    <strong><i class="fa fa-bullhorn"></i> <?php echo Text::_( 'COM_CROSSWORDS_TITLE_VERSION' ); ?></strong>
                 </div>
                 <table class="table table-striped">
                     <tbody>
@@ -212,7 +218,7 @@ CJLib::behavior( 'fontawesome' );
                         </td>
                     </tr>
                     <tr>
-                        <th><?php echo JText::_( 'COM_CROSSWORDS_INSTALLED_VERSION' ); ?>:</th>
+                        <th><?php echo Text::_( 'COM_CROSSWORDS_INSTALLED_VERSION' ); ?>:</th>
                         <td><?php echo CW_CURR_VERSION; ?></td>
                     <tr>
 						<?php if ( ! empty( $this->version ) ): ?>

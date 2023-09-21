@@ -10,17 +10,19 @@
  */
 defined( '_JEXEC' ) or die;
 
+use Joomla\CMS\Access\Access;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Helper\TagsHelper;
 use Joomla\CMS\Language\Associations;
 use Joomla\CMS\Language\Multilanguage;
+use Joomla\CMS\MVC\Model\ListModel;
 use Joomla\Database\ParameterType;
 use Joomla\Registry\Registry;
 use Joomla\String\StringHelper;
 use Joomla\Utilities\ArrayHelper;
 
-class CrosswordsModelCrosswords extends JModelList {
+class CrosswordsModelCrosswords extends ListModel {
 
 	/**
 	 * Constructor.
@@ -449,7 +451,7 @@ class CrosswordsModelCrosswords extends JModelList {
 			$authorAliasWhere = $db->quoteName( 'a.created_by_alias' ) . $type . ':authorAlias';
 			$query->bind( ':authorAlias', $authorAlias );
 		}
-		elseif ( \is_array( $authorAlias ) && ! empty( $authorAlias ) )
+		elseif ( is_array( $authorAlias ) && ! empty( $authorAlias ) )
 		{
 			$type             = $this->getState( 'filter.author_alias.include', true ) ? ' IN' : ' NOT IN';
 			$authorAliasWhere = $db->quoteName( 'a.created_by_alias' ) . $type
@@ -741,7 +743,7 @@ class CrosswordsModelCrosswords extends JModelList {
 		if ( $taggedItems )
 		{
 			$tagsHelper = new TagsHelper();
-			$itemIds    = \array_keys( $taggedItems );
+			$itemIds    = array_keys( $taggedItems );
 
 			foreach ( $tagsHelper->getMultipleItemTags( 'com_crosswords.crossword', $itemIds ) as $id => $tags )
 			{
@@ -772,7 +774,7 @@ class CrosswordsModelCrosswords extends JModelList {
 			$id = implode( ',', $id );
 		}
 
-		$db    = JFactory::getDbo();
+		$db    = Factory::getDbo();
 		$query = $db->getQuery( true );
 		$query
 			->update( $db->quoteName( '#__crosswords' ) )
@@ -794,7 +796,7 @@ class CrosswordsModelCrosswords extends JModelList {
 
 	public function delete_crosswords( $ids ) {
 
-		$db    = JFactory::getDbo();
+		$db    = Factory::getDbo();
 		$query = $db->getQuery( true );
 		$id    = implode( ',', $ids );
 
@@ -833,7 +835,7 @@ class CrosswordsModelCrosswords extends JModelList {
 
 	public function get_crossword( $id ) {
 
-		$db    = JFactory::getDbo();
+		$db    = Factory::getDbo();
 		$query = $db->getQuery( true );
 
 		$query
@@ -849,7 +851,7 @@ class CrosswordsModelCrosswords extends JModelList {
 
 	public function save_crossword( $crossword ) {
 
-		$db = JFactory::getDbo();
+		$db = Factory::getDbo();
 
 		if ( $db->updateObject( '#__crosswords', $crossword, 'id' ) )
 		{
@@ -862,7 +864,7 @@ class CrosswordsModelCrosswords extends JModelList {
 
 	function get_questions( $catid ) {
 
-		$db    = JFactory::getDbo();
+		$db    = Factory::getDbo();
 		$query = $db->getQuery( true );
 
 		$query->select( 'id, question' )->from( '#__crosswords_keywords' )->where( 'catid = ' . $catid . ' and published = 1' );
@@ -879,7 +881,7 @@ class CrosswordsModelCrosswords extends JModelList {
 			return false;
 		}
 
-		$userids = JAccess::getUsersByGroup( $groupId );
+		$userids = Access::getUsersByGroup( $groupId );
 
 		if ( empty( $userids ) )
 		{

@@ -8,12 +8,16 @@
  */
 defined( '_JEXEC' ) or die;
 
+use Joomla\CMS\Categories\Categories;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Component\Router\RouterView;
 use Joomla\CMS\Component\Router\RouterViewConfiguration;
 use Joomla\CMS\Component\Router\Rules\MenuRules;
 use Joomla\CMS\Component\Router\Rules\NomenuRules;
 use Joomla\CMS\Component\Router\Rules\StandardRules;
+use Joomla\CMS\Factory;
 
-class CrosswordsRouter extends JComponentRouterView {
+class CrosswordsRouter extends RouterView {
 
 	protected $noIDs = false;
 
@@ -26,7 +30,7 @@ class CrosswordsRouter extends JComponentRouterView {
 	 * @since 4.0.0
 	 */
 	public function __construct( $app = null, $menu = null ) {
-		$params      = JComponentHelper::getParams( 'com_crosswords' );
+		$params      = ComponentHelper::getParams( 'com_crosswords' );
 		$this->noIDs = (bool) $params->get( 'sef_ids' );
 
 		$categories = new RouterViewConfiguration( 'categories' );
@@ -44,7 +48,7 @@ class CrosswordsRouter extends JComponentRouterView {
 		$form = new RouterViewConfiguration( 'form' );
 		$this->registerView( $form );
 
-		$this->registerView(new RouterViewConfiguration('crosswords'));
+		$this->registerView( new RouterViewConfiguration( 'crosswords' ) );
 
 		parent::__construct( $app, $menu );
 
@@ -64,7 +68,7 @@ class CrosswordsRouter extends JComponentRouterView {
 	 * @since 4.0.0
 	 */
 	public function getCategorySegment( $id, $query ) {
-		$category = JCategories::getInstance( $this->getName() )->get( $id );
+		$category = Categories::getInstance( $this->getName() )->get( $id );
 		if ( $category )
 		{
 			$path    = array_reverse( $category->getPath(), true );
@@ -111,7 +115,7 @@ class CrosswordsRouter extends JComponentRouterView {
 	public function getCrosswordSegment( $id, $query ) {
 		if ( ! strpos( $id, ':' ) )
 		{
-			$db      = \JFactory::getDbo();
+			$db = Factory::getDbo();
 			$dbquery = $db->getQuery( true );
 			$dbquery->select( $dbquery->qn( 'alias' ) )
 			        ->from( $dbquery->qn( '#__crosswords' ) )
@@ -144,7 +148,7 @@ class CrosswordsRouter extends JComponentRouterView {
 	public function getCategoryId( $segment, $query ) {
 		if ( isset( $query['id'] ) )
 		{
-			$category = \JCategories::getInstance( $this->getName(), [ 'access' => false ] )->get( $query['id'] );
+			$category = Categories::getInstance( $this->getName(), [ 'access' => false ] )->get( $query['id'] );
 
 			if ( $category )
 			{
@@ -198,7 +202,7 @@ class CrosswordsRouter extends JComponentRouterView {
 	public function getCrosswordId( $segment, $query ) {
 		if ( $this->noIDs )
 		{
-			$db      = \JFactory::getDbo();
+			$db = Factory::getDbo();
 			$dbquery = $db->getQuery( true );
 			$dbquery->select( $dbquery->qn( 'id' ) )
 			        ->from( $dbquery->qn( '#__crosswords' ) )

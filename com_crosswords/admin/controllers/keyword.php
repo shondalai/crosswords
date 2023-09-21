@@ -8,19 +8,27 @@
  * @link           http://www.corejoomla.com/
  * @license        License GNU General Public License version 2 or later
  */
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Controller\FormController;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Session\Session;
+use Joomla\Utilities\ArrayHelper;
+
 defined( '_JEXEC' ) or die;
 jimport( 'joomla.application.component.controllerform' );
 
-class CrosswordsControllerKeyword extends JControllerForm {
+class CrosswordsControllerKeyword extends FormController {
 
 	public function __construct( $config = [] ) {
 		parent::__construct( $config );
-		$this->input = JFactory::getApplication()->input;
+		$this->input = Factory::getApplication()->input;
 	}
 
 	protected function allowAdd( $data = [] ) {
-		$user       = JFactory::getUser();
-		$categoryId = \Joomla\Utilities\ArrayHelper::getValue( $data, 'catid', $this->input->getInt( 'filter_category_id' ), 'int' );
+		$user       = Factory::getUser();
+		$categoryId = ArrayHelper::getValue( $data, 'catid', $this->input->getInt( 'filter_category_id' ), 'int' );
 		$allow      = null;
 
 		if ( $categoryId )
@@ -42,7 +50,7 @@ class CrosswordsControllerKeyword extends JControllerForm {
 
 	protected function allowEdit( $data = [], $key = 'id' ) {
 		$recordId = (int) isset( $data[$key] ) ? $data[$key] : 0;
-		$user     = JFactory::getUser();
+		$user     = Factory::getUser();
 		$userId   = $user->get( 'id' );
 
 		// Check general edit permission first.
@@ -82,13 +90,13 @@ class CrosswordsControllerKeyword extends JControllerForm {
 	}
 
 	public function batch( $model = null ) {
-		JSession::checkToken() or jexit( JText::_( 'JINVALID_TOKEN' ) );
+		Session::checkToken() or jexit( Text::_( 'JINVALID_TOKEN' ) );
 
 		// Set the model
 		$model = $this->getModel( 'Crossword', '', [] );
 
 		// Preset the redirect
-		$this->setRedirect( JRoute::_( 'index.php?option=com_crosswords&view=keywords' . $this->getRedirectToListAppend(), false ) );
+		$this->setRedirect( Route::_( 'index.php?option=com_crosswords&view=keywords' . $this->getRedirectToListAppend(), false ) );
 
 		return parent::batch( $model );
 	}
@@ -98,7 +106,7 @@ class CrosswordsControllerKeyword extends JControllerForm {
 
 		if ( $task == 'save' )
 		{
-			$this->setRedirect( JRoute::_( 'index.php?option=com_crosswords&view=keywords', false ) );
+			$this->setRedirect( Route::_( 'index.php?option=com_crosswords&view=keywords', false ) );
 		}
 	}
 

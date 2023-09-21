@@ -9,6 +9,8 @@
  * @license		License GNU General Public License version 2 or later
  */
 
+use Joomla\CMS\Factory;
+
 defined('_JEXEC') or die;
 
 class CrosswordsHelperQuery
@@ -93,7 +95,7 @@ class CrosswordsHelperQuery
 
 	public static function getQueryDate($orderDate)
 	{
-		$db = JFactory::getDbo();
+		$db = Factory::getDbo();
 
 		switch ($orderDate)
 		{

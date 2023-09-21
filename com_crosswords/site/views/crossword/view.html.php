@@ -17,12 +17,13 @@ use Joomla\CMS\Language\Associations;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Layout\FileLayout;
 use Joomla\CMS\MVC\View\GenericDataException;
+use Joomla\CMS\MVC\View\HtmlView;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Uri\Uri;
 use Joomla\Event\Event;
 
-class CrosswordsViewCrossword extends JViewLegacy {
+class CrosswordsViewCrossword extends HtmlView {
 
 	/**
 	 * The crossword object
@@ -244,7 +245,7 @@ class CrosswordsViewCrossword extends JViewLegacy {
 		PluginHelper::importPlugin( 'content' );
 		$this->dispatchEvent( new Event( 'onContentPrepare', [ 'com_crosswords.crossword', &$item, &$item->params, $offset ] ) );
 
-		$item->event                    = new \stdClass();
+		$item->event                    = new stdClass();
 		$results                        = Factory::getApplication()->triggerEvent( 'onContentAfterTitle', [ 'com_crosswords.crossword', &$item, &$item->params, $offset ] );
 		$item->event->afterDisplayTitle = trim( implode( "\n", $results ) );
 

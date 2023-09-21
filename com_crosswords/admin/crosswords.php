@@ -9,6 +9,9 @@
  * @license        License GNU General Public License version 2 or later
  */
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\MVC\Controller\BaseController;
+
 defined( '_JEXEC' ) or die;
 defined( 'CW_APP_NAME' ) or define( 'CW_APP_NAME', 'com_crosswords' );
 
@@ -29,7 +32,7 @@ JLoader::register( 'CrosswordsHelper', __DIR__ . '/helpers/crosswords.php' );
 require_once JPATH_COMPONENT_SITE . '/helpers/constants.php';
 require_once JPATH_COMPONENT_SITE . '/helpers/style.php';
 
-JFactory::getLanguage()->load( 'com_crosswords', JPATH_ROOT );
-$controller = JControllerLegacy::getInstance( 'Crosswords' );
-$controller->execute( JFactory::getApplication()->input->get( 'task' ) );
+Factory::getLanguage()->load( 'com_crosswords', JPATH_ROOT );
+$controller = BaseController::getInstance( 'Crosswords' );
+$controller->execute( Factory::getApplication()->input->get( 'task' ) );
 $controller->redirect();

@@ -6,9 +6,18 @@
  * @copyright   Copyright (C) 2023 BulaSikku Technologies Private Limited.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
+
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Controller\AdminController;
+use Joomla\CMS\Response\JsonResponse;
+use Joomla\CMS\Router\Route;
+
 defined( '_JEXEC' ) or die();
 
-class CrosswordsControllerCrossword extends JControllerAdmin {
+class CrosswordsControllerCrossword extends AdminController {
 
 	public function __construct( $config = [] ) {
 		parent::__construct( $config );
@@ -16,13 +25,13 @@ class CrosswordsControllerCrossword extends JControllerAdmin {
 
 	public function solveQuestion() {
 
-		$user   = JFactory::getUser();
-		$app    = JFactory::getApplication();
-		$params = JComponentHelper::getParams( 'com_crosswords' );
+		$user   = Factory::getUser();
+		$app    = Factory::getApplication();
+		$params = ComponentHelper::getParams( 'com_crosswords' );
 
 		if ( ! $params->get( 'enable_solve_question', 1 ) || ! $user->authorise( 'core.solve', 'com_crosswords' ) )
 		{
-			throw new Exception( JText::_( 'COM_CROSSWORDS_MSG_NOT_AUTHORIZED' ), 403 );
+			throw new Exception( Text::_( 'COM_CROSSWORDS_MSG_NOT_AUTHORIZED' ), 403 );
 		}
 
 		$id   = $app->input->getInt( 'id', 0 );
@@ -31,7 +40,7 @@ class CrosswordsControllerCrossword extends JControllerAdmin {
 
 		if ( ! $id || ! $axis || ! $pos )
 		{
-			throw new Exception( JText::_( 'COM_CROSSWORDS_REQUIRED_FIELDS_MISSING' ), 404 );
+			throw new Exception( Text::_( 'COM_CROSSWORDS_REQUIRED_FIELDS_MISSING' ), 404 );
 		}
 
 		$axis    = ( strcmp( $axis, 'x' ) == 0 ) ? 1 : 2;
@@ -40,18 +49,18 @@ class CrosswordsControllerCrossword extends JControllerAdmin {
 
 		if ( ! $keyword )
 		{
-			throw new Exception( JText::_( 'COM_CROSSWORDS_MSG_ERROR_PROCESSING' ), 500 );
+			throw new Exception( Text::_( 'COM_CROSSWORDS_MSG_ERROR_PROCESSING' ), 500 );
 		}
 
 		$chars = preg_split( '//u', $keyword, - 1, PREG_SPLIT_NO_EMPTY );
-		echo new JResponseJson( $chars );
+		echo new JsonResponse( $chars );
 	}
 
 	public function checkResult() {
-		$user = JFactory::getUser();
+		$user = Factory::getUser();
 		if ( ! $user->authorise( 'core.solve', 'com_crosswords' ) )
 		{
-			throw new Exception( JText::_( 'COM_CROSSWORDS_MSG_NOT_AUTHORIZED' ), 403 );
+			throw new Exception( Text::_( 'COM_CROSSWORDS_MSG_NOT_AUTHORIZED' ), 403 );
 		}
 
 		$model  = $this->getModel( 'Crossword' );
@@ -63,8 +72,8 @@ class CrosswordsControllerCrossword extends JControllerAdmin {
 		}
 		elseif ( empty( $failed ) )
 		{
-			$app    = JFactory::getApplication();
-			$params = JComponentHelper::getParams( 'com_crosswords' );
+			$app    = Factory::getApplication();
+			$params = ComponentHelper::getParams( 'com_crosswords' );
 			$cid    = $app->input->getInt( 'id', 0 );
 
 			CrosswordsHelper::awardPoints( $cid, 2 );
@@ -81,33 +90,33 @@ class CrosswordsControllerCrossword extends JControllerAdmin {
 				$fromname  = $app->get( 'fromname' );
 				$sitename  = $app->get( 'sitename' );
 				$user_name = $params->get( 'user_display_name', 'name' );
-				$link      = JHtml::link( JRoute::_( CrosswordsHelperRoute::getCrosswordRoute( $item->id, $item->catid ), false, - 1 ), $item->title );
+				$link      = HTMLHelper::link( Route::_( CrosswordsHelperRoute::getCrosswordRoute( $item->id, $item->catid ), false, - 1 ), $item->title );
 
-				$sub  = JText::sprintf( 'COM_CROSSWORDS_EMAIL_SOLVED_CROSSWORD_SUB', $user->$user_name );
-				$body = JText::sprintf( 'COM_CROSSWORDS_EMAIL_SOLVED_CROSSWORD_BODY', $item->user_name, $item->title, $user->$user_name, $link, $sitename );
+				$sub  = Text::sprintf( 'COM_CROSSWORDS_EMAIL_SOLVED_CROSSWORD_SUB', $user->$user_name );
+				$body = Text::sprintf( 'COM_CROSSWORDS_EMAIL_SOLVED_CROSSWORD_BODY', $item->user_name, $item->title, $user->$user_name, $link, $sitename );
 				CJFunctions::send_email( $from, $fromname, $item->email, $sub, $body, 1 );
 			}
 
-			echo new JResponseJson( [ 'status' => 1, 'message' => JText::_( 'COM_CROSSWORDS_MSG_CROSSWORD_SOLVED' ) ] );
+			echo new JsonResponse( [ 'status' => 1, 'message' => Text::_( 'COM_CROSSWORDS_MSG_CROSSWORD_SOLVED' ) ] );
 		}
 		else
 		{
-			echo new JResponseJson( [ 'status' => 2, 'failed' => $failed ] );
+			echo new JsonResponse( [ 'status' => 2, 'failed' => $failed ] );
 		}
 	}
 
 	public function solveCrossword() {
-		$user = JFactory::getUser();
+		$user = Factory::getUser();
 		if ( ! $user->authorise( 'core.solve', 'com_crosswords' ) )
 		{
-			throw new Exception( JText::_( 'COM_CROSSWORDS_MSG_NOT_AUTHORIZED' ), 403 );
+			throw new Exception( Text::_( 'COM_CROSSWORDS_MSG_NOT_AUTHORIZED' ), 403 );
 		}
-		$app = JFactory::getApplication();
+		$app = Factory::getApplication();
 		$id  = $app->input->getInt( 'id', 0 );
 
 		if ( ! $id )
 		{
-			throw new Exception( JText::_( 'COM_CROSSWORDS_REQUIRED_FIELDS_MISSING' ), 404 );
+			throw new Exception( Text::_( 'COM_CROSSWORDS_REQUIRED_FIELDS_MISSING' ), 404 );
 		}
 		$model   = $this->getModel( 'Crossword' );
 		$answers = $model->solveCrossword( $id );
@@ -141,7 +150,7 @@ class CrosswordsControllerCrossword extends JControllerAdmin {
 				}
 			}
 
-			echo new JResponseJson( $return );
+			echo new JsonResponse( $return );
 		}
 		else
 		{

@@ -8,6 +8,9 @@
  * @link		http://www.corejoomla.com/
  * @license		License GNU General Public License version 2 or later
  */
+
+use Joomla\CMS\Language\Text;
+
 defined('_JEXEC') or die;
 ?>
 
@@ -20,8 +23,8 @@ defined('_JEXEC') or die;
 				<table class="table table-striped table-hover">
 					<thead>
 						<tr>
-							<th><?php echo JText::_('JGLOBAL_TITLE');?></th>
-							<th><?php echo JText::_('JDATE');?></th>
+							<th><?php echo Text::_('JGLOBAL_TITLE');?></th>
+							<th><?php echo Text::_('JDATE');?></th>
 						</tr>
 					</thead>
 					<tbody>

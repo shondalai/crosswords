@@ -6,9 +6,20 @@
  * @copyright   Copyright (C) 2021 BulaSikku Technologies Private Limited.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
+
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Date\Date;
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Controller\FormController;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Uri\Uri;
+
 defined( '_JEXEC' ) or die();
 
-class CrosswordsControllerCrossword extends JControllerForm {
+class CrosswordsControllerCrossword extends FormController {
 
 	protected $view_item = 'form';
 	protected $view_list = 'crosswords';
@@ -17,20 +28,20 @@ class CrosswordsControllerCrossword extends JControllerForm {
 
 	public function add() {
 		$result = parent::add();
-		$user   = JFactory::getUser();
+		$user   = Factory::getUser();
 
 		if ( ! $result && $user->guest )
 		{
-			$redirectUrl = base64_encode( JRoute::_( CrosswordsHelperRoute::getCrosswordsRoute(), false ) );
-			$loginUrl    = JRoute::_( 'index.php?option=com_users&view=login&return=' . $redirectUrl, false );
-			$this->setRedirect( $loginUrl, JText::_( 'COM_CROSSWORDS_ERROR_LOGIN_TO_EXECUTE' ) );
+			$redirectUrl = base64_encode( Route::_( CrosswordsHelperRoute::getCrosswordsRoute(), false ) );
+			$loginUrl    = Route::_( 'index.php?option=com_users&view=login&return=' . $redirectUrl, false );
+			$this->setRedirect( $loginUrl, Text::_( 'COM_CROSSWORDS_ERROR_LOGIN_TO_EXECUTE' ) );
 		}
 
 		return $result;
 	}
 
 	protected function allowAdd( $data = [] ) {
-		$user       = JFactory::getUser();
+		$user       = Factory::getUser();
 		$categoryId = Joomla\Utilities\ArrayHelper::getValue( (array) $data, 'catid', $this->input->getInt( 'catid' ), 'int' );
 		$allow      = null;
 
@@ -54,7 +65,7 @@ class CrosswordsControllerCrossword extends JControllerForm {
 
 	protected function allowEdit( $data = [], $key = 'id' ) {
 		$recordId = (int) isset( $data[$key] ) ? $data[$key] : 0;
-		$user     = JFactory::getUser();
+		$user     = Factory::getUser();
 		$userId   = $user->id;
 		$asset    = 'com_crosswords.crossword.' . $recordId;
 
@@ -88,14 +99,14 @@ class CrosswordsControllerCrossword extends JControllerForm {
 			if ( $ownerId == $userId )
 			{
 				// Check if the disallow edit after days option is enabled
-				$params  = JComponentHelper::getParams( 'com_crosswords' );
+				$params  = ComponentHelper::getParams( 'com_crosswords' );
 				$numDays = (int) $params->get( 'disallow_editing_after', 0 );
 
 				if ( $numDays )
 				{
-					$after = new JDate( JHtml::date( $record->created, 'Y-m-d H:i:s' ) );
+					$after = new Date( HTMLHelper::date( $record->created, 'Y-m-d H:i:s' ) );
 					$after->modify( '+' . $numDays . ' day' );
-					$now = new JDate( JHtml::date( 'now', 'Y-m-d H:i:s' ) );
+					$now = new Date( HTMLHelper::date( 'now', 'Y-m-d H:i:s' ) );
 
 					if ( $now > $after )
 					{
@@ -121,13 +132,13 @@ class CrosswordsControllerCrossword extends JControllerForm {
 
 	public function edit( $key = null, $urlVar = 'a_id' ) {
 		$result = parent::edit( $key, $urlVar );
-		$user   = JFactory::getUser();
+		$user   = Factory::getUser();
 
 		if ( ! $result && $user->guest )
 		{
-			$redirectUrl = base64_encode( JRoute::_( CrosswordsHelperRoute::getCrosswordsRoute(), false ) );
-			$loginUrl    = JRoute::_( 'index.php?option=com_users&view=login&return=' . $redirectUrl, false );
-			$this->setRedirect( $loginUrl, JText::_( 'COM_CROSSWORDS_ERROR_LOGIN_TO_EXECUTE' ) );
+			$redirectUrl = base64_encode( Route::_( CrosswordsHelperRoute::getCrosswordsRoute(), false ) );
+			$loginUrl    = Route::_( 'index.php?option=com_users&view=login&return=' . $redirectUrl, false );
+			$this->setRedirect( $loginUrl, Text::_( 'COM_CROSSWORDS_ERROR_LOGIN_TO_EXECUTE' ) );
 		}
 
 		return $result;
@@ -187,9 +198,9 @@ class CrosswordsControllerCrossword extends JControllerForm {
 	protected function getReturnPage() {
 		$return = $this->input->get( 'return', null, 'base64' );
 
-		if ( empty( $return ) || ! JUri::isInternal( base64_decode( $return ) ) )
+		if ( empty( $return ) || ! Uri::isInternal( base64_decode( $return ) ) )
 		{
-			return JUri::base();
+			return Uri::base();
 		}
 		else
 		{
@@ -197,17 +208,17 @@ class CrosswordsControllerCrossword extends JControllerForm {
 		}
 	}
 
-	protected function postSaveHook( JModelLegacy $model, $validData = [] ) {
+	protected function postSaveHook( BaseDatabaseModel $model, $validData = [] ) {
 		$crosswordId = $model->getState( 'form.id' );
 		$isNew       = $model->getState( 'form.new' );
-		$user        = JFactory::getUser();
+		$user        = Factory::getUser();
 
 		if ( $isNew && $user->authorise( 'core.moderate.crossword', 'com_crosswords.category.' . $validData['catid'] )
 		     &&
 		     ! $user->authorise( 'core.admin', 'com_crosswords' ) )
 		{
-			JFactory::getApplication()->enqueueMessage( JText::_( 'COM_CROSSWORDS_CROSSWORD_SENT_FOR_MODERATION' ) );
-			$this->setRedirect( JRoute::_( CrosswordsHelperRoute::getCrosswordsRoute() ) );
+			Factory::getApplication()->enqueueMessage( Text::_( 'COM_CROSSWORDS_CROSSWORD_SENT_FOR_MODERATION' ) );
+			$this->setRedirect( Route::_( CrosswordsHelperRoute::getCrosswordsRoute() ) );
 
 			return;
 		}
@@ -217,7 +228,7 @@ class CrosswordsControllerCrossword extends JControllerForm {
 		$item->slug     = $item->alias ? ( $item->id . ':' . $item->alias ) : $item->id;
 		$item->catslug  = $item->category_alias ? ( $item->catid . ':' . $item->category_alias ) : $item->catid;
 
-		$this->setRedirect( JRoute::_( CrosswordsHelperRoute::getCrosswordRoute( $item->slug, $item->catslug, $item->language ) ) );
+		$this->setRedirect( Route::_( CrosswordsHelperRoute::getCrosswordRoute( $item->slug, $item->catslug, $item->language ) ) );
 	}
 
 }

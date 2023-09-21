@@ -9,6 +9,12 @@
  * @license        License GNU General Public License version 2 or later
  */
 
+use Joomla\CMS\Categories\Categories;
+use Joomla\CMS\Categories\CategoryNode;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Multilanguage;
+
 defined( '_JEXEC' ) or die;
 
 abstract class CrosswordsHelperRoute {
@@ -20,7 +26,7 @@ abstract class CrosswordsHelperRoute {
 		$needles = [ 'questions' => [ 0 ] ];
 		$link    = 'index.php?option=com_crosswords&view=crosswords';
 
-		if ( $language && $language != "*" && JLanguageMultilang::isEnabled() )
+		if ( $language && $language != "*" && Multilanguage::isEnabled() )
 		{
 			self::buildLanguageLookup();
 
@@ -47,7 +53,7 @@ abstract class CrosswordsHelperRoute {
 
 		if ( (int) $catid > 1 )
 		{
-			$categories = JCategories::getInstance( 'Crosswords' );
+			$categories = Categories::getInstance( 'Crosswords' );
 			$category   = $categories->get( (int) $catid );
 
 			if ( $category )
@@ -58,7 +64,7 @@ abstract class CrosswordsHelperRoute {
 			}
 		}
 
-		if ( $language && $language != "*" && JLanguageMultilang::isEnabled() )
+		if ( $language && $language != "*" && Multilanguage::isEnabled() )
 		{
 			self::buildLanguageLookup();
 
@@ -78,7 +84,7 @@ abstract class CrosswordsHelperRoute {
 	}
 
 	public static function getCategoryRoute( $catid, $language = 0 ) {
-		if ( $catid instanceof JCategoryNode )
+		if ( $catid instanceof CategoryNode )
 		{
 			$id       = $catid->id;
 			$category = $catid;
@@ -86,10 +92,10 @@ abstract class CrosswordsHelperRoute {
 		else
 		{
 			$id       = (int) $catid;
-			$category = JCategories::getInstance( 'Crosswords' )->get( $id );
+			$category = Categories::getInstance( 'Crosswords' )->get( $id );
 		}
 
-		if ( $id < 1 || ! ( $category instanceof JCategoryNode ) )
+		if ( $id < 1 || ! ( $category instanceof CategoryNode ) )
 		{
 			$link = '';
 		}
@@ -103,7 +109,7 @@ abstract class CrosswordsHelperRoute {
 			$needles['category']   = $catids;
 			$needles['categories'] = $catids;
 
-			if ( $language && $language != "*" && JLanguageMultilang::isEnabled() )
+			if ( $language && $language != "*" && Multilanguage::isEnabled() )
 			{
 				self::buildLanguageLookup();
 
@@ -140,7 +146,7 @@ abstract class CrosswordsHelperRoute {
 	protected static function buildLanguageLookup() {
 		if ( count( self::$lang_lookup ) == 0 )
 		{
-			$db    = JFactory::getDbo();
+			$db    = Factory::getDbo();
 			$query = $db->getQuery( true )
 			            ->select( 'a.sef AS sef' )
 			            ->select( 'a.lang_code AS lang_code' )
@@ -157,7 +163,7 @@ abstract class CrosswordsHelperRoute {
 	}
 
 	protected static function _findItem( $needles = null ) {
-		$app      = JFactory::getApplication();
+		$app      = Factory::getApplication();
 		$menus    = $app->getMenu( 'site' );
 		$language = isset( $needles['language'] ) ? $needles['language'] : '*';
 
@@ -166,7 +172,7 @@ abstract class CrosswordsHelperRoute {
 		{
 			self::$lookup[$language] = [];
 
-			$component = JComponentHelper::getComponent( 'com_crosswords' );
+			$component = ComponentHelper::getComponent( 'com_crosswords' );
 
 			$attributes = [ 'component_id' ];
 			$values     = [ $component->id ];
@@ -238,7 +244,9 @@ abstract class CrosswordsHelperRoute {
 
 		// Check if the active menuitem matches the requested language
 		$active = $menus->getActive();
-		if ( $active && $active->component == 'com_crosswords' && ( $language == '*' || in_array( $active->language, [ '*', $language ] ) || ! JLanguageMultilang::isEnabled() ) )
+		if ( $active && $active->component == 'com_crosswords'
+		     && ( $language == '*' || in_array( $active->language, [ '*', $language ] )
+		          || ! Multilanguage::isEnabled() ) )
 		{
 			return $active->id;
 		}

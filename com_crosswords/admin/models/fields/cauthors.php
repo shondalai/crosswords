@@ -7,11 +7,15 @@
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Form\Field\ListField;
+use Joomla\CMS\Form\FormHelper;
+
 defined('JPATH_PLATFORM') or die;
 
-JFormHelper::loadFieldClass('list');
+FormHelper::loadFieldClass('list');
 
-class JFormFieldCAuthors extends JFormFieldList
+class JFormFieldCAuthors extends ListField
 {
 	public $type = 'CAuthors';
 	protected static $options = array();
@@ -27,7 +31,7 @@ class JFormFieldCAuthors extends JFormFieldList
 
 			$options = array();
 
-			$db = JFactory::getDbo();
+			$db = Factory::getDbo();
 
 			// Construct the query
 			$query = $db->getQuery(true)

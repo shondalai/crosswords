@@ -9,15 +9,21 @@
 defined( 'JPATH_PLATFORM' ) or die();
 
 use Joomla\CMS\Application\ApplicationHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Table\Table;
+use Joomla\CMS\Tag\TaggableTableInterface;
+use Joomla\CMS\Tag\TaggableTableTrait;
+use Joomla\Database\DatabaseDriver;
 use Joomla\String\StringHelper;
 
-class CrosswordsTableCrosswordBase extends JTable {
+class CrosswordsTableCrosswordBase extends Table {
 
 	private $_aliasNum = 0;
 	public $_moderate = false;
 	protected $_jsonEncode = [ 'params', 'metadata', 'attribs' ];
 
-	public function __construct( JDatabaseDriver $db ) {
+	public function __construct( DatabaseDriver $db ) {
 		parent::__construct( '#__crosswords', 'id', $db );
 		parent::setColumnAlias( 'published', 'state' );
 
@@ -42,7 +48,7 @@ class CrosswordsTableCrosswordBase extends JTable {
 		return $this->title;
 	}
 
-	protected function _getAssetParentId( JTable $table = null, $id = null ) {
+	protected function _getAssetParentId( Table $table = null, $id = null ) {
 		$assetId = null;
 
 		// This is a crossword under a category.
@@ -81,7 +87,7 @@ class CrosswordsTableCrosswordBase extends JTable {
 	public function check() {
 		if ( trim( $this->title ) == '' )
 		{
-			throw new Exception( JText::_( 'COM_CROSSWORDS_WARNING_PROVIDE_VALID_NAME' ), 500 );
+			throw new Exception( Text::_( 'COM_CROSSWORDS_WARNING_PROVIDE_VALID_NAME' ), 500 );
 
 			return false;
 		}
@@ -95,7 +101,7 @@ class CrosswordsTableCrosswordBase extends JTable {
 
 		if ( trim( str_replace( '-', '', $this->alias ) ) == '' )
 		{
-			$this->alias = JFactory::getDate()->format( 'Y-m-d-H-i-s' );
+			$this->alias = Factory::getDate()->format( 'Y-m-d-H-i-s' );
 		}
 
 		// Check the publish down date is not earlier than publish up.
@@ -141,7 +147,7 @@ class CrosswordsTableCrosswordBase extends JTable {
 
 	public function store( $updateNulls = false ) {
 		// Verify that the alias is unique
-		$table = JTable::getInstance( 'Crossword', 'CrosswordsTable' );
+		$table = Table::getInstance( 'Crossword', 'CrosswordsTable' );
 		$alias = $this->_aliasNum ? $this->alias . '_' . $this->_aliasNum : $this->alias;
 
 		if ( $table->load( [ 'alias' => $alias, 'catid' => $this->catid ] ) && ( $table->id != $this->id || $this->id == 0 ) )
@@ -171,11 +177,11 @@ class CrosswordsTableCrosswordBase extends JTable {
 
 if ( interface_exists( '\Joomla\CMS\Tag\TaggableTableInterface' ) )
 {
-	class CrosswordsTableCrossword extends CrosswordsTableCrosswordBase implements \Joomla\CMS\Tag\TaggableTableInterface {
+	class CrosswordsTableCrossword extends CrosswordsTableCrosswordBase implements TaggableTableInterface {
 
-		use \Joomla\CMS\Tag\TaggableTableTrait;
+		use TaggableTableTrait;
 
-		public function __construct( JDatabaseDriver $db ) {
+		public function __construct( DatabaseDriver $db ) {
 			parent::__construct( $db );
 		}
 
@@ -185,7 +191,7 @@ else
 {
 	class CrosswordsTableCrossword extends CrosswordsTableCrosswordBase {
 
-		public function __construct( JDatabaseDriver $db ) {
+		public function __construct( DatabaseDriver $db ) {
 			parent::__construct( $db );
 		}
 

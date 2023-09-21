@@ -8,7 +8,7 @@
 		<field name="alias" type="text" label="JFIELD_ALIAS_LABEL" description="JFIELD_ALIAS_DESC" hint="JFIELD_ALIAS_PLACEHOLDER" class="inputbox" size="40" />
 
 		<field name="description" type="editor" class="inputbox" label="COM_CROSSWORDS_FIELD_TOPICTEXT_LABEL"
-		    description="COM_CROSSWORDS_FIELD_TOPICTEXT_DESC" filter="JComponentHelper::filterText" buttons="true" />
+		    description="COM_CROSSWORDS_FIELD_TOPICTEXT_DESC" filter="\Joomla\CMS\Component\ComponentHelper::filterText" buttons="true" />
 
 		<field name="published" type="list" label="JSTATUS" description="JFIELD_PUBLISHED_DESC" class="chzn-color-state custom-select-color-state" filter="intval" size="1" default="1">
 			<option value="1">JPUBLISHED</option>

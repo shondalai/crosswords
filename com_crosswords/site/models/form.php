@@ -6,6 +6,13 @@
  * @copyright   Copyright (C) 2021 BulaSikku Technologies Private Limited.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Helper\TagsHelper;
+use Joomla\CMS\Language\Associations;
+use Joomla\Registry\Registry;
+use Joomla\Utilities\ArrayHelper;
+
 defined( '_JEXEC' ) or die();
 
 // Base this model on the backend version.
@@ -21,7 +28,7 @@ class CrosswordsModelForm extends CrosswordsModelCrossword {
 	}
 
 	public function populateState() {
-		$app = JFactory::getApplication();
+		$app = Factory::getApplication();
 
 		// Load state from the request.
 		$pk = $app->input->getInt( 't_id' );
@@ -57,17 +64,17 @@ class CrosswordsModelForm extends CrosswordsModelCrossword {
 		}
 
 		$properties = $table->getProperties( 1 );
-		$value      = Joomla\Utilities\ArrayHelper::toObject( $properties, 'JObject' );
+		$value      = ArrayHelper::toObject( $properties, 'stdClass' );
 
 		// Convert attrib field to Registry.
-		$value->params = new JRegistry();
+		$value->params = new Registry();
 		if ( $value->attribs )
 		{
 			$value->params->loadString( $value->attribs );
 		}
 
 		// Compute selected asset permissions.
-		$user   = JFactory::getUser();
+		$user   = Factory::getUser();
 		$userId = $user->id;
 		$asset  = 'com_crosswords.crossword.' . $value->id;
 
@@ -114,7 +121,7 @@ class CrosswordsModelForm extends CrosswordsModelCrossword {
 		}
 
 		// Convert the metadata field to an array.
-		$registry = new JRegistry();
+		$registry = new Registry();
 		if ( $value->metadata )
 		{
 			$registry->loadString( $value->metadata );
@@ -123,12 +130,12 @@ class CrosswordsModelForm extends CrosswordsModelCrossword {
 
 		if ( $itemId )
 		{
-			$value->tags = new JHelperTags();
+			$value->tags = new TagsHelper();
 			$value->tags->getTagIds( $value->id, 'com_crosswords.crossword' );
 			$value->metadata['tags'] = $value->tags;
 		}
 
-		$app          = JFactory::getApplication();
+		$app          = Factory::getApplication();
 		$value->level = $app->input->post->getInt( 'difficulty_level', 1 );
 		$value->size  = $app->input->post->getInt( 'grid_size', 15 );
 		$value->size  = $value->size < 15 ? 15 : ( $value->size > 23 ? 23 : $value->size );
@@ -143,9 +150,9 @@ class CrosswordsModelForm extends CrosswordsModelCrossword {
 	public function save( $data ) {
 		// Associations are not edited in frontend ATM so we have to inherit
 		// them
-		if ( JLanguageAssociations::isEnabled() && ! empty( $data['id'] ) )
+		if ( Associations::isEnabled() && ! empty( $data['id'] ) )
 		{
-			if ( $associations = JLanguageAssociations::getAssociations( 'com_crosswords', '#__crosswords', 'com_crosswords.item', $data['id'] ) )
+			if ( $associations = Associations::getAssociations( 'com_crosswords', '#__crosswords', 'com_crosswords.item', $data['id'] ) )
 			{
 				foreach ( $associations as $tag => $associated )
 				{
@@ -157,7 +164,7 @@ class CrosswordsModelForm extends CrosswordsModelCrossword {
 		}
 
 		// Check if the user is new user and have not posted enough crosswords to post external urls, this contains them
-		$user = JFactory::getUser();
+		$user = Factory::getUser();
 		if ( empty( $data['id'] ) )
 		{
 			$asset         = 'com_crosswords.category.' . $data['catid'];

@@ -1,126 +1,135 @@
 <?php
 /**
- * @version		$Id: view.html.php 01 2014-01-26 11:37:09Z maverick $
- * @package		CoreJoomla.keywords
- * @subpackage	Components
- * @copyright	Copyright (C) 2009 - 2014 corejoomla.com. All rights reserved.
- * @author		Maverick
- * @link		http://www.corejoomla.com/
- * @license		License GNU General Public License version 2 or later
+ * @version        $Id: view.html.php 01 2014-01-26 11:37:09Z maverick $
+ * @package        CoreJoomla.keywords
+ * @subpackage     Components
+ * @copyright      Copyright (C) 2009 - 2014 corejoomla.com. All rights reserved.
+ * @author         Maverick
+ * @link           http://www.corejoomla.com/
+ * @license        License GNU General Public License version 2 or later
  */
-defined('_JEXEC') or die;
 
-class CrosswordsViewKeywords extends JViewLegacy
-{
+use Joomla\CMS\Factory;
+use Joomla\CMS\Helper\ContentHelper;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Layout\FileLayout;
+use Joomla\CMS\MVC\View\HtmlView;
+use Joomla\CMS\Toolbar\Toolbar;
+use Joomla\CMS\Toolbar\ToolbarHelper;
+
+defined( '_JEXEC' ) or die;
+
+class CrosswordsViewKeywords extends HtmlView {
+
 	protected $items;
 	protected $pagination;
 	protected $state;
 
-	public function display($tpl = null)
-	{
-		if ($this->getLayout() !== 'modal')
+	public function display( $tpl = null ) {
+		if ( $this->getLayout() !== 'modal' )
 		{
-			CrosswordsHelper::addSubmenu('keywords');
+			CrosswordsHelper::addSubmenu( 'keywords' );
 		}
 
-		$this->items         = $this->get('Items');
-		$this->pagination    = $this->get('Pagination');
-		$this->state         = $this->get('State');
-		$this->authors       = $this->get('Authors');
-		$this->filterForm    = $this->get('FilterForm');
-		$this->activeFilters = $this->get('ActiveFilters');
+		$this->items         = $this->get( 'Items' );
+		$this->pagination    = $this->get( 'Pagination' );
+		$this->state         = $this->get( 'State' );
+		$this->authors       = $this->get( 'Authors' );
+		$this->filterForm    = $this->get( 'FilterForm' );
+		$this->activeFilters = $this->get( 'ActiveFilters' );
 
 		// Check for errors.
-		if (count($errors = $this->get('Errors')))
+		if ( count( $errors = $this->get( 'Errors' ) ) )
 		{
-			JError::raiseError(500, implode("\n", $errors));
+			JError::raiseError( 500, implode( "\n", $errors ) );
 
 			return false;
 		}
 
 		// We don't need toolbar in the modal window.
-		if ($this->getLayout() !== 'modal')
+		if ( $this->getLayout() !== 'modal' )
 		{
 			$this->addToolbar();
 		}
-		
-		if(APP_VERSION < 3)
+
+		if ( APP_VERSION < 3 )
 		{
 			$tpl = 'j25';
 		}
 
-		parent::display($tpl);
+		parent::display( $tpl );
 	}
 
-	protected function addToolbar()
-	{
-		$canDo = JHelperContent::getActions('com_crosswords', 'category', $this->state->get('filter.category_id'));
-		$user  = JFactory::getUser();
+	protected function addToolbar() {
+		$canDo = ContentHelper::getActions( 'com_crosswords', 'category', $this->state->get( 'filter.category_id' ) );
+		$user  = Factory::getUser();
 
 		// Get the toolbar object instance
-		$bar = JToolBar::getInstance('toolbar');
+		$bar = Toolbar::getInstance( 'toolbar' );
 
-		JToolbarHelper::title(JText::_('COM_CROSSWORDS_KEYWORDS_TITLE'), 'stack keyword');
+		ToolbarHelper::title( Text::_( 'COM_CROSSWORDS_KEYWORDS_TITLE' ), 'stack keyword' );
 
-		if (($canDo->get('keyword.create')) || ($canDo->get('core.edit.own')))
+		if ( ( $canDo->get( 'keyword.create' ) ) || ( $canDo->get( 'core.edit.own' ) ) )
 		{
-			JToolbarHelper::addNew('keyword.add');
-		}
-		
-		if (($canDo->get('keyword.edit')) || ($canDo->get('core.edit.own')))
-		{
-			JToolbarHelper::editList('keyword.edit');
+			ToolbarHelper::addNew( 'keyword.add' );
 		}
 
-		if ($canDo->get('core.edit.state'))
+		if ( ( $canDo->get( 'keyword.edit' ) ) || ( $canDo->get( 'core.edit.own' ) ) )
 		{
-			JToolbarHelper::publish('keywords.publish', 'JTOOLBAR_PUBLISH', true);
-			JToolbarHelper::unpublish('keywords.unpublish', 'JTOOLBAR_UNPUBLISH', true);
-			JToolbarHelper::archiveList('keywords.archive');
-			JToolbarHelper::checkin('keywords.checkin');
+			ToolbarHelper::editList( 'keyword.edit' );
 		}
 
-		if ($this->state->get('filter.published') == -2 && $canDo->get('core.delete'))
+		if ( $canDo->get( 'core.edit.state' ) )
 		{
-			JToolbarHelper::deleteList('', 'keywords.delete', 'JTOOLBAR_EMPTY_TRASH');
+			ToolbarHelper::publish( 'keywords.publish', 'JTOOLBAR_PUBLISH', true );
+			ToolbarHelper::unpublish( 'keywords.unpublish', 'JTOOLBAR_UNPUBLISH', true );
+			ToolbarHelper::archiveList( 'keywords.archive' );
+			ToolbarHelper::checkin( 'keywords.checkin' );
 		}
-		elseif ($canDo->get('core.edit.state'))
+
+		if ( $this->state->get( 'filter.published' ) == - 2 && $canDo->get( 'core.delete' ) )
 		{
-			JToolbarHelper::trash('keywords.trash');
+			ToolbarHelper::deleteList( '', 'keywords.delete', 'JTOOLBAR_EMPTY_TRASH' );
+		}
+		elseif ( $canDo->get( 'core.edit.state' ) )
+		{
+			ToolbarHelper::trash( 'keywords.trash' );
 		}
 
 		// Add a batch button
-		if (APP_VERSION >= 3 && $user->authorise('core.create', 'com_crosswords') && $user->authorise('core.edit', 'com_crosswords') && $user->authorise('core.edit.state', 'com_crosswords'))
+		if ( APP_VERSION >= 3 && $user->authorise( 'core.create', 'com_crosswords' ) && $user->authorise( 'core.edit', 'com_crosswords' )
+		     && $user->authorise( 'core.edit.state', 'com_crosswords' ) )
 		{
-			JHtml::_('bootstrap.modal', 'collapseModal');
-			$title = JText::_('JTOOLBAR_BATCH');
+			HTMLHelper::_( 'bootstrap.modal', 'collapseModal' );
+			$title = Text::_( 'JTOOLBAR_BATCH' );
 
-			// Instantiate a new JLayoutFile instance and render the batch button
-			$layout = new JLayoutFile('joomla.toolbar.batch');
+			// Instantiate a new \Joomla\CMS\Layout\FileLayout instance and render the batch button
+			$layout = new FileLayout( 'joomla.toolbar.batch' );
 
-			$dhtml = $layout->render(array('title' => $title));
-			$bar->appendButton('Custom', $dhtml, 'batch');
+			$dhtml = $layout->render( [ 'title' => $title ] );
+			$bar->appendButton( 'Custom', $dhtml, 'batch' );
 		}
 
-		if ($user->authorise('core.admin', 'com_crosswords'))
+		if ( $user->authorise( 'core.admin', 'com_crosswords' ) )
 		{
-			JToolbarHelper::preferences('com_crosswords');
+			ToolbarHelper::preferences( 'com_crosswords' );
 		}
 	}
 
-	protected function getSortFields()
-	{
-		return array(
-			'a.ordering'     => JText::_('JGRID_HEADING_ORDERING'),
-			'a.state'        => JText::_('JSTATUS'),
-			'a.title'        => JText::_('JGLOBAL_TITLE'),
-			'category_title' => JText::_('JCATEGORY'),
-			'access_level'   => JText::_('JGRID_HEADING_ACCESS'),
-			'a.created_by'   => JText::_('JAUTHOR'),
-			'language'       => JText::_('JGRID_HEADING_LANGUAGE'),
-			'a.created'      => JText::_('JDATE'),
-			'a.id'           => JText::_('JGRID_HEADING_ID'),
-			'a.featured'     => JText::_('JFEATURED')
-		);
+	protected function getSortFields() {
+		return [
+			'a.ordering'     => Text::_( 'JGRID_HEADING_ORDERING' ),
+			'a.state'        => Text::_( 'JSTATUS' ),
+			'a.title'        => Text::_( 'JGLOBAL_TITLE' ),
+			'category_title' => Text::_( 'JCATEGORY' ),
+			'access_level'   => Text::_( 'JGRID_HEADING_ACCESS' ),
+			'a.created_by'   => Text::_( 'JAUTHOR' ),
+			'language'       => Text::_( 'JGRID_HEADING_LANGUAGE' ),
+			'a.created'      => Text::_( 'JDATE' ),
+			'a.id'           => Text::_( 'JGRID_HEADING_ID' ),
+			'a.featured'     => Text::_( 'JFEATURED' ),
+		];
 	}
+
 }

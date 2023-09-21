@@ -10,19 +10,23 @@
  */
 
 // No direct access to this file
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\Helpers\Sidebar;
+use Joomla\CMS\Language\Text;
+
 defined( '_JEXEC' ) or die;
 
 abstract class CrosswordsHelper {
 
 	public static function addSubmenu( $vName ) {
-		JHtmlSidebar::addEntry( JText::_( 'COM_CROSSWORDS_DASHBOARD' ), 'index.php?option=com_crosswords&view=dashboard', $vName == 'dashboard' );
-		JHtmlSidebar::addEntry( JText::_( 'COM_CROSSWORDS_CROSSWORDS' ), 'index.php?option=com_crosswords&view=crosswords', $vName == 'crosswords' );
-		JHtmlSidebar::addEntry( JText::_( 'COM_CROSSWORDS_KEYWORDS' ), 'index.php?option=com_crosswords&view=keywords', $vName == 'keywords' );
-		JHtmlSidebar::addEntry( JText::_( 'COM_CROSSWORDS_CATEGORIES' ), 'index.php?option=com_categories&view=categories&extension=com_crosswords', $vName == 'categories' );
+		Sidebar::addEntry( Text::_( 'COM_CROSSWORDS_DASHBOARD' ), 'index.php?option=com_crosswords&view=dashboard', $vName == 'dashboard' );
+		Sidebar::addEntry( Text::_( 'COM_CROSSWORDS_CROSSWORDS' ), 'index.php?option=com_crosswords&view=crosswords', $vName == 'crosswords' );
+		Sidebar::addEntry( Text::_( 'COM_CROSSWORDS_KEYWORDS' ), 'index.php?option=com_crosswords&view=keywords', $vName == 'keywords' );
+		Sidebar::addEntry( Text::_( 'COM_CROSSWORDS_CATEGORIES' ), 'index.php?option=com_categories&view=categories&extension=com_crosswords', $vName == 'categories' );
 	}
 
 	public static function countItems( &$items ) {
-		$db = JFactory::getDbo();
+		$db = Factory::getDbo();
 
 		foreach ( $items as $item )
 		{

@@ -6,9 +6,15 @@
  * @copyright   Copyright (C) 2023 BulaSikku Technologies Private Limited.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\MVC\Controller\AdminController;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Uri\Uri;
+
 defined( '_JEXEC' ) or die();
 
-class CrosswordsControllerCrosswords extends JControllerAdmin {
+class CrosswordsControllerCrosswords extends AdminController {
 
 	protected $text_prefix = 'COM_CROSSWORDS';
 	protected $view_list = 'crosswords';
@@ -26,18 +32,18 @@ class CrosswordsControllerCrosswords extends JControllerAdmin {
 	protected function getReturnPage() {
 		$return = $this->input->get( 'return', null, 'base64' );
 
-		if ( empty( $return ) || ! JUri::isInternal( base64_decode( $return ) ) )
+		if ( empty( $return ) || ! Uri::isInternal( base64_decode( $return ) ) )
 		{
-			$app   = JFactory::getApplication();
+			$app   = Factory::getApplication();
 			$catid = $app->input->post->getInt( 'jform[catid]' );
 
 			if ( $catid )
 			{
-				return JRoute::_( CrosswordsHelperRoute::getCategoryRoute( $catid ) );
+				return Route::_( CrosswordsHelperRoute::getCategoryRoute( $catid ) );
 			}
 			else
 			{
-				return JRoute::_( 'index.php?option=com_crosswords&view=categories&id=0' );
+				return Route::_( 'index.php?option=com_crosswords&view=categories&id=0' );
 			}
 		}
 		else
@@ -54,16 +60,16 @@ class CrosswordsControllerCrosswords extends JControllerAdmin {
 	public function publish() {
 		parent::publish();
 
-		$app   = JFactory::getApplication();
+		$app   = Factory::getApplication();
 		$catid = $app->input->post->getInt( 'jform[catid]' );
 
 		if ( $catid )
 		{
-			return JRoute::_( CrosswordsHelperRoute::getCategoryRoute( $catid ) );
+			return Route::_( CrosswordsHelperRoute::getCategoryRoute( $catid ) );
 		}
 		else
 		{
-			return JRoute::_( 'index.php?option=com_crosswords&view=categories&id=0' );
+			return Route::_( 'index.php?option=com_crosswords&view=categories&id=0' );
 		}
 	}
 

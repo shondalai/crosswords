@@ -9,7 +9,9 @@
  * @license		License GNU General Public License version 2 or later
  */
 
+use Joomla\CMS\Layout\LayoutHelper;
+
 defined('_JEXEC') or die;
 
-echo JLayoutHelper::render('joomla.edit.metadata', $this);
+echo LayoutHelper::render('joomla.edit.metadata', $this);
 ?>

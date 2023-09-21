@@ -6,9 +6,15 @@
  * @copyright   Copyright (C) 2023 BulaSikku Technologies Private Limited.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Helper\TagsHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\View\HtmlView;
+
 defined( 'JPATH_PLATFORM' ) or die();
 
-class CrosswordsViewForm extends JViewLegacy {
+class CrosswordsViewForm extends HtmlView {
 
 	protected $form;
 	protected $item;
@@ -16,7 +22,7 @@ class CrosswordsViewForm extends JViewLegacy {
 	protected $state;
 
 	public function display( $tpl = null ) {
-		$user              = JFactory::getUser();
+		$user              = Factory::getUser();
 		$this->state       = $this->get( 'State' );
 		$this->item        = $this->get( 'Item' );
 		$this->form        = $this->get( 'Form' );
@@ -33,10 +39,10 @@ class CrosswordsViewForm extends JViewLegacy {
 
 		if ( $authorised !== true )
 		{
-			throw new Exception( JText::_( 'JERROR_ALERTNOAUTHOR' ), 403 );
+			throw new Exception( Text::_( 'JERROR_ALERTNOAUTHOR' ), 403 );
 		}
 
-		$this->item->tags = new JHelperTags;
+		$this->item->tags = new TagsHelper;
 		if ( ! empty( $this->item->id ) )
 		{
 			$this->item->tags->getItemTags( 'com_crosswords.crossword.', $this->item->id );
@@ -66,7 +72,7 @@ class CrosswordsViewForm extends JViewLegacy {
 	 * Prepares the document
 	 */
 	protected function _prepareDocument() {
-		$app   = JFactory::getApplication();
+		$app   = Factory::getApplication();
 		$menus = $app->getMenu();
 		$title = null;
 
@@ -79,17 +85,17 @@ class CrosswordsViewForm extends JViewLegacy {
 		}
 		else
 		{
-			$this->params->def( 'page_heading', JText::_( 'COM_CROSSWORD_FORM_EDIT_CROSSWORD' ) );
+			$this->params->def( 'page_heading', Text::_( 'COM_CROSSWORD_FORM_EDIT_CROSSWORD' ) );
 		}
 
-		$title = $this->params->def( 'page_title', JText::_( 'COM_CROSSWORD_FORM_EDIT_CROSSWORD' ) );
+		$title = $this->params->def( 'page_title', Text::_( 'COM_CROSSWORD_FORM_EDIT_CROSSWORD' ) );
 		if ( $app->getCfg( 'sitename_pagetitles', 0 ) == 1 )
 		{
-			$title = JText::sprintf( 'JPAGETITLE', $app->getCfg( 'sitename' ), $title );
+			$title = Text::sprintf( 'JPAGETITLE', $app->getCfg( 'sitename' ), $title );
 		}
 		elseif ( $app->getCfg( 'sitename_pagetitles', 0 ) == 2 )
 		{
-			$title = JText::sprintf( 'JPAGETITLE', $title, $app->getCfg( 'sitename' ) );
+			$title = Text::sprintf( 'JPAGETITLE', $title, $app->getCfg( 'sitename' ) );
 		}
 		$this->document->setTitle( $title );
 
